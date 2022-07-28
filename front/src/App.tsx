@@ -12,6 +12,11 @@ import { RegisterProcessLayout } from './views/users/register_process/RegisterPr
 import { UserInfo } from './views/users/register_process/UserInfo';
 import { SetPassword } from './views/users/SetPassword';
 
+import Header from './test/Header';
+import Main from './test/Main';
+import Product from './test/Product';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 export const App = () => (
   <Routes>
     <Route path="/" element={<Layout />}>
