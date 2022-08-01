@@ -1,3 +1,1 @@
-export const Alert = () => (
-    <div></div>
-);
+export const Alert = () => <div></div>;
