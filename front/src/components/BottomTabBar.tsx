@@ -1,3 +1,1 @@
-export const BottomTabBar = () => (
-    <div></div>
-);
+export const BottomTabBar = () => <div></div>;

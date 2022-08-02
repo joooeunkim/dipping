@@ -1,3 +1,1 @@
-export const DippinMain = () => (
-    <div></div>
-);
+export const DippinMain = () => <div>dippin</div>;

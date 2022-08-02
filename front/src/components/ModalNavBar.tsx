@@ -1,3 +1,1 @@
-export const ModalNavBar = () => (
-    <div></div>
-);
+export const ModalNavBar = () => <div></div>;

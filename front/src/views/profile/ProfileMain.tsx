@@ -1,3 +1,1 @@
-export const ProfileMain = () => (
-    <div></div>
-);
+export const ProfileMain = () => <div>profile</div>;

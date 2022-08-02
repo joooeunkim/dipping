@@ -1,3 +1,1 @@
-export const SearchNavBar = () => (
-    <div></div>
-);
+export const SearchNavBar = () => <div></div>;
