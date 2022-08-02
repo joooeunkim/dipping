@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 public class HelloController {
 
     @GetMapping(value = "/good")
-    public String signUp(final HttpServletRequest request) {
+    public String signUp() {
         System.out.println("hello");
         return "hello";
     }
