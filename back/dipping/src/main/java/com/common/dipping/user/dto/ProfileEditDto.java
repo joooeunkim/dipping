@@ -3,18 +3,14 @@ package com.common.dipping.user.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
-public class SignUpDto {
+public class ProfileEditDto {
 
     private String email;
-    private String password;
     private String userNickname;
     private String profileImgUrl;
     private String userMusicTaste;
-    private String provider;
-    private String musicGerne;
+    private Boolean openUser;
 
 }
