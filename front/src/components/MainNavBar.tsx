@@ -1,48 +1,50 @@
 import { Box, Text, Flex, Image, Spacer, useColorModeValue } from '@chakra-ui/react';
 
 export const MainNavBar = () => {
-  const title = 'Titles';
   const bg = useColorModeValue('white', 'gray.800');
   const color = useColorModeValue('gray.200', 'gray.600');
+  const size = 48;
+
+  const title = '';
+
   return (
     <Box>
       <Box
-        h="8vh"
         w="full"
-        position="fixed"
-        top="0vh"
+        h={size + 'px'}
         borderBottom="1px"
         borderColor={color}
+        position="fixed"
+        top="0vh"
+        zIndex="popover"
         bg={bg}
       >
-        <Box h="6vh" w="full" position="relative" top="1vh" bg="">
+        <Box position="relative" top="15%" h="70%" w="full">
           <Flex>
             <Image
               src="/logo_icon.png"
+              alt="logo"
               objectFit="contain"
               position="absolute"
-              left="2vh"
-              alt="logo"
-              h="6vh"
+              left="4vw"
+              h={size * 0.7 + 'px'}
             />
             <Spacer />
-            <Text fontSize="3.2vh" position="relative" top="0.6vh">
-              {title}
-            </Text>
+            <Text fontSize={size * 0.5 + 'px'}>{title}</Text>
             <Spacer />
             <Box
               className="fa-light fa-bell"
-              fontSize="3.2vh"
-              position="absolute"
-              top="1.6vh"
-              right="6.2vh"
+              fontSize={size * 0.5 + 'px'}
+              position="relative"
+              top={size * 0.1 + 'px'}
+              right="8vw"
             />
             <Box
               className="fa-light fa-comment"
-              fontSize="3.2vh"
-              top="1.6vh"
-              position="absolute"
-              right="2vh"
+              fontSize={size * 0.5 + 'px'}
+              position="relative"
+              top={size * 0.1 + 'px'}
+              right="4vw"
             />
           </Flex>
         </Box>

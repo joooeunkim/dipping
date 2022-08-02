@@ -5,49 +5,47 @@ export const ModalNavBar = () => {
   const color = useColorModeValue('gray.200', 'gray.600');
 
   const title = '댓글';
-
-  const rightButton = (
-    <Text
-      fontSize="2.6vh"
-      position="relative"
-      top="0.8vh"
-      fontWeight="bold"
-      margin="0"
-      color="cyan.400"
-    >
-      완료
-    </Text>
-  );
+  const rightButton = '완료';
+  // const rightButton = <Box className="fa-light fa-music" fontSize="24px" bg="" />;
 
   return (
     <Box>
       <Box
-        h="8vh"
+        h="48px"
         w="full"
         position="fixed"
-        top="8vh"
+        top="48px"
         borderBottom="1px"
         borderColor={color}
         bg={bg}
       >
-        <Box h="6vh" w="full" position="relative" top="1vh" bg="">
-          <Flex>
-            <Box
-              className="fa-light fa-angle-left"
-              fontSize="3.2vh"
-              position="absolute"
-              top="1.6vh"
-              left="2vh"
-            />
-            <Spacer />
-            <Text fontSize="2.6vh" position="relative" top="0.8vh">
-              {title}
-            </Text>
-            <Spacer />
-            <Box position="absolute" h="6vh" right="2vh">
-              {rightButton}
-            </Box>
-          </Flex>
+        <Box id="bar" position="relative" top="6px" h="36px" w="full" bg="">
+          <Box
+            className="fa-light fa-angle-left"
+            fontSize="32px"
+            position="absolute"
+            top="2px"
+            left="4vw"
+            bg=""
+          />
+          <Box
+            position="absolute"
+            right="4vw"
+            h="36px"
+            w="48px"
+            float="right"
+            lineHeight="36px"
+            textAlign="right"
+            fontSize="16px"
+            fontWeight="bold"
+            color="cyan.400"
+            bg=""
+          >
+            {rightButton}
+          </Box>
+          <Box w="128px" margin="auto" textAlign="center" fontSize="16px" lineHeight="36px" bg="">
+            {title}
+          </Box>
         </Box>
       </Box>
     </Box>
