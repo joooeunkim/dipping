@@ -1,3 +1,1 @@
-export const MainNavBar = () => (
-    <div></div>
-);
+export const MainNavBar = () => <div></div>;

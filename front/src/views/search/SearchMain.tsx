@@ -1,3 +1,1 @@
-export const SearchMain = () => (
-    <div></div>
-);
+export const SearchMain = () => <div>search</div>;
