@@ -102,18 +102,22 @@ public class UserController {
     public ResponseEntity<?> profileEdit(@RequestBody final ProfileEditDto profileEditDto) {
         // 이메일을 통해 유저 정보를 가져오고 가져온 정보랑 ProfileEditDto의 정보를 비교
         // 닉네임이 바뀔 경우
-        if(userService.isUserNicknameDuplicated(profileEditDto.getUserNickname())) {
+        // UserService에서 처리하자!
+//        if(userService.isUserNicknameDuplicated(profileEditDto.getUserNickname())) {
 
 //            System.out.println(profileEditDto.getEmail() == userService.profile(profileEditDto.getUserNickname()).getEmail());
 //            if (profileEditDto.getEmail() != userService.profile(profileEditDto.getUserNickname()).getEmail()) {
 //                return ResponseEntity.badRequest().build();
 //            }
+//        }
+
+        if (userService.profileEdit(profileEditDto)) {
+            return ResponseEntity.ok().body("수정 완료");
+        } else {
+            return ResponseEntity.ok().body("닉네임이 중복되었습니다.");
         }
 
-        User userinfo = userService.profileEdit(profileEditDto);
-        Map<String,Object> result = new HashMap<>();
-        result.put("data", userinfo);
-        return ResponseEntity.ok().body(result);
+
     }
 
 //    @GetMapping(value = "/oauth/kakao")

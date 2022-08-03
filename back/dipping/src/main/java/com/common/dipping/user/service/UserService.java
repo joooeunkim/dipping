@@ -62,18 +62,18 @@ public class UserService {
 
     // set을 안 쓰고 바꾸기 update 함수 만들기
     @Transactional
-    public User profileEdit(final ProfileEditDto profileEditDto) {
+    public Boolean profileEdit(final ProfileEditDto profileEditDto) {
 
         User userinfo = userRepository.findByEmail(profileEditDto.getEmail()).orElse(null);
+        User nicknameUser = userRepository.findByUserNickname(profileEditDto.getUserNickname()).orElse(null);
+        if (nicknameUser != null && nicknameUser.getEmail() != userinfo.getEmail()) {
+            return false;
+        }
 
-        // this.userNickname = profileEditDto.getUserNickname()
-        userinfo.setUserNickname(profileEditDto.getUserNickname());
-        userinfo.setProfileImgUrl(profileEditDto.getProfileImgUrl());
-        userinfo.setUserMusicTaste(profileEditDto.getUserMusicTaste());
-        userinfo.setOpenUser(profileEditDto.getOpenUser());
-        // System.out.println(userinfo.getUserNickname());
+        userinfo.profileEdit(profileEditDto.getUserNickname(), profileEditDto.getProfileImgUrl(), profileEditDto.getUserMusicTaste(), profileEditDto.getOpenUser(), profileEditDto.getMusicGerne());
+
         userRepository.save(userinfo);
-        return userinfo;
+        return true;
     }
 
 }

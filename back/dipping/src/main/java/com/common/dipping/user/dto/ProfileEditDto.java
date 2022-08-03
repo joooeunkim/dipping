@@ -12,5 +12,6 @@ public class ProfileEditDto {
     private String profileImgUrl;
     private String userMusicTaste;
     private Boolean openUser;
+    private String musicGerne;
 
 }
