@@ -23,7 +23,7 @@ export const App = () => (
       <Route
         path="/"
         element={
-          <ProtectedRoute isAuthenticated={false} authenticationPath="/login" outlet={<Layout />} />
+          <ProtectedRoute isAuthenticated={true} authenticationPath="/login" outlet={<Layout />} />
         }
       >
         <Route index element={<HomeMain />} />
