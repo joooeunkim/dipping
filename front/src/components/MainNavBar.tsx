@@ -22,7 +22,7 @@ export const MainNavBar = () => {
         <Box position="relative" top="15%" h="70%" w="full">
           <Flex>
             <Image
-              src="/logo_icon.png"
+              src="/logo_dippin.png"
               alt="logo"
               objectFit="contain"
               position="absolute"

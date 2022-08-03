@@ -8,18 +8,11 @@ import {
   Input,
 } from '@chakra-ui/react';
 
-export const SearchNavBar = () => {
-  const display = '';
+export const SearchNavBar = (props: any) => {
   const bg = useColorModeValue('white', 'gray.800');
   const color = useColorModeValue('gray.200', 'gray.600');
 
-  const title = '댓글';
-
-  const rightButton = (
-    <Text fontSize="2.4vh" position="relative" top="1vh" fontWeight="bold" margin="0">
-      취소
-    </Text>
-  );
+  const { leftDisplay, rightDisplay } = props;
 
   return (
     <Box>
@@ -27,7 +20,7 @@ export const SearchNavBar = () => {
         h="48px"
         w="full"
         position="fixed"
-        top="96px"
+        top="0px"
         borderBottom="1px"
         borderColor={color}
         bg={bg}
@@ -35,7 +28,7 @@ export const SearchNavBar = () => {
         <Box position="relative" top="6px" h="36px" w="full" bg="">
           <Flex h="36px">
             <Box
-              display={display}
+              display={leftDisplay}
               marginRight="2vw"
               className="fa-light fa-angle-left"
               fontSize="32px"
@@ -60,7 +53,7 @@ export const SearchNavBar = () => {
               </InputGroup>
             </Box>
             <Box
-              display={display}
+              display={rightDisplay}
               position="relative"
               right="4vw"
               h="36px"
