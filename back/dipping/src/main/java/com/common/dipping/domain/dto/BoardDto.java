@@ -11,6 +11,6 @@ public class BoardDto {
 	private String updateAt;
 	private boolean openPost;
 	private boolean openComment;
-	private boolean isAlbumart;
+	private boolean albumart;
 	private long userSeq;
 }

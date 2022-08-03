@@ -7,31 +7,36 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.common.dipping.user.domain.User;
-
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Like {
-
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long likeSeq;
-	private String createAt;
+public class PostTag {
 	
-	// 좋아요한 사용자번호 연결
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long postTagSeq;
+	
+	// 태그 연결
+	// 게시판 연결
 	@ManyToOne
-    @JoinColumn(name = "id")
-    private User user;
-	// 댓글인지 연결
-	@ManyToOne
-    @JoinColumn(name = "commentSeq")
-    private Comment comment;
-	// 게시판번호인지 연결
+    @JoinColumn(name = "tagSeq")
+    private Tag tag;
+	
 	@ManyToOne
     @JoinColumn(name = "boardSeq")
     private Board board;
+
+	@Builder
+	public PostTag(Tag tag, Board board) {
+		this.tag = tag;
+		this.board = board;
+	}
+	
+	
+	
+	
 }
