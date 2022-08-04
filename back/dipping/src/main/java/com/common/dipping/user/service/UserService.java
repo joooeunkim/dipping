@@ -24,7 +24,7 @@ public class UserService {
     public User signUp(final SignUpDto signUpDto) {
         final User user = User.builder()
                 .email(signUpDto.getEmail())
-                .nickname(signUpDto.getNickname())
+                .userNickname(signUpDto.getUserNickname())
                 .pw(passwordEncoder.encode(signUpDto.getPassword()))
                 .role(UserRole.ROLE_USER)
                 .build();

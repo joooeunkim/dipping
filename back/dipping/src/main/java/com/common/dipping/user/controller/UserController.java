@@ -6,13 +6,14 @@ import com.common.dipping.user.service.UserService;
 import com.common.dipping.utils.TokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/user")
-@Log4j2
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -30,22 +31,18 @@ public class UserController {
     public ResponseEntity<String> signUp(@RequestBody final SignUpDto signUpDto) {
         System.out.println(signUpDto.getEmail());
         System.out.println(signUpDto.getPassword());
-        System.out.println(signUpDto.getNickname());
-        return userService.isEmailDuplicated(signUpDto.getEmail())
-                ? ResponseEntity.badRequest().build()
-                : ResponseEntity.ok(TokenUtils.generateJwtToken(userService.signUp(signUpDto)));
+        System.out.println(signUpDto.getUserNickname());
+//        return userService.isEmailDuplicated(signUpDto.getEmail())
+//                ? ResponseEntity.badRequest().build()
+//                : ResponseEntity.ok(TokenUtils.generateJwtToken(userService.signUp(signUpDto)));
+
+        if(userService.isEmailDuplicated(signUpDto.getEmail())){
+            return ResponseEntity.badRequest().build(); //이미 존재하는 회원정보
+        } else{
+             userService.signUp(signUpDto);
+             return ResponseEntity.ok().build();
+        }
     }
 
-
-
-//    @GetMapping(value = "/oauth/kakao")
-//    public ResponseEntity<String> kakaoLogin() {
-//
-//    }
-
-//    @GetMapping(value = "/oauth/google")
-//    public ResponseEntity<String> googleLogin() {
-//
-//    }
 
 }
