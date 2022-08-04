@@ -31,4 +31,5 @@ public abstract class Common implements Serializable {
     @Setter
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
     private Boolean isEnable = true;                        // 사용 여부
+
 }

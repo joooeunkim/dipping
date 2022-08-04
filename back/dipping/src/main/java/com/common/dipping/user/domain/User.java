@@ -1,15 +1,34 @@
 package com.common.dipping.user.domain;
 
-import com.common.dipping.enums.UserRole;
-import com.common.dipping.user.common.Common;
-import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
-
-import javax.persistence.*;
-import java.io.DataInput;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.DynamicInsert;
+
+import com.common.dipping.domain.entity.Board;
+import com.common.dipping.domain.entity.Comment;
+import com.common.dipping.domain.entity.Like;
+import com.common.dipping.domain.entity.UserTag;
+import com.common.dipping.enums.UserRole;
+import com.common.dipping.user.common.Common;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "USER")
@@ -18,13 +37,13 @@ import java.util.Date;
 @AllArgsConstructor
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends Common implements Serializable {
+public class User extends Common  implements Serializable {
 
     @Column(nullable = false, unique = true, length = 50)
     private String email;
 
     @Setter
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String pw;
 
     @Setter
@@ -34,6 +53,28 @@ public class User extends Common implements Serializable {
     @Column(nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
     private UserRole role;
+    
+    @Builder
+    public User(String email, String pw, String userNickname, String provider, UserRole role) {
+		this.email = email;
+		this.pw = pw;
+		this.userNickname = userNickname;
+		this.provider = provider;
+		this.role = role;
+	}
+
+
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Board> boards = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private UserTag userTag;
 
     @Column(nullable = true)
     private String profileImgUrl;
