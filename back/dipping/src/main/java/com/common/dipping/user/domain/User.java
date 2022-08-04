@@ -3,18 +3,20 @@ package com.common.dipping.user.domain;
 import com.common.dipping.enums.UserRole;
 import com.common.dipping.user.common.Common;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import java.io.DataInput;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "USER")
 @Getter
 @Builder
 @AllArgsConstructor
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends Common  implements Serializable {
 
@@ -26,23 +28,41 @@ public class User extends Common  implements Serializable {
     private String pw;
 
     @Setter
-    @Column(nullable = true, unique = true)
+    @Column(nullable = false, unique = true)
     private String userNickname;
 
-    @Setter
-    @Column(nullable = true, length = 50)
+    @Column(nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @CreationTimestamp
-    @Column(nullable = true, length = 20, updatable = false)
-    private LocalDateTime createdAt;                        // 등록 일자
+    @Column(nullable = true)
+    private String profileImgUrl;
 
-    @UpdateTimestamp
-    @Column(length = 20)
-    private LocalDateTime updatedAt;                        // 수정 일자
+    @Column(nullable = true)
+    private String userMusicTaste;
+
+    @Column(nullable = true)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = true)
+    private LocalDateTime updatedAt;
+
+    @Column(columnDefinition = "Boolean default true")
+    private Boolean openUser;
 
     @Column(nullable = true)
     private String provider;
+
+    @Column(nullable = true)
+    private String musicGerne;
+
+    public void profileEdit(String userNickname, String profileImgUrl, String userMusicTaste, Boolean openUser, String musicGerne) {
+        this.userNickname = userNickname;
+        this.profileImgUrl = profileImgUrl;
+        this.userMusicTaste = userMusicTaste;
+        this.openUser = openUser;
+        this.musicGerne = musicGerne;
+        this.updatedAt = LocalDateTime.now();
+    }
 
 }

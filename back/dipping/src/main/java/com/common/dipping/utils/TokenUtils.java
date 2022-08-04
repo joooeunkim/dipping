@@ -80,7 +80,7 @@ public final class TokenUtils {
         Map<String, Object> claims = new HashMap<>();
 
         claims.put("email", user.getEmail());
-        claims.put("nickname", user.getUserNickname());
+        claims.put("userNickname", user.getUserNickname());
         claims.put("role", user.getRole());
 
         return claims;
