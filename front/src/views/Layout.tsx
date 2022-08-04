@@ -10,8 +10,6 @@ export const Layout = () => (
   <div>
     <Box h="48px" w="full" />
     <Outlet />
-    <div>layout</div>
-    <ColorModeSwitcher />
     <Box h="48px" w="full" />
 
     {/* ==Floating Component== */}
