@@ -22,7 +22,7 @@ import com.common.dipping.board.domain.entity.Comment;
 import com.common.dipping.board.domain.entity.Like;
 import com.common.dipping.board.domain.entity.UserTag;
 import com.common.dipping.enums.UserRole;
-import com.common.dipping.user.common.Common;
+import com.common.dipping.common.Common;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

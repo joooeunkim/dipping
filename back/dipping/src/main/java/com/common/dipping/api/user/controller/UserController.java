@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/api/user")
 @Slf4j
 public class UserController {
 
@@ -33,7 +33,7 @@ public class UserController {
 //                : ResponseEntity.badRequest().build();
 //    }
 
-    @PostMapping(value = "/signUp")
+    @PostMapping(value = "/")
     public ResponseEntity<String> signUp(@RequestBody final SignUpDto signUpDto) {
         System.out.println(signUpDto.getEmail());
         System.out.println(signUpDto.getPassword());

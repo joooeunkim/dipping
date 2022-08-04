@@ -1,6 +1,7 @@
 package com.common.dipping.config.security;
 
-import com.common.dipping.exception.InputNotFoundException;
+import com.common.dipping.exception.UserNotFoundException;
+import com.common.dipping.user.domain.dto.LoginDto;
 import com.common.dipping.user.domain.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
@@ -17,20 +18,27 @@ import java.io.IOException;
 @Log4j2
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    public CustomAuthenticationFilter(final AuthenticationManager authenticationManager) {
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
         super.setAuthenticationManager(authenticationManager);
     }
 
+
     @Override
-    public Authentication attemptAuthentication(final HttpServletRequest request, final HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         final UsernamePasswordAuthenticationToken authRequest;
-        try{
-            final User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
-            authRequest = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPw());
-        } catch (IOException exception){
-            throw new InputNotFoundException();
+
+        final LoginDto loginDto;
+        try {
+            // 사용자 요청 정보로 UserPasswordAuthenticationToken 발급
+            loginDto = new ObjectMapper().readValue(request.getInputStream(), LoginDto.class);
+            authRequest = new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Token 발급 실패");
         }
         setDetails(request, authRequest);
+
+        // AuthenticationManager에게 전달 -> AuthenticationProvider의 인증 메서드 실행
         return this.getAuthenticationManager().authenticate(authRequest);
     }
 

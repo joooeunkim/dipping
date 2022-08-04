@@ -1,53 +1,55 @@
 package com.common.dipping.user.domain.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.Delegate;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Getter
-public class MyUserDetails implements UserDetails  {
+@ToString
+//회원 데이터를 조회하고 해당 정보와 권한을 저장하는 UserDetails를 구현
+public class UserDetailsImpl implements UserDetails {
 
-    @Delegate
-    private final User user;
+    private final String username; //이메일
+    private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return this.authorities;
     }
 
     @Override
     public String getPassword() {
-        return user.getPw();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return username;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return user.getIsEnable();
+        return false;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return user.getIsEnable();
+        return false;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return user.getIsEnable();
+        return false;
     }
 
     @Override
     public boolean isEnabled() {
-        return user.getIsEnable();
+        return false;
     }
 }
