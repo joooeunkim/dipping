@@ -1,8 +1,6 @@
-package com.common.dipping.config.security;
+package com.common.dipping.security;
 
-import com.common.dipping.exception.UserNotFoundException;
-import com.common.dipping.user.domain.dto.LoginDto;
-import com.common.dipping.user.domain.entity.User;
+import com.common.dipping.api.user.domain.dto.LoginDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;

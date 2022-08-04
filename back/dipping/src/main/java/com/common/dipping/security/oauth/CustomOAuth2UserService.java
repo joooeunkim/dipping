@@ -1,7 +1,7 @@
-package com.common.dipping.user.oauth;
+package com.common.dipping.security.oauth;
 
-import com.common.dipping.user.domain.entity.User;
-import com.common.dipping.user.repository.UserRepository;
+import com.common.dipping.api.user.domain.entity.User;
+import com.common.dipping.api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

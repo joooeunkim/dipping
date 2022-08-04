@@ -1,4 +1,4 @@
-package com.common.dipping.board.controller;
+package com.common.dipping.api.board.controller;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.common.dipping.board.domain.dto.BoardDto;
-import com.common.dipping.board.domain.dto.BoardSongDto;
-import com.common.dipping.board.domain.dto.PostTagDto;
-import com.common.dipping.board.domain.dto.UserTagDto;
-import com.common.dipping.board.domain.entity.Board;
-import com.common.dipping.board.repository.BoardRepository;
-import com.common.dipping.board.service.BoardService;
-import com.common.dipping.user.domain.entity.User;
-import com.common.dipping.user.repository.UserRepository;
+import com.common.dipping.api.board.domain.dto.BoardDto;
+import com.common.dipping.api.board.domain.dto.BoardSongDto;
+import com.common.dipping.api.board.domain.dto.PostTagDto;
+import com.common.dipping.api.board.domain.dto.UserTagDto;
+import com.common.dipping.api.board.domain.entity.Board;
+import com.common.dipping.api.board.repository.BoardRepository;
+import com.common.dipping.api.board.service.BoardService;
+import com.common.dipping.api.user.domain.entity.User;
+import com.common.dipping.api.user.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;

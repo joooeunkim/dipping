@@ -1,4 +1,4 @@
-package com.common.dipping.user.domain.entity;
+package com.common.dipping.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +15,9 @@ import java.util.Collection;
 public class UserDetailsImpl implements UserDetails {
 
     private final String username; //이메일
-    private final String password;
+    private final String password; //비밀번호
+    private final Long id; //사용자 고유번호
+    private final String nickname; //사용자 닉네임
     private final Collection<? extends GrantedAuthority> authorities;
 
     @Override
@@ -31,6 +33,14 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 
     @Override

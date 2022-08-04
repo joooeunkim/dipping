@@ -1,4 +1,4 @@
-package com.common.dipping.user.domain.entity;
+package com.common.dipping.api.user.domain.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -17,11 +17,11 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 
-import com.common.dipping.board.domain.entity.Board;
-import com.common.dipping.board.domain.entity.Comment;
-import com.common.dipping.board.domain.entity.Like;
-import com.common.dipping.board.domain.entity.UserTag;
-import com.common.dipping.enums.UserRole;
+import com.common.dipping.api.board.domain.entity.Board;
+import com.common.dipping.api.board.domain.entity.Comment;
+import com.common.dipping.api.board.domain.entity.Like;
+import com.common.dipping.api.board.domain.entity.UserTag;
+import com.common.dipping.common.UserRole;
 import com.common.dipping.common.Common;
 
 import lombok.AccessLevel;

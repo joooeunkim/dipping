@@ -1,6 +1,5 @@
-package com.common.dipping.config.security;
+package com.common.dipping.security;
 
-import com.common.dipping.user.domain.entity.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -9,7 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
@@ -19,7 +18,9 @@ import org.springframework.stereotype.Component;
 public class AuthenticationProviderImpl  implements AuthenticationProvider {
 
     private final UserDetailsService userDetailsService;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
+
 
     //인증 구현
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

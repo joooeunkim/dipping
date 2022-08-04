@@ -1,4 +1,4 @@
-package com.common.dipping.user.domain.entity;
+package com.common.dipping.api.user.domain.entity;
 
 import lombok.Builder;
 import lombok.Getter;

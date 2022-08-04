@@ -1,7 +1,7 @@
-package com.common.dipping.user.controller;
+package com.common.dipping.api.user.controller;
 
-import com.common.dipping.user.domain.dto.FollowDto;
-import com.common.dipping.user.service.FollowService;
+import com.common.dipping.api.user.domain.dto.FollowDto;
+import com.common.dipping.api.user.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

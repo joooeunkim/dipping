@@ -1,4 +1,4 @@
-package com.common.dipping.enums;
+package com.common.dipping.common;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,7 @@
-package com.common.dipping.user.domain.entity;
+package com.common.dipping.security;
 
-import com.common.dipping.user.repository.UserRepository;
+import com.common.dipping.api.user.domain.entity.User;
+import com.common.dipping.api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +23,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new UserDetailsImpl(
                 user.getEmail(),
                 user.getPw(),
+                user.getId(),
+                user.getUserNickname(),
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
         );
     }

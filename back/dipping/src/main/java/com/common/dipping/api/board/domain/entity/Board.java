@@ -1,4 +1,4 @@
-package com.common.dipping.board.domain.entity;
+package com.common.dipping.api.board.domain.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,7 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.common.dipping.user.domain.entity.User;
+import com.common.dipping.api.user.domain.entity.User;
 
 import lombok.Builder;
 import lombok.Getter;

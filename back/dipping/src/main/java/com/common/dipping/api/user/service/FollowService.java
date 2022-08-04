@@ -1,9 +1,9 @@
-package com.common.dipping.user.service;
+package com.common.dipping.api.user.service;
 
-import com.common.dipping.user.domain.entity.Follow;
-import com.common.dipping.user.domain.entity.User;
-import com.common.dipping.user.repository.FollowRepository;
-import com.common.dipping.user.repository.UserRepository;
+import com.common.dipping.api.user.domain.entity.Follow;
+import com.common.dipping.api.user.domain.entity.User;
+import com.common.dipping.api.user.repository.FollowRepository;
+import com.common.dipping.api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

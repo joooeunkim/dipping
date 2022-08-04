@@ -1,4 +1,4 @@
-package com.common.dipping.user.domain.dto;
+package com.common.dipping.api.user.domain.dto;
 
 import lombok.Getter;
 import lombok.Setter;

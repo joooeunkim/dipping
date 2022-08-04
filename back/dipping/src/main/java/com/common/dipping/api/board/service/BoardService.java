@@ -1,25 +1,25 @@
-package com.common.dipping.board.service;
+package com.common.dipping.api.board.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.common.dipping.board.domain.dto.BoardDto;
-import com.common.dipping.board.domain.dto.BoardSongDto;
-import com.common.dipping.board.domain.dto.PostTagDto;
-import com.common.dipping.board.domain.dto.UserTagDto;
-import com.common.dipping.board.domain.entity.Board;
-import com.common.dipping.board.domain.entity.BoardSong;
-import com.common.dipping.board.domain.entity.PostTag;
-import com.common.dipping.board.domain.entity.Tag;
-import com.common.dipping.board.domain.entity.UserTag;
-import com.common.dipping.board.repository.BoardRepository;
-import com.common.dipping.board.repository.BoardSongRepository;
-import com.common.dipping.board.repository.PostTagRepository;
-import com.common.dipping.board.repository.TagRepository;
-import com.common.dipping.board.repository.UserTagRepository;
-import com.common.dipping.user.domain.entity.User;
-import com.common.dipping.user.repository.UserRepository;
+import com.common.dipping.api.board.domain.dto.BoardDto;
+import com.common.dipping.api.board.domain.dto.BoardSongDto;
+import com.common.dipping.api.board.domain.dto.PostTagDto;
+import com.common.dipping.api.board.domain.dto.UserTagDto;
+import com.common.dipping.api.board.domain.entity.Board;
+import com.common.dipping.api.board.domain.entity.BoardSong;
+import com.common.dipping.api.board.domain.entity.PostTag;
+import com.common.dipping.api.board.domain.entity.Tag;
+import com.common.dipping.api.board.domain.entity.UserTag;
+import com.common.dipping.api.board.repository.BoardRepository;
+import com.common.dipping.api.board.repository.BoardSongRepository;
+import com.common.dipping.api.board.repository.PostTagRepository;
+import com.common.dipping.api.board.repository.TagRepository;
+import com.common.dipping.api.board.repository.UserTagRepository;
+import com.common.dipping.api.user.domain.entity.User;
+import com.common.dipping.api.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 

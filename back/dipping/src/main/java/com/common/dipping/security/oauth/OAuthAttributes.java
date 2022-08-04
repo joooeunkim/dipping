@@ -1,13 +1,13 @@
-package com.common.dipping.user.oauth;
+package com.common.dipping.security.oauth;
 
-import com.common.dipping.user.domain.entity.User;
+import com.common.dipping.api.user.domain.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
-import static com.common.dipping.enums.UserRole.ROLE_USER;
+import static com.common.dipping.common.UserRole.ROLE_USER;
 
 @Getter
 @Slf4j

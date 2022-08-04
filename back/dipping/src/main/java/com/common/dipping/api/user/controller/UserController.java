@@ -1,11 +1,10 @@
-package com.common.dipping.user.controller;
+package com.common.dipping.api.user.controller;
 
-import com.common.dipping.user.domain.entity.User;
-import com.common.dipping.user.domain.dto.ProfileDto;
-import com.common.dipping.user.domain.dto.ProfileEditDto;
-import com.common.dipping.user.domain.dto.SignUpDto;
-import com.common.dipping.user.service.UserService;
-import com.common.dipping.utils.TokenUtils;
+import com.common.dipping.api.user.domain.entity.User;
+import com.common.dipping.api.user.domain.dto.ProfileDto;
+import com.common.dipping.api.user.domain.dto.ProfileEditDto;
+import com.common.dipping.api.user.domain.dto.SignUpDto;
+import com.common.dipping.api.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.query.Param;
@@ -18,29 +17,21 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api/user")
+@RequestMapping(value = "/api")
 @Slf4j
 public class UserController {
 
     private final UserService userService;
 
-//    @PostMapping(value = "/login")
-//    public ResponseEntity<String> login(@RequestBody final LoginDto loginDto){
-//        System.out.println(loginDto.getEmail());
-//        System.out.println(loginDto.getPassword());
-//        return userService.isEmailDuplicated(loginDto.getEmail())
-//                ? ResponseEntity.ok(TokenUtils.generateJwtToken(userService.login(loginDto)))
-//                : ResponseEntity.badRequest().build();
-//    }
+    @PostMapping(value = "/signUp")
+    public ResponseEntity signUp(@RequestBody final SignUpDto signUpDto) {
 
-    @PostMapping(value = "/")
-    public ResponseEntity<String> signUp(@RequestBody final SignUpDto signUpDto) {
-        System.out.println(signUpDto.getEmail());
-        System.out.println(signUpDto.getPassword());
-        System.out.println(signUpDto.getUserNickname());
-        return userService.isEmailDuplicated(signUpDto.getEmail())
-                ? ResponseEntity.badRequest().build()
-                : ResponseEntity.ok(TokenUtils.generateJwtToken(userService.signUp(signUpDto)));
+        if(userService.isEmailDuplicated(signUpDto.getEmail())){ //이메일이 이미 존재
+            return ResponseEntity.badRequest().body("이미 가입된 회원입니다");
+        } else{
+            userService.signUp(signUpDto);
+            return ResponseEntity.ok().build();
+        }
     }
 
 

@@ -1,7 +1,7 @@
-package com.common.dipping.user.repository;
+package com.common.dipping.api.user.repository;
 
-import com.common.dipping.user.domain.entity.Follow;
-import com.common.dipping.user.domain.entity.User;
+import com.common.dipping.api.user.domain.entity.Follow;
+import com.common.dipping.api.user.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

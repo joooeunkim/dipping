@@ -1,4 +1,4 @@
-package com.common.dipping.board.domain.dto;
+package com.common.dipping.api.board.domain.dto;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.common.dipping.board.domain.entity;
+package com.common.dipping.api.board.domain.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

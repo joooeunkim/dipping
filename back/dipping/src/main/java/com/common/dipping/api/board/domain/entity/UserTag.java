@@ -1,4 +1,4 @@
-package com.common.dipping.board.domain.entity;
+package com.common.dipping.api.board.domain.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import com.common.dipping.user.domain.entity.User;
+import com.common.dipping.api.user.domain.entity.User;
 
 import lombok.Builder;
 import lombok.Getter;
