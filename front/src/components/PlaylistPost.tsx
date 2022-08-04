@@ -1,6 +1,7 @@
 import { Box, useColorModeValue, Image, Avatar } from '@chakra-ui/react';
 import { useState } from 'react';
 import { PlayerLarge } from './PlayerLarge';
+import { PlayerLarge2 } from './PlayerLarge2';
 
 export const PlaylistPost = (props: any) => {
   const bgColor = useColorModeValue('white', 'gray.800');
@@ -21,23 +22,6 @@ export const PlaylistPost = (props: any) => {
   };
   const onClickMore = (str: string) => () => {
     setLimit(str.length);
-  };
-
-  const outerBoxStyles = {
-    boxSize: '250px',
-    p: '10',
-    background: 'url(https://picsum.photos/id/1068/200/300) center/cover no-repeat',
-  };
-  const innerBoxStyles = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-    boxSize: 'full',
-    color: 'white',
-    textShadow: '0 0 20px black',
-    fontWeight: 'bold',
-    fontSize: '20px',
   };
 
   return (
@@ -71,6 +55,7 @@ export const PlaylistPost = (props: any) => {
 
       {/* music player */}
       <PlayerLarge />
+      {/* <PlayerLarge2 /> */}
 
       {/* icon set */}
       <Box position="relative" h="30px" w="full" bg="" marginBottom="16px">
