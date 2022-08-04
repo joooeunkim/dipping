@@ -1,11 +1,9 @@
 package com.common.dipping.user.controller;
 
-import com.common.dipping.user.domain.Follow;
-import com.common.dipping.user.dto.FollowDto;
+import com.common.dipping.user.domain.dto.FollowDto;
 import com.common.dipping.user.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
