@@ -54,8 +54,8 @@ export const PlaylistPost = (props: any) => {
       </Box>
 
       {/* music player */}
-      <PlayerLarge />
-      {/* <PlayerLarge2 /> */}
+      {/* <PlayerLarge /> */}
+      <PlayerLarge2 />
 
       {/* icon set */}
       <Box position="relative" h="30px" w="full" bg="" marginBottom="16px">

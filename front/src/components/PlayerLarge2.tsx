@@ -5,6 +5,11 @@ import { PlaylistItem } from './PlaylistItem';
 // dummy data
 const playlists = [
   {
+    title: 'Stressed Out',
+    artist: '​twenty one pilots',
+    albumart: 'https://bit.ly/3PcIrtn',
+  },
+  {
     title: 'Welcome To The Black Parade',
     artist: 'My Chemical Romance',
     albumart: 'https://bit.ly/3PXNy1o',
@@ -18,11 +23,6 @@ const playlists = [
     title: '백색왜성',
     artist: '넬',
     albumart: 'https://bit.ly/3bwSzPF',
-  },
-  {
-    title: 'Stressed Out',
-    artist: '​twenty one pilots',
-    albumart: 'https://bit.ly/3PcIrtn',
   },
   {
     title: 'Dead!',
@@ -107,9 +107,9 @@ export const PlayerLarge2 = () => {
           position="relative"
           left="0vw"
           top="8px"
-          fontSize="14px"
+          fontSize="12px"
           fontWeight="400"
-          lineHeight="15px"
+          lineHeight="14px"
           bg=""
           color="gray.400"
         >
@@ -118,10 +118,10 @@ export const PlayerLarge2 = () => {
         <Box
           position="relative"
           left="0vw"
-          top="5px"
-          fontSize="20px"
+          top="4px"
+          fontSize="18px"
           fontWeight="500"
-          lineHeight="25px"
+          lineHeight="24px"
           bg=""
         >
           {playlists[currentitem].title}
