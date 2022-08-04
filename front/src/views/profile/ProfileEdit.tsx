@@ -10,6 +10,9 @@ import {
   FormLabel,
   Select,
   Link,
+  Tag,
+  TagLabel,
+  TagCloseButton,
 } from '@chakra-ui/react';
 import { ModalNavBar } from '../../components/ModalNavBar';
 
@@ -40,11 +43,11 @@ export const ProfileEdit = () => {
           </Box>
         </Flex>
         <Flex>
-          <Box height="40px">
+          <Box alignItems="left" marginTop="8px">
             <Text>이름</Text>
           </Box>
           <Spacer />
-          <Box>
+          <Box width="240px">
             <Input variant="flushed" placeholder="월래이름" />
           </Box>
         </Flex>
@@ -53,16 +56,25 @@ export const ProfileEdit = () => {
             <Text>관심분야</Text>
           </Box>
           <Spacer />
-          <Box>
+          <Box width="240px">
             <Input variant="flushed" placeholder="#관심분야" />
           </Box>
         </Flex>
-        <Flex>
-          <Text>ㅇㅇ</Text>
+        <Flex marginBottom="120px">
+          <Tag
+            size="sm"
+            borderRadius="full"
+            variant="outline"
+            colorScheme="cyan.500"
+            textColor="black"
+          >
+            <TagLabel>힙합</TagLabel>
+            <TagCloseButton />
+          </Tag>
         </Flex>
-        <Flex marginBottom="160px">
+        <Flex marginBottom="56px">
           <FormControl>
-            <FormLabel marginBottom="16px">추천 리스트</FormLabel>
+            <FormLabel marginBottom="8px">추천 리스트</FormLabel>
             <Select height="32px" placeholder="선택된 리스트">
               <option>1번 리스트</option>
               <option>2번 리스트</option>
