@@ -48,6 +48,6 @@ public class Comment {
     private Board board;
 	// 댓글작성자번호 연결
 	@ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "userSeq")
     private User user;
 }

@@ -15,34 +15,35 @@ import com.common.dipping.domain.entity.Tag;
 import com.common.dipping.domain.entity.UserTag;
 import com.common.dipping.repository.BoardRepository;
 import com.common.dipping.repository.BoardSongRepository;
-import com.common.dipping.repository.CommentRepository;
-import com.common.dipping.repository.LikeRepository;
 import com.common.dipping.repository.PostTagRepository;
 import com.common.dipping.repository.TagRepository;
 import com.common.dipping.repository.UserTagRepository;
 import com.common.dipping.user.domain.User;
 import com.common.dipping.user.repository.UserRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class BoardService {
 
-	UserRepository userRepository;
-	BoardRepository boardRepository;
-	BoardSongRepository boardSongRepository;
-	CommentRepository commentRepository;
-	LikeRepository likeRepository;
-	PostTagRepository postTagRepository;
-	TagRepository tagRepository;
-	UserTagRepository userTagRepository;
+	private final UserRepository userRepository;
+	private final BoardRepository boardRepository;
+	private final BoardSongRepository boardSongRepository;
+	//private final CommentRepository commentRepository;
+	//private final LikeRepository likeRepository;
+	private final PostTagRepository postTagRepository;
+	private final TagRepository tagRepository;
+	private final UserTagRepository userTagRepository;
 
 	public Board getboardOne(long boardSeq) {
-		Board board = boardRepository.findAllByboardSeq(boardSeq);
+		Board board = boardRepository.findByboardSeq(boardSeq);
 		return board;
 	}
 
 	public long register(BoardDto boardDto) {
 
-		User user = userRepository.findById(boardDto.getUserSeq());
+		User user = userRepository.findByUserSeq(boardDto.getUserSeq());
 		// 포스트 기본 설정
 		Board board = Board.builder().content(boardDto.getContent())
 				.openPost(boardDto.isOpenPost())
@@ -50,11 +51,10 @@ public class BoardService {
 				.albumart(boardDto.isAlbumart())
 				.user(user).build();
 		
-		boardRepository.save(board);
+		return boardRepository.save(board).getBoardSeq();
 
 		// 리턴은 사용자 기준 게시판 중에서 내림차순으로 했을 때 첫번째가 가장 최근에 만들어진
 		// 게시판임으로 boardSeq 조회해서 반환
-		return boardRepository.findTop1ByUserIdOrderByBoardSeqDesc(user);
 	}
 
 	public void registerSong(List<BoardSongDto> boardSongDto, long boardSeq) {
@@ -64,7 +64,7 @@ public class BoardService {
 				BoardSong boardSong = BoardSong.builder().songTitle(boardSongDto.get(i).getSongTitle())
 						.songSinger(boardSongDto.get(i).getSongSinger()).songUrl(boardSongDto.get(i).getSongUrl())
 						.songImgUrl(boardSongDto.get(i).getSongImgUrl())
-						.board(boardRepository.findAllByboardSeq(boardSeq)).build();
+						.board(boardRepository.findByboardSeq(boardSeq)).build();
 			}
 		}
 
@@ -84,7 +84,7 @@ public class BoardService {
 					tag = tagRepository.findByContent(postTagDto.get(i).getContent());
 					postTagDto.get(i).setTagSeq(tag.getTagSeq());
 				}
-				PostTag postTag = PostTag.builder().tag(tag).board(boardRepository.findAllByboardSeq(boardSeq)).build();
+				PostTag postTag = PostTag.builder().tag(tag).board(boardRepository.findByboardSeq(boardSeq)).build();
 				postTagRepository.save(postTag);
 			} else {
 				return;
@@ -94,8 +94,9 @@ public class BoardService {
 		for (int i = 0; i < userTagDto.size(); i++) {
 			if (userTagDto.get(i) != null) {
 				long userSeq = Long.parseLong(userTagDto.get(i).getContent());
-				UserTag userTag = UserTag.builder().board(boardRepository.findAllByboardSeq(boardSeq))
-						.user(userRepository.findById(userSeq)).build();
+				User user = userRepository.findById(userSeq).orElseThrow(()->new IllegalArgumentException("해당 게시글이 없습니다. id="+userSeq));
+				UserTag userTag = UserTag.builder().board(boardRepository.findByboardSeq(boardSeq))
+						.user(user).build();
 				userTagRepository.save(userTag);
 			}else {
 				return;

@@ -1,6 +1,7 @@
 package com.common.dipping.user.domain;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,24 +14,26 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
+
 import com.common.dipping.domain.entity.Board;
 import com.common.dipping.domain.entity.Comment;
 import com.common.dipping.domain.entity.Like;
 import com.common.dipping.domain.entity.UserTag;
 import com.common.dipping.enums.UserRole;
 import com.common.dipping.user.common.Common;
-import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
 
-import javax.persistence.*;
-import java.io.DataInput;
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Date;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "USER")
 @Getter
+@Builder
 @AllArgsConstructor
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -52,10 +55,11 @@ public class User extends Common implements Serializable {
     private UserRole role;
     
     @Builder
-    public User(String email, String pw, String userNickname, UserRole role) {
+    public User(String email, String pw, String userNickname, String provider, UserRole role) {
 		this.email = email;
 		this.pw = pw;
 		this.userNickname = userNickname;
+		this.provider = provider;
 		this.role = role;
 	}
 

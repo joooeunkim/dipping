@@ -50,7 +50,7 @@ public class Board {
 
 	// 사용자 번호 연결해야 한다.
 	@ManyToOne
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "userSeq")
 	private User user;
 
 	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
