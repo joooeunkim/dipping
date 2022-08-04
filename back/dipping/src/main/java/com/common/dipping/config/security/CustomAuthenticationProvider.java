@@ -1,6 +1,6 @@
 package com.common.dipping.config.security;
 
-import com.common.dipping.user.domain.MyUserDetails;
+import com.common.dipping.user.domain.entity.MyUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationProvider;
