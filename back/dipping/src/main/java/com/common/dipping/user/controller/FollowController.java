@@ -4,6 +4,7 @@ import com.common.dipping.user.domain.Follow;
 import com.common.dipping.user.dto.FollowDto;
 import com.common.dipping.user.service.FollowService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,14 +16,24 @@ public class FollowController {
     private final FollowService followService;
 
     @PostMapping("/follow")
-    public Follow followUser(@RequestBody FollowDto followDto) {
-
-        return followService.save(followDto.getFromUser(), followDto.getToUser());
-    }
-
-    @DeleteMapping("/follow")
-    public void unFollowUser(@RequestBody FollowDto followDto) {
+    public ResponseEntity<String> followUser(@RequestBody FollowDto followDto) {
+        // 본인에게 보내는 팔로잉 차단
+        if (followDto.getFromUser().equals(followDto.getToUser())) {
+            return ResponseEntity.badRequest().build();
+        }
+        // 팔로우 번호를 가져오고 없을 경우 -1을 리턴
         Long id = followService.getFollowIdByFromEmailToEmail(followDto.getFromUser(), followDto.getToUser());
+        if (id == -1){
+            followService.save(followDto.getFromUser(), followDto.getToUser());
+            return ResponseEntity.ok().body("팔로잉");
+        }
         followService.unFollow(id);
+        return ResponseEntity.ok().body("언팔로잉");
     }
+
+//    @DeleteMapping("/follow")
+//    public void unFollowUser(@RequestBody FollowDto followDto) {
+//        Long id = followService.getFollowIdByFromEmailToEmail(followDto.getFromUser(), followDto.getToUser());
+//        followService.unFollow(id);
+//    }
 }

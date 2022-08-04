@@ -21,7 +21,7 @@ public class FollowService {
         User fromUser = userRepository.findByEmail(fromUserEmail).orElse(null);
         User toUser = userRepository.findByEmail(toUserEmail).orElse(null);
 
-        Follow follow = followRepository.findByFromUserAndToUser(fromUser, toUser);
+        Follow follow = followRepository.findByFromUserAndToUser(fromUser, toUser).orElse(null);
 
         if (follow != null) {
             return follow.getId();
