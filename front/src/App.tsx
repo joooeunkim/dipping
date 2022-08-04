@@ -1,38 +1,38 @@
-import * as React from "react"
-import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
+import { ChakraProvider } from '@chakra-ui/react';
+import { Route, Routes } from 'react-router-dom';
+import { DippinMain } from './views/dippin/DippinMain';
+import { HomeMain } from './views/home/HomeMain';
+import { Layout } from './views/Layout';
+import { ProfileMain } from './views/profile/ProfileMain';
+import { SearchMain } from './views/search/SearchMain';
+import { FindPassword } from './views/users/FindPassword';
+import { Login } from './views/users/Login';
+import { Register } from './views/users/Register';
+import { Genre } from './views/users/register_process/Genre';
+import { InterestTag } from './views/users/register_process/InterestTag';
+import { RegisterProcessLayout } from './views/users/register_process/RegisterProcessLayout';
+import { UserInfo } from './views/users/register_process/UserInfo';
+import { SetPassword } from './views/users/SetPassword';
 
 export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
-    </Box>
+  <ChakraProvider>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<HomeMain />} />
+        <Route path="dippin" element={<DippinMain />} />
+        <Route path="search" element={<SearchMain />} />
+        <Route path="profile" element={<ProfileMain />} />
+        <Route path="profile/:nickname" element={<ProfileMain />} />
+      </Route>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/findPassword" element={<FindPassword />} />
+      <Route path="/setPassword" element={<SetPassword />} />
+      <Route path="/process" element={<RegisterProcessLayout />}>
+        <Route path="step1" element={<UserInfo />} />
+        <Route path="step2" element={<Genre />} />
+        <Route path="step3" element={<InterestTag />} />
+      </Route>
+    </Routes>
   </ChakraProvider>
-)
+);

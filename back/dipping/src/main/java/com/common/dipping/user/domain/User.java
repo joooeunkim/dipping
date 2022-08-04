@@ -19,18 +19,20 @@ import com.common.dipping.domain.entity.Like;
 import com.common.dipping.domain.entity.UserTag;
 import com.common.dipping.enums.UserRole;
 import com.common.dipping.user.common.Common;
+import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import javax.persistence.*;
+import java.io.DataInput;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "USER")
 @Getter
 @AllArgsConstructor
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends Common implements Serializable {
 
@@ -43,20 +45,20 @@ public class User extends Common implements Serializable {
 
     @Setter
     @Column(nullable = false, unique = true)
-    private String nickname;
+    private String userNickname;
 
-    @Setter
     @Column(nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
     private UserRole role;
     
     @Builder
-    public User(String email, String pw, String nickname, UserRole role) {
+    public User(String email, String pw, String userNickname, UserRole role) {
 		this.email = email;
 		this.pw = pw;
-		this.nickname = nickname;
+		this.userNickname = userNickname;
 		this.role = role;
 	}
+
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Board> boards = new ArrayList<>();
@@ -69,4 +71,35 @@ public class User extends Common implements Serializable {
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private UserTag userTag;
+
+    @Column(nullable = true)
+    private String profileImgUrl;
+
+    @Column(nullable = true)
+    private String userMusicTaste;
+
+    @Column(nullable = true)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = true)
+    private LocalDateTime updatedAt;
+
+    @Column(columnDefinition = "Boolean default true")
+    private Boolean openUser;
+
+    @Column(nullable = true)
+    private String provider;
+
+    @Column(nullable = true)
+    private String musicGerne;
+
+    public void profileEdit(String userNickname, String profileImgUrl, String userMusicTaste, Boolean openUser, String musicGerne) {
+        this.userNickname = userNickname;
+        this.profileImgUrl = profileImgUrl;
+        this.userMusicTaste = userMusicTaste;
+        this.openUser = openUser;
+        this.musicGerne = musicGerne;
+        this.updatedAt = LocalDateTime.now();
+    }
+
 }
