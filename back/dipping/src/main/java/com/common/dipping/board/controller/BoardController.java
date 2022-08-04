@@ -44,16 +44,11 @@ public class BoardController {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		BoardDto boardDto = mapper.treeToValue(registerObj.get("post"), BoardDto.class);
-		User user = userRepository.findByUserSeq(boardDto.getUserSeq());
+		User user = userRepository.findById(boardDto.getUserSeq()).orElse(null);
 		
 		List<PostTagDto> postTagDto = Arrays.asList(mapper.treeToValue(registerObj.get("post_tag"), PostTagDto[].class));
 		List<UserTagDto> userTagDto = Arrays.asList(mapper.treeToValue(registerObj.get("user_tag"), UserTagDto[].class));
 		List<BoardSongDto> boardSongDto = Arrays.asList(mapper.treeToValue(registerObj.get("playlist"), BoardSongDto[].class));
-		
-		System.out.println(postTagDto.get(0).getContent());
-		System.out.println(userTagDto.get(0).getContent());
-		System.out.println(boardSongDto.get(0).getSongTitle());
-		
 		
 		long boardSeq = boardService.register(boardDto);
 		
@@ -65,7 +60,7 @@ public class BoardController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@GetMapping
+	@GetMapping("/board")
 	public ResponseEntity<?> getBoardOne(@Param("boardSeq") long boardSeq){
 		
 		Board board = boardService.getboardOne(boardSeq);
@@ -83,7 +78,7 @@ public class BoardController {
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 	
-	@GetMapping
+	@GetMapping("/userSeq")
 	public ResponseEntity<?> getfollowingBoard(@Param("userSeq") long userSeq){
 		
 		Map<String, Object> result = new HashMap<String, Object>();

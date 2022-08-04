@@ -1,10 +1,14 @@
 package com.common.dipping.board.domain.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import com.common.dipping.user.domain.entity.User;
@@ -23,15 +27,15 @@ public class Like {
 	private String createAt;
 	
 	// 좋아요한 사용자번호 연결
-	@ManyToOne
-    @JoinColumn(name = "userSeq")
-    private User user;
+	@ManyToMany
+    @JoinColumn(name = "id")
+    private List<User> users = new ArrayList<>();
 	// 댓글인지 연결
-	@ManyToOne
+	@ManyToMany
     @JoinColumn(name = "commentSeq",nullable = true)
-    private Comment comment;
+    private List<Comment> comments = new ArrayList<>();
 	// 게시판번호인지 연결
-	@ManyToOne
+	@ManyToMany
     @JoinColumn(name = "boardSeq",nullable = true)
-    private Board board;
+    private List<Board> boards = new ArrayList<>();
 }

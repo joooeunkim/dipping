@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -47,7 +48,7 @@ public class User extends Common  implements Serializable {
     private String pw;
 
     @Setter
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true, unique = true)
     private String userNickname;
 
     @Column(nullable = false, length = 50)
@@ -70,7 +71,7 @@ public class User extends Common  implements Serializable {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<Like> likes = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)

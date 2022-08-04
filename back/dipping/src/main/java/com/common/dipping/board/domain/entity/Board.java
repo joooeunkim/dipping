@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -50,13 +51,13 @@ public class Board {
 
 	// 사용자 번호 연결해야 한다.
 	@ManyToOne
-	@JoinColumn(name = "userSeq")
+	@JoinColumn(name = "id")
 	private User user;
 
 	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
 	private List<Comment> comments = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "boards", fetch = FetchType.LAZY)
     private List<Like> Likes = new ArrayList<>();
 
 }

@@ -24,7 +24,7 @@ public class UserTag {
 	private long userTagSeq;
 
 	@OneToOne
-    @JoinColumn(name = "userSeq")
+    @JoinColumn(name = "id")
     private User user;
 	
 	@ManyToOne

@@ -9,8 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import com.common.dipping.user.domain.entity.User;
 
@@ -39,7 +39,7 @@ public class Comment {
 		this.createdAt = createdAt;
 	}
 	
-	@OneToMany(mappedBy = "comment", fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "comments", fetch = FetchType.LAZY)
     private List<Like> Likes = new ArrayList<>();
 	
 	// 게시판 연결
@@ -48,6 +48,6 @@ public class Comment {
     private Board board;
 	// 댓글작성자번호 연결
 	@ManyToOne
-    @JoinColumn(name = "userSeq")
+    @JoinColumn(name = "id")
     private User user;
 }

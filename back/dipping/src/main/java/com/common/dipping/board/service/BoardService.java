@@ -43,7 +43,7 @@ public class BoardService {
 
 	public long register(BoardDto boardDto) {
 
-		User user = userRepository.findByUserSeq(boardDto.getUserSeq());
+		User user = userRepository.findById(boardDto.getUserSeq()).orElse(null);
 		// 포스트 기본 설정
 		Board board = Board.builder().content(boardDto.getContent())
 				.openPost(boardDto.isOpenPost())
