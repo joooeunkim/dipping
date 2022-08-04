@@ -18,13 +18,13 @@ import java.util.Date;
 @AllArgsConstructor
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends Common implements Serializable {
+public class User extends Common  implements Serializable {
 
     @Column(nullable = false, unique = true, length = 50)
     private String email;
 
     @Setter
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String pw;
 
     @Setter

@@ -21,7 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/user")
-@Log4j2
+@Slf4j
 public class UserController {
 
     private final UserService userService;
