@@ -1,3 +1,138 @@
+import { Box, Center, Flex, Spacer } from '@chakra-ui/react';
+
 export const Genre = () => {
-  return <div>장르</div>;
+  return (
+    <Flex flexWrap="wrap" justifyContent="center" mt="8">
+      <Flex width="100%" justifyContent="space-between" mb="calc(10vw)">
+        <Center
+          border="1px"
+          borderRadius="full"
+          w="100px"
+          h="100px"
+          borderColor="cyan.400"
+          color="cyan.400"
+        >
+          발라드
+        </Center>
+        <Spacer />
+        <Center
+          border="1px"
+          borderRadius="full"
+          w="100px"
+          h="100px"
+          borderColor="cyan.400"
+          color="cyan.400"
+        >
+          댄스
+        </Center>
+        <Spacer />
+        <Center
+          border="1px"
+          borderRadius="full"
+          w="100px"
+          h="100px"
+          borderColor="cyan.400"
+          color="cyan.400"
+        >
+          랩/힙합
+        </Center>
+      </Flex>
+      <Flex width="100%" justifyContent="space-between" mb="calc(10vw)">
+        <Center
+          border="1px"
+          borderRadius="full"
+          w="100px"
+          h="100px"
+          borderColor="cyan.400"
+          color="cyan.400"
+        >
+          R&B/Soul
+        </Center>
+        <Center
+          border="1px"
+          borderRadius="full"
+          w="100px"
+          h="100px"
+          borderColor="cyan.400"
+          color="cyan.400"
+        >
+          인디음악
+        </Center>
+        <Center
+          border="1px"
+          borderRadius="full"
+          w="100px"
+          h="100px"
+          borderColor="gray.500"
+          color=""
+        >
+          록/메탈
+        </Center>
+      </Flex>
+      <Flex width="100%" justifyContent="space-between" mb="calc(10vw)">
+        <Center
+          border="1px"
+          borderRadius="full"
+          w="100px"
+          h="100px"
+          borderColor="cyan.400"
+          color="cyan.400"
+        >
+          POP
+        </Center>
+        <Center
+          border="1px"
+          borderRadius="full"
+          w="100px"
+          h="100px"
+          borderColor="cyan.400"
+          color="cyan.400"
+        >
+          EDM
+        </Center>
+        <Center
+          border="1px"
+          borderRadius="full"
+          w="100px"
+          h="100px"
+          borderColor="cyan.400"
+          color="cyan.400"
+        >
+          재즈
+        </Center>
+      </Flex>
+      <Flex width="100%" justifyContent="space-between" mb="calc(10vw)">
+        <Center
+          border="1px"
+          borderRadius="full"
+          w="100px"
+          h="100px"
+          borderColor="cyan.400"
+          color="cyan.400"
+        >
+          포크/블루스
+        </Center>
+        <Center
+          border="1px"
+          borderRadius="full"
+          w="100px"
+          h="100px"
+          borderColor="cyan.400"
+          color="cyan.400"
+        >
+          트로트
+        </Center>
+        <Center
+          border="1px"
+          borderRadius="full"
+          w="100px"
+          h="100px"
+          borderColor="cyan.400"
+          color="cyan.400"
+        >
+          뉴에이지
+        </Center>
+      </Flex>
+    </Flex>
+  );
 };
