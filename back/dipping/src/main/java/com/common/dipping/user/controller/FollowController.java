@@ -24,10 +24,8 @@ public class FollowController {
         // 팔로우 번호를 가져오고 없을 경우 -1을 리턴
         Long id = followService.getFollowIdByFromEmailToEmail(followDto.getFromUser(), followDto.getToUser());
         if (id == -1){
-            followService.save(followDto.getFromUser(), followDto.getToUser());
             return ResponseEntity.ok().body("팔로잉");
         }
-        followService.unFollow(id);
         return ResponseEntity.ok().body("언팔로잉");
     }
 

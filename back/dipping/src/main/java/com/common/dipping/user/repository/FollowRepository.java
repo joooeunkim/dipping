@@ -14,6 +14,5 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     void deleteById(Long id);
 
-    Follow save(Follow follow);
 
 }
