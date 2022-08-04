@@ -1,5 +1,6 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { Route, Routes } from 'react-router-dom';
+import ProtectedRoute from './ProtectedRoute';
 import { DippinMain } from './views/dippin/DippinMain';
 import { HomeMain } from './views/home/HomeMain';
 import { Layout } from './views/Layout';
@@ -14,10 +15,17 @@ import { RegisterProcessLayout } from './views/users/register_process/RegisterPr
 import { UserInfo } from './views/users/register_process/UserInfo';
 import { SetPassword } from './views/users/SetPassword';
 
+import { ProtectedRouteProps } from './ProtectedRoute';
+
 export const App = () => (
   <ChakraProvider>
     <Routes>
-      <Route path="/" element={<Layout />}>
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute isAuthenticated={true} authenticationPath="/login" outlet={<Layout />} />
+        }
+      >
         <Route index element={<HomeMain />} />
         <Route path="dippin" element={<DippinMain />} />
         <Route path="search" element={<SearchMain />} />
