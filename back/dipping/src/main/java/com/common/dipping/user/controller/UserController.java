@@ -21,7 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/user")
-@Log4j2
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -117,8 +117,9 @@ public class UserController {
             return ResponseEntity.ok().body("닉네임이 중복되었습니다.");
         }
 
-
     }
+
+
 
 //    @GetMapping(value = "/oauth/kakao")
 //    public ResponseEntity<String> kakaoLogin() {
