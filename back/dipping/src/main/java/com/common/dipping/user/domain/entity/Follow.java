@@ -17,21 +17,21 @@ public class Follow {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @JoinColumn(name = "from_user_id")
+    @JoinColumn(name = "sender")
     @ManyToOne
-    private User fromUser;
+    private User sender;
 
-    @JoinColumn(name = "to_user_id")
+    @JoinColumn(name = "receiver")
     @ManyToOne
-    private User toUser;
+    private User receiver;
 
     @Column(nullable = true)
     private LocalDateTime followCreated;
 
     @Builder
     public Follow(User fromUser, User toUser) {
-        this.fromUser = fromUser;
-        this.toUser = toUser;
+        this.sender = fromUser;
+        this.receiver = toUser;
         this.followCreated = LocalDateTime.now();
     }
 }

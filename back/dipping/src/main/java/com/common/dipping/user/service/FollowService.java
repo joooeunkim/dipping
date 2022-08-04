@@ -17,17 +17,19 @@ public class FollowService {
     private final FollowRepository followRepository;
 
     @Transactional
-    public long getFollowIdByFromEmailToEmail(String fromUserEmail, String toUserEmail) {
-        User fromUser = userRepository.findByEmail(fromUserEmail).orElse(null);
-        User toUser = userRepository.findByEmail(toUserEmail).orElse(null);
-
-        Follow follow = followRepository.findByFromUserAndToUser(fromUser, toUser).orElse(null);
+    public long getFollowIdByFromEmailToEmail(String senderNickname, String receiverNickname) {
+        User sender = userRepository.findByUserNickname(senderNickname).orElse(null);
+        User receiver = userRepository.findByUserNickname(receiverNickname).orElse(null);
+        if (sender == null || receiver == null) {
+            return -2;
+        }
+        Follow follow = followRepository.findBySenderAndReceiver(sender, receiver).orElse(null);
 
         if (follow != null) {
             followRepository.deleteById(follow.getId());
             return follow.getId();
         }else {
-            Follow newFollow = Follow.builder().fromUser(fromUser).toUser(toUser).build();
+            Follow newFollow = Follow.builder().fromUser(sender).toUser(receiver).build();
             followRepository.save(newFollow);
             return -1;
         }

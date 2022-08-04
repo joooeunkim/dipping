@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class FollowDto {
 
-    private String fromUser;
-    private String toUser;
+    private String receiverNickname;
+    private String senderNickname;
 
 }
