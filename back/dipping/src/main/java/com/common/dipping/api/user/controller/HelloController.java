@@ -1,9 +1,20 @@
 package com.common.dipping.api.user.controller;
 
 import com.common.dipping.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+
+@ApiResponses({
+        @ApiResponse(responseCode = "200", description = "OK !!"),
+        @ApiResponse(responseCode = "400", description = "BAD REQUEST !!"),
+        @ApiResponse(responseCode = "404", description = "NOT FOUND !!"),
+        @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR !!")
+})
 
 @RestController
 @RequestMapping(value = "/api")
