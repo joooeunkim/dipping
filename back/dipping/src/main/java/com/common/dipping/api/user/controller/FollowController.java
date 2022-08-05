@@ -1,10 +1,16 @@
 package com.common.dipping.api.user.controller;
 
 import com.common.dipping.api.user.domain.dto.FollowDto;
+import com.common.dipping.api.user.domain.entity.Follow;
 import com.common.dipping.api.user.service.FollowService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,6 +30,32 @@ public class FollowController {
         if (id == -1) {return ResponseEntity.ok().body("팔로잉");}
         else if (id == -2) {return ResponseEntity.ok().body("존재하지 않는 유저입니다.");}
         return ResponseEntity.ok().body("언팔로잉");
+    }
+
+    @GetMapping("/follow")
+    public ResponseEntity<?> followList(@Param("userNickname") String userNickname) {
+        Map<String,Object> result = new HashMap<>();
+        Map<String,Object> followResult = new HashMap<>();
+        List<Follow> followList = followService.getFollowListByFromUserNickname(userNickname);
+        result.put("code", 200); // code : 200
+        followResult.put("follows", followList); // "user" : profileDto
+        result.put("data", followResult);
+        /*
+        {
+          "code": "200",
+          "data": {
+            "follows": [
+              {
+                "followSeq": 0,
+                "senderSeq": 0,
+                "receiverSeq": 1,
+                "followCreated": ""
+              }
+            ]
+          }
+        }
+        */
+        return ResponseEntity.ok().body(result);
     }
 
 //    @DeleteMapping("/follow")

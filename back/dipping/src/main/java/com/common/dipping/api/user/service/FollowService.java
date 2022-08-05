@@ -45,6 +45,12 @@ public class FollowService {
     	return list;
     }
 
+    public List<Follow> getFollowListByFromUserNickname(String fromUser){
+        User user = userRepository.findByUserNickname(fromUser).orElse(null);
+        List<Follow> list = followRepository.findAllBySender(user);
+        return list;
+    }
+
 //    @Transactional
 //    public Follow save(String fromUserEmail, String toUserEmail) {
 //        User fromUser = userRepository.findByEmail(fromUserEmail).orElse(null);
