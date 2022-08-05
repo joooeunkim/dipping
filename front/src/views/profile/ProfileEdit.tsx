@@ -43,20 +43,20 @@ export const ProfileEdit = () => {
           </Box>
         </Flex>
         <Flex>
-          <Box alignItems="left" marginTop="8px">
+          <Box alignItems="left" marginTop="8px" width="96px">
             <Text>이름</Text>
           </Box>
           <Spacer />
-          <Box width="240px">
-            <Input variant="flushed" placeholder="월래이름" />
+          <Box width="100%">
+            <Input variant="flushed" placeholder="기존이름" />
           </Box>
         </Flex>
         <Flex marginBottom="8px">
-          <Box alignItems="left" marginTop="8px">
+          <Box alignItems="left" marginTop="8px" width="96px">
             <Text>관심분야</Text>
           </Box>
           <Spacer />
-          <Box width="240px">
+          <Box width="100%">
             <Input variant="flushed" placeholder="#관심분야" />
           </Box>
         </Flex>
@@ -68,8 +68,14 @@ export const ProfileEdit = () => {
             colorScheme="cyan.500"
             textColor="black"
           >
-            <TagLabel>힙합</TagLabel>
-            <TagCloseButton />
+            <Tag marginRight="8px">
+              힙합
+              <TagCloseButton />
+            </Tag>
+            <Tag marginRight="8px">
+              코딩중
+              <TagCloseButton />
+            </Tag>
           </Tag>
         </Flex>
         <Flex marginBottom="56px">
