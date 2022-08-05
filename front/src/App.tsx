@@ -14,6 +14,8 @@ import { InterestTag } from './views/users/register_process/InterestTag';
 import { RegisterProcessLayout } from './views/users/register_process/RegisterProcessLayout';
 import { UserInfo } from './views/users/register_process/UserInfo';
 import { SetPassword } from './views/users/SetPassword';
+import { ProfileEdit } from './views/profile/ProfileEdit';
+import { PersonalInfoEdit } from './views/profile/PersonalInfoEdit';
 
 import { ProtectedRouteProps } from './ProtectedRoute';
 
@@ -30,17 +32,15 @@ export const App = () => (
         <Route path="dippin" element={<DippinMain />} />
         <Route path="search" element={<SearchMain />} />
         <Route path="profile" element={<ProfileMain />} />
+        <Route path="profile/edit" element={<ProfileEdit />} />
+        <Route path="profile/edit/person" element={<PersonalInfoEdit />} />
         <Route path="profile/:nickname" element={<ProfileMain />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/findPassword" element={<FindPassword />} />
       <Route path="/setPassword" element={<SetPassword />} />
-      <Route path="/process" element={<RegisterProcessLayout />}>
-        <Route path="step1" element={<UserInfo />} />
-        <Route path="step2" element={<Genre />} />
-        <Route path="step3" element={<InterestTag />} />
-      </Route>
+      <Route path="/process" element={<RegisterProcessLayout />} />
     </Routes>
   </ChakraProvider>
 );
