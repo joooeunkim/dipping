@@ -6,11 +6,17 @@ import {
   ModalBody,
   Avatar,
   Flex,
-  color,
   Input,
   InputGroup,
   useColorModeValue,
   InputRightElement,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
 } from '@chakra-ui/react';
 import { ModalNavBar } from './ModalNavBar';
 import { PostCommentItem } from './PostCommentItem';
@@ -33,8 +39,8 @@ export const PostComment = (props: any) => {
         onClick={onOpen}
       />
 
-      <Modal scrollBehavior="inside" onClose={onClose} size="full" isOpen={isOpen}>
-        <ModalContent position="fixed" top="0px">
+      <Drawer trapFocus={false} placement="right" onClose={onClose} size="full" isOpen={isOpen}>
+        <DrawerContent maxW="400px" h="full" padding="0">
           <ModalNavBar
             title="댓글"
             leftElement={
@@ -47,15 +53,15 @@ export const PostComment = (props: any) => {
               />
             }
           />
-          <ModalBody padding="0">
+          <DrawerBody padding="0">
             <Box h="48px" w="full" />
 
-            <Box right="0vw" w="full" marginY="8px" bg="">
-              <Box marginLeft="4vw" marginRight="6vw" fontSize="14px" lineHeight="18px" bg="">
+            <Box w="full" marginY="8px" bg="">
+              <Box marginLeft="16px" marginRight="20px" fontSize="14px" lineHeight="18px" bg="">
                 <Flex>
                   <Avatar
                     boxSize="32px"
-                    marginRight="2vw"
+                    marginRight="8px"
                     name={user.name}
                     src={user.profile_image}
                   />
@@ -76,54 +82,53 @@ export const PostComment = (props: any) => {
             {comments.map((item: any, index: number) => (
               <PostCommentItem {...item} key={index} />
             ))}
-
-            {/* input area */}
-            <Box
-              h="auto"
-              w="full"
-              position="fixed"
-              bottom="0px"
-              borderTop="1px"
-              borderColor={color}
-              bg={bg}
-              zIndex="sticky"
-            >
-              <Box fontSize="14px" marginX="16px" color="gray.500" display="none">
-                <Box display="inline" fontWeight="600">
-                  {user.name}
-                </Box>
-                에게 답글 입력 중
+          </DrawerBody>
+          {/* input area */}
+          <Box
+            w="full"
+            h="auto"
+            borderTop="1px"
+            borderColor={color}
+            position="fixed"
+            bottom="0px"
+            zIndex="popover"
+            bg={bg}
+          >
+            <Box fontSize="14px" marginX="16px" color="gray.500" display="none">
+              <Box display="inline" fontWeight="600">
+                {user.name}
               </Box>
-              <Box position="relative" top="6px" h="auto" w="full" bg="" marginX="16px">
-                <Flex h="48px">
-                  <Avatar boxSize="32px" name={user.name} src={user.profile_image} />
-                  <Box flex="1" position="relative" top="2px" marginX="4vw">
-                    <InputGroup>
-                      <InputRightElement
-                        h="32px"
-                        children={
-                          <Box
-                            fontSize="16px"
-                            color="gray.400"
-                            className="fa-regular fa-paper-plane-top"
-                          />
-                        }
-                      />
-                      <Input
-                        h="32px"
-                        variant="flushed"
-                        type="text"
-                        placeholder="검색어를 입력하세요."
-                      />
-                    </InputGroup>
-                  </Box>
-                </Flex>
-              </Box>
+              에게 답글 입력 중
             </Box>
-            <Box h="48px" w="full" />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+            <Box position="relative" top="6px" h="auto" w="full" bg="" marginX="16px" marginY="4px">
+              <Flex h="56px">
+                <Avatar boxSize="32px" name={user.name} src={user.profile_image} />
+                <Box flex="1" position="relative" top="2px" marginX="16px">
+                  <InputGroup>
+                    <InputRightElement
+                      h="32px"
+                      children={
+                        <Box
+                          fontSize="16px"
+                          color="gray.400"
+                          className="fa-regular fa-paper-plane-top"
+                        />
+                      }
+                    />
+                    <Input
+                      h="32px"
+                      variant="flushed"
+                      type="text"
+                      placeholder="검색어를 입력하세요."
+                    />
+                  </InputGroup>
+                </Box>
+                <Box w="8px" />
+              </Flex>
+            </Box>
+          </Box>
+        </DrawerContent>
+      </Drawer>
     </>
   );
 };

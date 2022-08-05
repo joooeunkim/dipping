@@ -28,23 +28,21 @@ export const PlayerLarge = (props: any) => {
   return (
     <>
       {/* album art */}
-      <Box
-        position="relative"
-        boxSize="92vw"
-        marginX="4vw"
-        borderRadius="20px"
-        overflow="hidden"
-        bg=""
-        boxShadow="0 0 2px gray"
-      >
-        <Image boxSize="92vw" src={playlists[currentitem].albumart} />
+      <Box position="relative" boxSize="92vw" marginX="4vw" borderRadius="20px" bg="">
+        <Image
+          borderRadius="20px"
+          boxShadow="0 0 2px gray"
+          boxSize="92vw"
+          src={playlists[currentitem].albumart}
+        />
 
         {/* playlist popover */}
         <Box>
           <Box
+            borderRadius="20px"
             position="absolute"
             w="full"
-            h="100vw"
+            h="92vw"
             top="0px"
             bg="whiteAlpha.400"
             backdropFilter="auto"

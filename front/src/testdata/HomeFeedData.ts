@@ -96,7 +96,7 @@ export const HomeFeedData: Array<FeedPost> = [
         },
         comment: {
           content: 'I must use Lorem',
-          parent: null,
+          parent: ' ',
           last_modified: '1시간',
           likes: 22,
           userlike: true,

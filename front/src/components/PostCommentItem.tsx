@@ -16,16 +16,16 @@ export const PostCommentItem = (props: any) => {
   // useEffect(() => {});
 
   return (
-    <Box right="0vw" w="full" marginY="8px" bg="">
+    <Box w="full" marginY="8px" bg="">
       <Box
-        marginLeft={comment.parent ? '8vw' : '4vw'}
-        marginRight="4vw"
+        marginLeft={comment.parent ? '48px' : '16px'}
+        marginRight="16px"
         fontSize="14px"
         lineHeight="18px"
         bg=""
       >
         <Flex>
-          <Avatar boxSize="32px" marginRight="2vw" name={user.name} src={user.profile_image} />
+          <Avatar boxSize="32px" marginRight="8px" name={user.name} src={user.profile_image} />
 
           <Box w="full" bg="">
             <Box display="inline" fontWeight="600">
@@ -45,7 +45,7 @@ export const PostCommentItem = (props: any) => {
               </Box>
             </Box>
           </Box>
-          <Box w="32px" h="32px" marginLeft="2vw" textAlign="center" bg="" onClick={onClickLike}>
+          <Box w="32px" h="32px" marginLeft="8px" textAlign="center" bg="" onClick={onClickLike}>
             {like ? (
               <Box
                 className="fa-solid fa-heart"
