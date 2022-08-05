@@ -14,6 +14,7 @@ import { InterestTag } from './views/users/register_process/InterestTag';
 import { RegisterProcessLayout } from './views/users/register_process/RegisterProcessLayout';
 import { UserInfo } from './views/users/register_process/UserInfo';
 import { SetPassword } from './views/users/SetPassword';
+import { ProfileEdit } from './views/profile/ProfileEdit';
 
 import { ProtectedRouteProps } from './ProtectedRoute';
 
@@ -30,6 +31,7 @@ export const App = () => (
         <Route path="dippin" element={<DippinMain />} />
         <Route path="search" element={<SearchMain />} />
         <Route path="profile" element={<ProfileMain />} />
+        <Route path="profile/edit" element={<ProfileEdit />} />
         <Route path="profile/:nickname" element={<ProfileMain />} />
       </Route>
       <Route path="/login" element={<Login />} />
