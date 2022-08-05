@@ -1,74 +1,52 @@
-import { Box, Center, Input, Text } from '@chakra-ui/react';
+import { Box, Input } from '@chakra-ui/react';
+import { SetStateAction, useState } from 'react';
+import { Tag } from '../../../components/Tag';
 
 export const InterestTag = () => {
+  const createTag = (e: any) => {
+    let tagName: string = e.target.value;
+    let code = e.code;
+    const temp: any[] = [...tags, tagName];
+    if (code === 'Enter') {
+      if (e.nativeEvent.isComposing === false) {
+        if (tags) {
+          setTags(temp);
+        } else {
+          setTags([tagName]);
+        }
+        e.target.value = '';
+      }
+    }
+  };
+
+  const deleteTag = (value: string) => {
+    let _tags = tags;
+
+    _tags = _tags.filter((e: any) => {
+      return e != value;
+    });
+
+    setTags(_tags);
+  };
+
+  const [tags, setTags] = useState<SetStateAction<any>>([]);
+
   return (
     <Box>
       <Box>
-        <Input variant="flushed" placeholder="관심태그입력" />
+        <Input
+          variant="flushed"
+          placeholder="관심태그입력"
+          maxLength={15}
+          onKeyDown={e => createTag(e)}
+        />
       </Box>
       <Box>
-        {/* 컴포넌트화 필요 */}
-        <Center
-          p="2"
-          m="2"
-          ml="0"
-          border="1px"
-          width="fit-content"
-          display="inline-block"
-          borderRadius="full"
-          borderColor="gray.500"
-          color="gray.500"
-        >
-          태그
-          <Box color="cyan.400" display="inline-block" ml="2">
-            <i className="fa-regular fa-xmark"></i>
-          </Box>
-        </Center>
-        <Center
-          p="2"
-          mr="2"
-          border="1px"
-          width="fit-content"
-          display="inline-block"
-          borderRadius="full"
-          borderColor="gray.500"
-          color="gray.500"
-        >
-          태그
-          <Box color="cyan.400" display="inline-block" ml="2">
-            <i className="fa-regular fa-xmark"></i>
-          </Box>
-        </Center>
-        <Center
-          p="2"
-          mr="2"
-          border="1px"
-          width="fit-content"
-          display="inline-block"
-          borderRadius="full"
-          borderColor="gray.500"
-          color="gray.500"
-        >
-          태그태그태그22222
-          <Box color="cyan.400" display="inline-block" ml="2">
-            <i className="fa-regular fa-xmark"></i>
-          </Box>
-        </Center>
-        <Center
-          p="2"
-          mr="2"
-          border="1px"
-          width="fit-content"
-          display="inline-block"
-          borderRadius="full"
-          borderColor="gray.500"
-          color="gray.500"
-        >
-          태그
-          <Box color="cyan.400" display="inline-block" ml="2">
-            <i className="fa-regular fa-xmark"></i>
-          </Box>
-        </Center>
+        {tags
+          ? tags.map((text: any, index: any) => (
+              <Tag key={index} text={text} deleteTag={deleteTag} />
+            ))
+          : ''}
       </Box>
     </Box>
   );

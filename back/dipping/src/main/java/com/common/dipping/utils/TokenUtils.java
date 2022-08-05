@@ -1,7 +1,7 @@
 package com.common.dipping.utils;
 
 import com.common.dipping.enums.UserRole;
-import com.common.dipping.user.domain.User;
+import com.common.dipping.user.domain.entity.User;
 import io.jsonwebtoken.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
