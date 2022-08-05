@@ -1,11 +1,9 @@
 package com.common.dipping.user.service;
 
 import com.common.dipping.enums.UserRole;
-import com.common.dipping.user.domain.User;
-import com.common.dipping.user.dto.LoginDto;
-import com.common.dipping.user.dto.ProfileDto;
-import com.common.dipping.user.dto.ProfileEditDto;
-import com.common.dipping.user.dto.SignUpDto;
+import com.common.dipping.user.domain.entity.User;
+import com.common.dipping.user.domain.dto.ProfileEditDto;
+import com.common.dipping.user.domain.dto.SignUpDto;
 import com.common.dipping.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service

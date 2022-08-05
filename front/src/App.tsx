@@ -36,11 +36,7 @@ export const App = () => (
       <Route path="/register" element={<Register />} />
       <Route path="/findPassword" element={<FindPassword />} />
       <Route path="/setPassword" element={<SetPassword />} />
-      <Route path="/process" element={<RegisterProcessLayout />}>
-        <Route path="step1" element={<UserInfo />} />
-        <Route path="step2" element={<Genre />} />
-        <Route path="step3" element={<InterestTag />} />
-      </Route>
+      <Route path="/process" element={<RegisterProcessLayout />} />
     </Routes>
   </ChakraProvider>
 );

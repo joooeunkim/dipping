@@ -1,6 +1,6 @@
 package com.common.dipping.user.repository;
 
-import com.common.dipping.user.domain.User;
+import com.common.dipping.user.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
