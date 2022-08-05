@@ -1,12 +1,16 @@
 package com.common.dipping.user.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.common.dipping.user.domain.entity.Follow;
 import com.common.dipping.user.domain.entity.User;
 import com.common.dipping.user.repository.FollowRepository;
 import com.common.dipping.user.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -31,6 +35,12 @@ public class FollowService {
             followRepository.save(newFollow);
             return -1;
         }
+    }
+    
+    public List<Follow> getfollowListByFromUser(long fromUser){
+    	User user = userRepository.findById(fromUser).orElse(null);
+    	List<Follow> list = followRepository.findAllByFromUser(user);
+    	return list;
     }
 
 //    @Transactional

@@ -15,6 +15,7 @@ import com.common.dipping.board.domain.entity.Tag;
 import com.common.dipping.board.domain.entity.UserTag;
 import com.common.dipping.board.repository.BoardRepository;
 import com.common.dipping.board.repository.BoardSongRepository;
+import com.common.dipping.board.repository.CommentRepository;
 import com.common.dipping.board.repository.PostTagRepository;
 import com.common.dipping.board.repository.TagRepository;
 import com.common.dipping.board.repository.UserTagRepository;
@@ -65,6 +66,7 @@ public class BoardService {
 						.songSinger(boardSongDto.get(i).getSongSinger()).songUrl(boardSongDto.get(i).getSongUrl())
 						.songImgUrl(boardSongDto.get(i).getSongImgUrl())
 						.board(boardRepository.findByboardSeq(boardSeq)).build();
+				boardSongRepository.save(boardSong);
 			}
 		}
 
@@ -104,4 +106,15 @@ public class BoardService {
 		}
 
 	}
+
+	public List<Board> getBoardAllByuserSeq(User toUser) {
+		List<Board> list = boardRepository.findAllByUserSeq(toUser);
+		return list;
+	}
+
+	public List<BoardSong> getBoardSongAllByboardSeq(Board board) {
+		List<BoardSong> list = boardSongRepository.findAllByBoardSeq(board);
+		return list;
+	}
+	
 }

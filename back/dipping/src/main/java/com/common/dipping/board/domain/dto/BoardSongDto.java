@@ -10,5 +10,5 @@ public class BoardSongDto {
 	private String songSinger;
 	private String songUrl;
 	private String songImgUrl;
-	private long userSeq;
+	private long boardSeq;
 }
