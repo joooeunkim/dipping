@@ -7,5 +7,5 @@ import com.common.dipping.api.board.domain.entity.Comment;
 
 public interface CommentRepository extends JpaRepository<Comment, Long>{
 
-	Long countByBoardSeq(Board board);
+	Long countByBoardId(Board board);
 }

@@ -24,13 +24,13 @@ public class UserService {
     public User signUp(final SignUpDto signUpDto) {
         final User user = User.builder()
                 .email(signUpDto.getEmail())
-                .userNickname(signUpDto.getUserNickname())
+                .nickname(signUpDto.getNickname())
                 .pw(passwordEncoder.encode(signUpDto.getPassword()))
                 .role(UserRole.ROLE_USER)
                 .provider(signUpDto.getProvider())
                 .profileImgUrl(signUpDto.getProfileImgUrl())
-                .userMusicTaste(signUpDto.getUserMusicTaste())
-                .musicGerne(signUpDto.getMusicGerne())
+                .musicTaste(signUpDto.getMusicTaste())
+                .musicGenre(signUpDto.getMusicGenre())
                 .build();
 
         return userRepository.save(user);
@@ -41,7 +41,7 @@ public class UserService {
     }
 
     public boolean isUserNicknameDuplicated(final String userNickname) {
-        return userRepository.existsByUserNickname(userNickname);
+        return userRepository.existsByNickname(userNickname);
     }
 
 //    public User login(LoginDto loginDto) {
@@ -53,7 +53,7 @@ public class UserService {
     }
 
     public User profile(String userNickname) {
-        User userinfo = userRepository.findAllByUserNickname(userNickname).orElse(null);
+        User userinfo = userRepository.findAllByNickname(userNickname).orElse(null);
         return userinfo;
     }
 
@@ -62,12 +62,12 @@ public class UserService {
     public Boolean profileEdit(final ProfileEditDto profileEditDto) {
 
         User userinfo = userRepository.findByEmail(profileEditDto.getEmail()).orElse(null);
-        User nicknameUser = userRepository.findByUserNickname(profileEditDto.getUserNickname()).orElse(null);
+        User nicknameUser = userRepository.findByNickname(profileEditDto.getNickname()).orElse(null);
         if (nicknameUser != null && nicknameUser.getEmail() != userinfo.getEmail()) {
             return false;
         }
 
-        userinfo.profileEdit(profileEditDto.getUserNickname(), profileEditDto.getProfileImgUrl(), profileEditDto.getUserMusicTaste(), profileEditDto.getOpenUser(), profileEditDto.getMusicGerne());
+        userinfo.profileEdit(profileEditDto.getNickname(), profileEditDto.getProfileImgUrl(), profileEditDto.getMusicTaste(), profileEditDto.getOpenUser(), profileEditDto.getMusicGenre());
 
         userRepository.save(userinfo);
         return true;

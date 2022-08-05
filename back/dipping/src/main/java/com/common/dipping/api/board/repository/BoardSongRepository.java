@@ -9,6 +9,6 @@ import com.common.dipping.api.board.domain.entity.BoardSong;
 
 public interface BoardSongRepository extends JpaRepository<BoardSong, Long>{
 
-	List<BoardSong> findAllByBoardSeq(Board board);
+	List<BoardSong> findAllByBoardId(Board board);
 
 }

@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.common.dipping.common.Common;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,20 +15,17 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class PostTag {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long postTagSeq;
+public class PostTag extends Common {
+
 	
 	// 태그 연결
+	@ManyToOne
+    @JoinColumn(name = "tagId")
+    private Tag tag;
+
 	// 게시판 연결
 	@ManyToOne
-    @JoinColumn(name = "tagSeq")
-    private Tag tag;
-	
-	@ManyToOne
-    @JoinColumn(name = "boardSeq")
+    @JoinColumn(name = "boardId")
     private Board board;
 
 	@Builder

@@ -22,8 +22,8 @@ public class FollowService {
 
     @Transactional
     public long getFollowIdByFromEmailToEmail(String senderNickname, String receiverNickname) {
-        User sender = userRepository.findByUserNickname(senderNickname).orElse(null);
-        User receiver = userRepository.findByUserNickname(receiverNickname).orElse(null);
+        User sender = userRepository.findByNickname(senderNickname).orElse(null);
+        User receiver = userRepository.findByNickname(receiverNickname).orElse(null);
         if (sender == null || receiver == null) {
             return -2;
         }
@@ -39,7 +39,7 @@ public class FollowService {
         }
     }
     
-    public List<Follow> getfollowListByFromUser(long fromUser){
+    public List<Follow> getfollowListByFromUser(Long fromUser){
     	User user = userRepository.findById(fromUser).orElse(null);
     	List<Follow> list = followRepository.findAllBySender(user);
     	return list;

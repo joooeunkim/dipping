@@ -36,35 +36,35 @@ public class BoardService {
 	private final TagRepository tagRepository;
 	private final UserTagRepository userTagRepository;
 
-	public Board getboardOne(long boardSeq) {
-		Board board = boardRepository.findByboardSeq(boardSeq);
+	public Board getboardOne(Long boardId) {
+		Board board = boardRepository.findById(boardId).orElse(null);
 		return board;
 	}
 
 	public long register(BoardDto boardDto) {
 
-		User user = userRepository.findById(boardDto.getUserSeq()).orElse(null);
+		User user = userRepository.findById(boardDto.getUserId()).orElse(null);
 		// 포스트 기본 설정
 		Board board = Board.builder().content(boardDto.getContent())
 				.openPost(boardDto.isOpenPost())
 				.openComment(boardDto.isOpenComment())
-				.albumart(boardDto.isAlbumart())
+				.albumArt(boardDto.isAlbumArt())
 				.user(user).build();
 		
-		return boardRepository.save(board).getBoardSeq();
+		return boardRepository.save(board).getId();
 
 		// 리턴은 사용자 기준 게시판 중에서 내림차순으로 했을 때 첫번째가 가장 최근에 만들어진
 		// 게시판임으로 boardSeq 조회해서 반환
 	}
 
-	public void registerSong(List<BoardSongDto> boardSongDto, long boardSeq) {
+	public void registerSong(List<BoardSongDto> boardSongDto, long boardId) {
 
 		for (int i = 0; i < boardSongDto.size(); i++) {
 			if (boardSongDto.get(i) != null) {
 				BoardSong boardSong = BoardSong.builder().songTitle(boardSongDto.get(i).getSongTitle())
 						.songSinger(boardSongDto.get(i).getSongSinger()).songUrl(boardSongDto.get(i).getSongUrl())
 						.songImgUrl(boardSongDto.get(i).getSongImgUrl())
-						.board(boardRepository.findByboardSeq(boardSeq)).build();
+						.board(boardRepository.findById(boardId).orElse(null)).build();
 				boardSongRepository.save(boardSong);
 			}
 		}
@@ -72,20 +72,20 @@ public class BoardService {
 		// 게시판과 연결
 	}
 
-	public void registerTag(List<PostTagDto> postTagDto, List<UserTagDto> userTagDto, long boardSeq) {
+	public void registerTag(List<PostTagDto> postTagDto, List<UserTagDto> userTagDto, long boardId) {
 
 		for (int i = 0; i < postTagDto.size(); i++) {
 			if (postTagDto.get(i) != null) {
 				Tag tag = tagRepository.findByContent(postTagDto.get(i).getContent());
 				if (tag != null) {
-					postTagDto.get(i).setTagSeq(tag.getTagSeq());
+					postTagDto.get(i).setTagId(tag.getId());
 				} else {
 					tag = Tag.builder().content(postTagDto.get(i).getContent()).build();
 					tagRepository.save(tag);
 					tag = tagRepository.findByContent(postTagDto.get(i).getContent());
-					postTagDto.get(i).setTagSeq(tag.getTagSeq());
+					postTagDto.get(i).setTagId(tag.getId());
 				}
-				PostTag postTag = PostTag.builder().tag(tag).board(boardRepository.findByboardSeq(boardSeq)).build();
+				PostTag postTag = PostTag.builder().tag(tag).board(boardRepository.findById(boardId).orElse(null)).build();
 				postTagRepository.save(postTag);
 			} else {
 				return;
@@ -94,9 +94,9 @@ public class BoardService {
 
 		for (int i = 0; i < userTagDto.size(); i++) {
 			if (userTagDto.get(i) != null) {
-				long userSeq = Long.parseLong(userTagDto.get(i).getContent());
-				User user = userRepository.findById(userSeq).orElseThrow(()->new IllegalArgumentException("해당 게시글이 없습니다. id="+userSeq));
-				UserTag userTag = UserTag.builder().board(boardRepository.findByboardSeq(boardSeq))
+				long userId = Long.parseLong(userTagDto.get(i).getContent());
+				User user = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("해당 게시글이 없습니다. id="+userId));
+				UserTag userTag = UserTag.builder().board(boardRepository.findById(boardId).orElse(null))
 						.user(user).build();
 				userTagRepository.save(userTag);
 			}else {
@@ -106,13 +106,8 @@ public class BoardService {
 
 	}
 
-	public List<Board> getBoardAllByuserSeq(User toUser) {
-		List<Board> list = boardRepository.findAllByUserSeq(toUser);
-		return list;
-	}
-
-	public List<BoardSong> getBoardSongAllByboardSeq(Board board) {
-		List<BoardSong> list = boardSongRepository.findAllByBoardSeq(board);
+	public List<BoardSong> getBoardSongAllById(Board board) {
+		List<BoardSong> list = boardSongRepository.findAllByBoardId(board);
 		return list;
 	}
 	

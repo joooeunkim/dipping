@@ -3,17 +3,11 @@ package com.common.dipping.api.board.domain.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import com.common.dipping.api.user.domain.entity.User;
 
+import com.common.dipping.common.Common;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,33 +15,29 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Comment {
+public class Comment extends Common {
 
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long commentSeq;
-	
 	private String content;
-	private long parentSeq;
-	private String createdAt;
-	private String updateAt;
+
+	@Column(nullable = true)
+	private long parentId;
 	
 	@Builder
-	public Comment(String content, long parentSeq, String createdAt) {
+	public Comment(String content, Long parentId) {
 		this.content = content;
-		this.parentSeq = parentSeq;
-		this.createdAt = createdAt;
+		this.parentId = parentId;
 	}
 	
-	@ManyToMany(mappedBy = "comments", fetch = FetchType.LAZY)
-    private List<Like> Likes = new ArrayList<>();
+//	@ManyToMany(mappedBy = "comments", fetch = FetchType.LAZY)
+//    private List<Like> Likes = new ArrayList<>();
 	
 	// 게시판 연결
 	@ManyToOne
-    @JoinColumn(name = "boardSeq")
+    @JoinColumn(name = "boardId")
     private Board board;
+
 	// 댓글작성자번호 연결
 	@ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "userId")
     private User user;
 }
