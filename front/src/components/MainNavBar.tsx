@@ -1,4 +1,5 @@
 import { Box, Text, Flex, Image, Spacer, useColorModeValue } from '@chakra-ui/react';
+import { ColorModeSwitcher } from '../ColorModeSwitcher';
 
 export const MainNavBar = () => {
   const bg = useColorModeValue('white', 'gray.800');
@@ -32,6 +33,7 @@ export const MainNavBar = () => {
             <Spacer />
             <Text fontSize={size * 0.5 + 'px'}>{title}</Text>
             <Spacer />
+            <ColorModeSwitcher position="relative" bottom="4px" right="9vw" />
             <Box
               className="fa-light fa-bell"
               fontSize={size * 0.5 + 'px'}
