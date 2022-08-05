@@ -1,15 +1,15 @@
-type User = {
+export type User = {
   name: string;
   profile_image: string;
 };
 
-type Music = {
+export type Music = {
   title: string;
   artist: string;
   albumart: string;
 };
 
-type Comment = {
+export type Comment = {
   user: User;
   comment: {
     content: string;
@@ -20,7 +20,7 @@ type Comment = {
   };
 };
 
-type FeedPost = {
+export type FeedPost = {
   title: string;
   likes: any;
   article: string;

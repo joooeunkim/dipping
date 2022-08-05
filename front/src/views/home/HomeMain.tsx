@@ -3,37 +3,19 @@ import { useRef, useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { MainNavBar } from '../../components/MainNavBar';
 import { PlaylistPost } from '../../components/PlaylistPost';
-
-type Post = {
-  title: string;
-  likes: string;
-  article: string;
-  tags: string;
-  user: {
-    name: string;
-    profile_image: string;
-  };
-  playlists: {
-    title: string;
-    artist: string;
-    albumart: string;
-  }[];
-};
+import { HomeFeedData, FeedPost } from '../../testdata/HomeFeedData';
 
 export const HomeMain = () => {
   // const posts = [<PlaylistPost />, <PlaylistPost />];
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<FeedPost[]>([]);
+  const postfeeds = HomeFeedData;
 
   // ref
   const observerRef = useRef<IntersectionObserver>();
   const boxRef = useRef<HTMLDivElement>(null);
 
-  // // useEffect
-  // useEffect(() => {
-  //   // 렌더링마다 새로 데이터 가져오기
-  //   getInfo();
-  // }, []);
-  console.log('렌더링!');
+  // useEffect
+  // console.log('렌더링!');
   useEffect(() => {
     observerRef.current = new IntersectionObserver(intersectionObserver); // IntersectionObserver
     boxRef.current && observerRef.current.observe(boxRef.current);
@@ -45,23 +27,7 @@ export const HomeMain = () => {
     // setPosts(curPosts => [...curPosts, ...res.data]); // state에 추가
 
     // 더미 데이터
-    const newpost: { data: Array<Post> } = {
-      // data: [
-      //   {
-      //     article: '',
-      //     likes: '',
-      //     tags: '',
-      //     title: '',
-      //     playlists: [
-      //       {
-      //         title: '',
-      //         albumart: '',
-      //         artist: '',
-      //       },
-      //     ],
-      //     user: { name: '', profile_image: '' },
-      //   },
-      // ],
+    const newpost: { data: Array<FeedPost> } = {
       data: new Array(2),
     };
     setPosts(curPosts => [...curPosts, ...newpost.data]); // state에 추가
@@ -82,7 +48,7 @@ export const HomeMain = () => {
     <Box>
       <MainNavBar />
       {posts.map((item, index) => (
-        <PlaylistPost key={index} />
+        <PlaylistPost postfeed={postfeeds[0]} key={index} />
       ))}
       <Box position="relative" w="full" h="300px">
         <Spinner

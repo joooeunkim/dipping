@@ -2,69 +2,10 @@ import { Box, useDisclosure, Modal, ModalContent, ModalBody, Avatar, Flex } from
 import { ModalNavBar } from './ModalNavBar';
 import { PostCommentItem } from './PostCommentItem';
 
-// 더미 데이터
-const post = {
-  user: {
-    name: 'mocha_oca',
-    profile_image: 'https://bit.ly/3A2BqqJ',
-  },
-  article:
-    'The Black Parade is the third studio album by American rock band My Chemical Romance. ' +
-    'Released in Europe on October 20, 2006, through Reprise Records, it was produced by the band with ' +
-    'Rob Cavallo, known for having produced multiple albums for the Goo Goo Dolls and Green Day. ' +
-    "It is a rock opera centering on a dying character with cancer known as 'The Patient'. " +
-    'The album tells the story of his apparent death, experiences in the afterlife, and subsequent ' +
-    "reflections on his life. It is the band's only studio album to feature drummer Bob Bryar before his departure in 2010.",
-  last_modified: '1일',
-};
-
-const comments = [
-  {
-    user: {
-      name: 'mocha_oca',
-      profile_image: 'https://bit.ly/3A2BqqJ',
-    },
-    comment: {
-      content: '',
-      parent: null,
-    },
-  },
-  {
-    user: {
-      name: 'mocha_oca',
-      profile_image: 'https://bit.ly/3A2BqqJ',
-    },
-    comment: {
-      content: '',
-      parent: null,
-    },
-  },
-  {
-    user: {
-      name: 'mocha_oca',
-      profile_image: 'https://bit.ly/3A2BqqJ',
-    },
-    comment: {
-      content: '',
-      parent: 'something',
-    },
-  },
-  {
-    user: {
-      name: 'mocha_oca',
-      profile_image: 'https://bit.ly/3A2BqqJ',
-    },
-    comment: {
-      content: '',
-      parent: null,
-    },
-  },
-];
-
 export const PostComment = (props: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // const { post, comments } = props;
+  const { user, article, last_modified, comments } = props;
 
   return (
     <>
@@ -100,28 +41,26 @@ export const PostComment = (props: any) => {
                   <Avatar
                     boxSize="32px"
                     marginRight="2vw"
-                    name={post.user.name}
-                    src={post.user.profile_image}
+                    name={user.name}
+                    src={user.profile_image}
                   />
 
                   <Box w="full" bg="">
                     <Box display="inline" fontWeight="600">
-                      {post.user.name}
+                      {user.name}
                     </Box>
-                    <Box display="inline">&nbsp; {post.article}</Box>
+                    <Box display="inline">&nbsp; {article}</Box>
                     <Box fontSize="12px" color="gray.500" marginY="8px">
-                      <Box display="inline">{post.last_modified}</Box>
+                      <Box display="inline">{last_modified}</Box>
                     </Box>
                   </Box>
                 </Flex>
               </Box>
             </Box>
             <hr />
-            <PostCommentItem />
-            <PostCommentItem />
-            <PostCommentItem />
-            <PostCommentItem />
-            <PostCommentItem />
+            {comments.map((item: any, index: number) => (
+              <PostCommentItem {...item} key={index} />
+            ))}
             <Box h="48px" w="full" />
           </ModalBody>
         </ModalContent>

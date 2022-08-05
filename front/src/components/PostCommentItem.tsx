@@ -1,31 +1,19 @@
 import { Box, Avatar, Flex, Spacer } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ModalNavBar } from './ModalNavBar';
 
 export const PostCommentItem = (props: any) => {
-  // const { user, comment } = props;
+  const { user, comment } = props;
 
   // console.log('comment!');
 
-  const user = {
-    name: 'mocha_oca',
-    profile_image: 'https://bit.ly/3A2BqqJ',
-  };
-
-  const comment = {
-    content:
-      'The Black Parade is the third studio album by American rock band My Chemical Romance. ' +
-      'Released in Europe on October 20, 2006, through Reprise Records, it was produced by the band with ' +
-      'Rob Cavallo, known for having produced multiple albums for the Goo Goo Dolls and Green Day. ',
-    parent: null,
-    last_modified: '2시간',
-  };
-
   // 좋아요 토글
-  const [like, toggleLike] = useState(0);
+  const [like, toggleLike] = useState(comment.userlike);
   const onClickLike = () => {
     toggleLike(like ^ 1);
   };
+
+  // useEffect(() => {});
 
   return (
     <Box right="0vw" w="full" marginY="8px" bg="">
