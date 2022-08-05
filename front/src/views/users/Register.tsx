@@ -1,4 +1,5 @@
-import { Text, Box, Button, Center, ChakraProvider, Container, Heading } from '@chakra-ui/react';
+import { Text, Box, Button, Center, ChakraProvider, Container, Image } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 // 회원가입 방법 선택 컴포넌트
 export const Register = () => {
@@ -6,28 +7,29 @@ export const Register = () => {
     <ChakraProvider>
       <Container maxW="480px" w="95%" bg="" h="100vh" margin="0 auto">
         <Center mt="32px">
-          <Heading as="h1" h="110px" bg="gray.200">
-            LOGO
-          </Heading>
+          <Image src="/logo_dippin.png" w="48" mt="12" />
         </Center>
-        <Center mt="128px" w="100%" flexWrap="wrap">
+        <Center mt="24" w="100%" flexWrap="wrap">
           <Box w="100%">
-            <Button
-              w="100%"
-              bg="cyan.400"
-              color="white"
-              _hover={{
-                bg: 'cyan.500',
-              }}
-              _active={{
-                bg: 'cyan.500',
-              }}
-            >
-              디핑 회원가입
-            </Button>
+            <Link to="/process/step1">
+              <Button
+                w="100%"
+                bg="cyan.400"
+                color="white"
+                _hover={{
+                  bg: 'cyan.500',
+                }}
+                _active={{
+                  bg: 'cyan.500',
+                }}
+              >
+                디핑 회원가입
+              </Button>
+            </Link>
           </Box>
           <Box w="100%" mt="8px">
             <Button
+              leftIcon={<Image src="/google_logo.png" />}
               w="100%"
               bg="white"
               color="black"
@@ -43,6 +45,7 @@ export const Register = () => {
           </Box>
           <Box w="100%" mt="8px">
             <Button
+              leftIcon={<Image src="/kakao_logo.png" />}
               w="100%"
               bg="#FEE500"
               color="#392020"
@@ -56,9 +59,11 @@ export const Register = () => {
               카카오 회원가입
             </Button>
           </Box>
-          <Text mt="64px" color="cyan.400">
-            로그인 화면으로 돌아가기
-          </Text>
+          <Link to="/login">
+            <Text mt="64px" color="cyan.400">
+              로그인 화면으로 돌아가기
+            </Text>
+          </Link>
         </Center>
       </Container>
     </ChakraProvider>
