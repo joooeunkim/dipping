@@ -1,9 +1,6 @@
 package com.common.dipping.api.board.controller;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
@@ -24,7 +21,6 @@ import com.common.dipping.api.board.domain.entity.BoardSong;
 import com.common.dipping.api.board.repository.BoardRepository;
 import com.common.dipping.api.board.service.BoardService;
 import com.common.dipping.api.board.service.CommentService;
-import com.common.dipping.api.board.service.LikeService;
 import com.common.dipping.api.user.domain.entity.Follow;
 import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.repository.UserRepository;
@@ -42,7 +38,6 @@ public class BoardController {
 
 	private final BoardService boardService;
 	private final CommentService commentService;
-	private final LikeService likeService;
 	private final BoardRepository boardRepository;
 	private final UserRepository userRepository;
 	private final FollowService followService;
@@ -54,7 +49,7 @@ public class BoardController {
 		ObjectMapper mapper = new ObjectMapper();
 
 		BoardDto boardDto = mapper.treeToValue(registerObj.get("post"), BoardDto.class);
-		User user = userRepository.findById(boardDto.getUserSeq()).orElse(null);
+		User user = userRepository.findById(boardDto.getUserId()).orElse(null);
 
 		List<PostTagDto> postTagDto = Arrays
 				.asList(mapper.treeToValue(registerObj.get("post_tag"), PostTagDto[].class));
@@ -63,11 +58,9 @@ public class BoardController {
 		List<BoardSongDto> boardSongDto = Arrays
 				.asList(mapper.treeToValue(registerObj.get("playlist"), BoardSongDto[].class));
 
-		long boardSeq = boardService.register(boardDto);
-
-		boardService.registerSong(boardSongDto, boardSeq);
-		boardService.registerTag(postTagDto, userTagDto, boardSeq);
-		;
+		Long boardId = boardService.register(boardDto);
+		boardService.registerSong(boardSongDto, boardId);
+		boardService.registerTag(postTagDto, userTagDto, boardId);
 
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
@@ -107,18 +100,18 @@ public class BoardController {
 			for (int i = 0; i < follows.size(); i++) {
 				Map<String, Object> posts = new HashMap<String, Object>();
 
-				List<Board> boards = boardService.getBoardAllByuserSeq(follows.get(i).getReceiver());
+				List<Board> boards = new ArrayList<>();
 				if (boards != null) {
 					BoardResponse boardResponse = new BoardResponse(boards.get(i));
 					boardResponse.setId(number++);
-					boardResponse.setLikeCount(likeService.getCountByBoardSeq(boards.get(i)));
-					boardResponse.setMyLike(likeService.isMylike(userSeq, boards.get(i)));
-					boardResponse.setCommentcount(commentService.getCountByBoardSeq(boards.get(i)));
+					//boardResponse.setLikeCount(likeService.getCountByBoardSeq(boards.get(i)));
+					//boardResponse.setMyLike(likeService.isMylike(userSeq, boards.get(i)));
+					boardResponse.setCommentCount(commentService.getCountById(boards.get(i)));
 
 					posts.put("item", boardResponse);
 
 					for (int j = 0; j < boards.size(); j++) {
-						List<BoardSong> boardSongs = boardService.getBoardSongAllByboardSeq(boards.get(i));
+						List<BoardSong> boardSongs = boardService.getBoardSongAllById(boards.get(i));
 
 						if (boardSongs != null) {
 							posts.put("music", boardSongs);

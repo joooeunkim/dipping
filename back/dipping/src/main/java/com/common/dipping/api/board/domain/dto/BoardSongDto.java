@@ -5,10 +5,10 @@ import lombok.Data;
 @Data
 public class BoardSongDto {
 
-	private long songSeq;
+	private Long songId;
 	private String songTitle;
 	private String songSinger;
 	private String songUrl;
 	private String songImgUrl;
-	private long boardSeq;
+	private Long boardId;
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class PostTagDto {
 	
-	private long tagSeq;
-	private long boardSeq;
+	private Long tagId;
+	private Long boardId;
 	private String content;
 }

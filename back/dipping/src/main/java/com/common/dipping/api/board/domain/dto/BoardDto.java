@@ -5,12 +5,12 @@ import lombok.Data;
 @Data
 public class BoardDto {
 
-	private long boardSeq;
+	private Long id;
 	private String content;
-	private String createAt;
-	private String updateAt;
+	private String createdAt;
+	private String updatedAt;
 	private boolean openPost;
 	private boolean openComment;
-	private boolean albumart;
-	private long userSeq;
+	private boolean albumArt;
+	private Long userId;
 }

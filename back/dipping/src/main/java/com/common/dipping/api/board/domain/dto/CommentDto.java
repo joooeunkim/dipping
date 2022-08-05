@@ -5,11 +5,11 @@ import lombok.Data;
 @Data
 public class CommentDto {
 
-	private long commentSeq;	
+	private Long commentId;
 	private String content;
-	private long parentSeq;
+	private Long parentId;
 	private String createdAt;
-	private String updateAt;
-	private long userSeq;
-	private long boardSeq;
+	private String updatedAt;
+	private Long userId;
+	private Long boardId;
 }

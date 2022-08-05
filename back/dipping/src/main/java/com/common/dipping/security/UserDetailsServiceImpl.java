@@ -24,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 user.getEmail(),
                 user.getPw(),
                 user.getId(),
-                user.getUserNickname(),
+                user.getNickname(),
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
         );
     }

@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class LikeDto {
 
-	private long likeSeq;
-	private String createAt;
-	private long commentSeq;
-	private long boardSeq;
+	private Long likeId;
+	private String createdAt;
+	private Long commentId;
+	private Long boardId;
 }

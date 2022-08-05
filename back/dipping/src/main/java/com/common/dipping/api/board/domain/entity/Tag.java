@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.common.dipping.common.Common;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,11 +18,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Tag {
+public class Tag extends Common {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long tagSeq;
 	private String content;
 	
 	@Builder

@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.common.dipping.common.Common;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,11 +15,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class BoardSong {
+public class BoardSong extends Common {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long songSeq;
 	private String songTitle;
 	private String songSinger;
 	private String songUrl;
@@ -36,7 +34,7 @@ public class BoardSong {
 
 	// 게시판번호 연결
 	@ManyToOne
-    @JoinColumn(name = "boardSeq")
+    @JoinColumn(name = "boardId")
     private Board board;
 	// 사용자번호 연결 안해도 될듯??
 }
