@@ -65,6 +65,7 @@ public class BoardService {
 						.songSinger(boardSongDto.get(i).getSongSinger()).songUrl(boardSongDto.get(i).getSongUrl())
 						.songImgUrl(boardSongDto.get(i).getSongImgUrl())
 						.board(boardRepository.findByboardSeq(boardSeq)).build();
+				boardSongRepository.save(boardSong);
 			}
 		}
 
@@ -104,4 +105,15 @@ public class BoardService {
 		}
 
 	}
+
+	public List<Board> getBoardAllByuserSeq(User toUser) {
+		List<Board> list = boardRepository.findAllByUserSeq(toUser);
+		return list;
+	}
+
+	public List<BoardSong> getBoardSongAllByboardSeq(Board board) {
+		List<BoardSong> list = boardSongRepository.findAllByBoardSeq(board);
+		return list;
+	}
+	
 }
