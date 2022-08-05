@@ -15,7 +15,7 @@ export type Comment = {
     content: string;
     parent: any;
     last_modified: any;
-    like: number;
+    likes: any;
     userlike: any;
   };
 };
@@ -85,7 +85,7 @@ export const HomeFeedData: Array<FeedPost> = [
           content: 'nice',
           parent: null,
           last_modified: '1분',
-          like: 0,
+          likes: 0,
           userlike: false,
         },
       },
@@ -95,10 +95,10 @@ export const HomeFeedData: Array<FeedPost> = [
           profile_image: 'https://bit.ly/3A2BqqJ',
         },
         comment: {
-          content: 'i must use Lorem',
+          content: 'I must use Lorem',
           parent: null,
           last_modified: '1시간',
-          like: 0,
+          likes: 22,
           userlike: true,
         },
       },
@@ -111,8 +111,8 @@ export const HomeFeedData: Array<FeedPost> = [
           content: 'Good Old Days',
           parent: null,
           last_modified: '2시간',
-          like: 0,
-          userlike: true,
+          likes: 0,
+          userlike: false,
         },
       },
       {
@@ -127,8 +127,40 @@ export const HomeFeedData: Array<FeedPost> = [
             'Rob Cavallo, known for having produced multiple albums for the Goo Goo Dolls and Green Day. ',
           parent: null,
           last_modified: '2시간',
-          like: 0,
-          userlike: true,
+          likes: 0,
+          userlike: false,
+        },
+      },
+      {
+        user: {
+          name: 'mocha_oca',
+          profile_image: 'https://bit.ly/3A2BqqJ',
+        },
+        comment: {
+          content:
+            'The Black Parade is the third studio album by American rock band My Chemical Romance. ' +
+            'Released in Europe on October 20, 2006, through Reprise Records, it was produced by the band with ' +
+            'Rob Cavallo, known for having produced multiple albums for the Goo Goo Dolls and Green Day. ',
+          parent: null,
+          last_modified: '2시간',
+          likes: 0,
+          userlike: false,
+        },
+      },
+      {
+        user: {
+          name: 'mocha_oca',
+          profile_image: 'https://bit.ly/3A2BqqJ',
+        },
+        comment: {
+          content:
+            'The Black Parade is the third studio album by American rock band My Chemical Romance. ' +
+            'Released in Europe on October 20, 2006, through Reprise Records, it was produced by the band with ' +
+            'Rob Cavallo, known for having produced multiple albums for the Goo Goo Dolls and Green Day. ',
+          parent: null,
+          last_modified: '2시간',
+          likes: 0,
+          userlike: false,
         },
       },
     ],

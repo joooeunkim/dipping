@@ -33,6 +33,11 @@ export const PostCommentItem = (props: any) => {
             </Box>
             <Box display="inline">&nbsp; {comment.content}</Box>
             <Box fontSize="12px" color="gray.500" marginY="8px">
+              {comment.likes > 0 ? (
+                <Box display="inline">좋아요 {comment.likes} 개 &nbsp;&nbsp;</Box>
+              ) : (
+                <Box />
+              )}
               <Box display="inline">{comment.last_modified}</Box>
               &nbsp;&nbsp;
               <Box display="inline" fontWeight="600">
