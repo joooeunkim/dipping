@@ -2,20 +2,19 @@ package com.common.dipping.api.board.controller;
 
 import java.util.*;
 
+import com.common.dipping.api.board.domain.dto.*;
+import com.common.dipping.api.board.domain.entity.Comment;
+import com.common.dipping.security.UserDetailsImpl;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.common.dipping.api.board.domain.dto.BoardDto;
-import com.common.dipping.api.board.domain.dto.BoardResponse;
-import com.common.dipping.api.board.domain.dto.BoardSongDto;
-import com.common.dipping.api.board.domain.dto.PostTagDto;
-import com.common.dipping.api.board.domain.dto.UserTagDto;
 import com.common.dipping.api.board.domain.entity.Board;
 import com.common.dipping.api.board.domain.entity.BoardSong;
 import com.common.dipping.api.board.repository.BoardRepository;
@@ -123,5 +122,32 @@ public class BoardController {
 		}
 
 		return ResponseEntity.status(HttpStatus.OK).body(result);
+	}
+
+	@PostMapping("/comment")
+	public ResponseEntity<?> registerComment(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody CommentDto commentDto) {
+		commentDto.setUserId(userInfo.getId());
+		Long commentId = commentService.registerComment(commentDto);
+
+		if(commentId != 0L){
+			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+
+	@GetMapping("/comment")
+	public ResponseEntity<?> getCommentByBoardId(@Param("boardId") Long boardId){
+		List<Comment> comments = commentService.getlistCommentByboardId(boardId);
+		Map<String, Object> result = new HashMap<String, Object>();
+		if(comments != null){
+			result.put("code", 200);
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("comment", comments);
+			result.put("data",data);
+			return ResponseEntity.status(HttpStatus.OK).body(result);
+		}else {
+			result.put("code",201);
+			return ResponseEntity.status(HttpStatus.OK).body(result);
+		}
 	}
 }
