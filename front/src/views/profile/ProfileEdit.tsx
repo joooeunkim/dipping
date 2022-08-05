@@ -10,11 +10,10 @@ import {
   FormLabel,
   Select,
   Link,
-  Tag,
-  TagLabel,
-  TagCloseButton,
 } from '@chakra-ui/react';
 import { ModalNavBar } from '../../components/ModalNavBar';
+import { SetStateAction, useState } from 'react';
+import { Tag } from '../../components/Tag';
 
 export const ProfileEdit = () => {
   const props = {
@@ -24,6 +23,33 @@ export const ProfileEdit = () => {
     ),
     rightElement: <Box className="fa-light fa-bars" lineHeight="36px" fontSize="24px" bg="" />,
   };
+  const createTag = (e: any) => {
+    let tagName: string = e.target.value;
+    let code = e.code;
+    const temp: any[] = [...tags, tagName];
+    if (code === 'Enter') {
+      if (e.nativeEvent.isComposing === false) {
+        if (tags) {
+          setTags(temp);
+        } else {
+          setTags([tagName]);
+        }
+        e.target.value = '';
+      }
+    }
+  };
+
+  const deleteTag = (value: string) => {
+    let _tags = tags;
+
+    _tags = _tags.filter((e: any) => {
+      return e != value;
+    });
+
+    setTags(_tags);
+  };
+
+  const [tags, setTags] = useState<SetStateAction<any>>([]);
 
   return (
     <Box>
@@ -57,27 +83,16 @@ export const ProfileEdit = () => {
           </Box>
           <Spacer />
           <Box width="100%">
-            <Input variant="flushed" placeholder="#관심분야" />
+            <Input variant="flushed" onKeyDown={e => createTag(e)} placeholder="#관심태그입력" />
           </Box>
         </Flex>
-        <Flex marginBottom="120px">
-          <Tag
-            size="sm"
-            borderRadius="full"
-            variant="outline"
-            colorScheme="cyan.500"
-            textColor="black"
-          >
-            <Tag marginRight="8px">
-              힙합
-              <TagCloseButton />
-            </Tag>
-            <Tag marginRight="8px">
-              코딩중
-              <TagCloseButton />
-            </Tag>
-          </Tag>
-        </Flex>
+        <Box marginBottom="32px">
+          {tags
+            ? tags.map((text: any, index: any) => (
+                <Tag key={index} text={text} deleteTag={deleteTag} />
+              ))
+            : ''}
+        </Box>
         <Flex marginBottom="56px">
           <FormControl>
             <FormLabel marginBottom="8px">추천 리스트</FormLabel>
