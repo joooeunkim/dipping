@@ -1,7 +1,7 @@
 package com.common.dipping.user.service;
 
-import com.common.dipping.user.domain.Follow;
-import com.common.dipping.user.domain.User;
+import com.common.dipping.user.domain.entity.Follow;
+import com.common.dipping.user.domain.entity.User;
 import com.common.dipping.user.repository.FollowRepository;
 import com.common.dipping.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

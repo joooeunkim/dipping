@@ -1,7 +1,7 @@
 package com.common.dipping.user.service;
 
 import com.common.dipping.exception.UserNotFoundException;
-import com.common.dipping.user.domain.MyUserDetails;
+import com.common.dipping.user.domain.entity.MyUserDetails;
 import com.common.dipping.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

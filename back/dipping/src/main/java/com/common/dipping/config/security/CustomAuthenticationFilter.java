@@ -1,7 +1,7 @@
 package com.common.dipping.config.security;
 
 import com.common.dipping.exception.InputNotFoundException;
-import com.common.dipping.user.domain.User;
+import com.common.dipping.user.domain.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;

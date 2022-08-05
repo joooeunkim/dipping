@@ -1,8 +1,7 @@
 package com.common.dipping.config.security;
 
-import com.common.dipping.enums.UserRole;
 import com.common.dipping.handler.CustomLoginSuccessHandler;
-import com.common.dipping.oauth.CustomOAuth2UserService;
+import com.common.dipping.user.oauth.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;

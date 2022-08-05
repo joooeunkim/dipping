@@ -1,19 +1,17 @@
 package com.common.dipping.user.controller;
 
-import com.common.dipping.user.domain.User;
-import com.common.dipping.user.dto.LoginDto;
-import com.common.dipping.user.dto.ProfileDto;
-import com.common.dipping.user.dto.ProfileEditDto;
-import com.common.dipping.user.dto.SignUpDto;
+import com.common.dipping.user.domain.entity.User;
+import com.common.dipping.user.domain.dto.ProfileDto;
+import com.common.dipping.user.domain.dto.ProfileEditDto;
+import com.common.dipping.user.domain.dto.SignUpDto;
 import com.common.dipping.user.service.UserService;
 import com.common.dipping.utils.TokenUtils;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
