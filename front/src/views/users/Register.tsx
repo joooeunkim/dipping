@@ -11,7 +11,7 @@ export const Register = () => {
         </Center>
         <Center mt="24" w="100%" flexWrap="wrap">
           <Box w="100%">
-            <Link to="/process/step1">
+            <Link to="/process">
               <Button
                 w="100%"
                 bg="cyan.400"
