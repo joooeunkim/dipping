@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 
 import com.common.dipping.api.user.domain.entity.User;
 
+import com.common.dipping.common.Common;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,40 +25,36 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Board {
+public class Board extends Common {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long boardSeq;
+	@Column(nullable = true)
 	private String content;
-	@Column(nullable = true)
-	private Date createAt;
-	@Column(nullable = true)
-	private String updateAt;
+
 	private boolean openPost;
+
 	private boolean openComment;
-	private boolean albumart;
+
+	private boolean albumArt;
 
 	@Builder
-	public Board(String content, String createAt, boolean openPost, boolean openComment, boolean albumart,
+	public Board(String content, boolean openPost, boolean openComment, boolean albumArt,
 			User user) {
 		this.content = content;
-		this.createAt = new Date();
 		this.openPost = openPost;
 		this.openComment = openComment;
-		this.albumart = albumart;
+		this.albumArt = albumArt;
 		this.user = user;
 	}
 
 	// 사용자 번호 연결해야 한다.
 	@ManyToOne
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "userId")
 	private User user;
 
 	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
 	private List<Comment> comments = new ArrayList<>();
 	
-	@ManyToMany(mappedBy = "boards", fetch = FetchType.LAZY)
-    private List<Like> Likes = new ArrayList<>();
+//	@ManyToMany(mappedBy = "boards", fetch = FetchType.LAZY)
+//    private List<Like> Likes = new ArrayList<>();
 
 }

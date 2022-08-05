@@ -8,11 +8,11 @@ import lombok.Setter;
 public class ProfileDto {
 
     private String email;
-    private String userNickname;
+    private String nickname;
     private String profileImgUrl;
-    private String userMusicTaste;
+    private String musicTaste;
     private String provider;
-    private String musicGerne;
+    private String musicGenre;
     private String createAt;
     private String updateAt;
     private Boolean openUser;

@@ -10,6 +10,7 @@ import javax.persistence.OneToOne;
 
 import com.common.dipping.api.user.domain.entity.User;
 
+import com.common.dipping.common.Common;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,18 +18,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class UserTag {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long userTagSeq;
+public class UserTag extends Common {
 
 	@OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "userId")
     private User user;
 	
 	@ManyToOne
-    @JoinColumn(name = "boardSeq")
+    @JoinColumn(name = "boardId")
     private Board board;
 
 	@Builder

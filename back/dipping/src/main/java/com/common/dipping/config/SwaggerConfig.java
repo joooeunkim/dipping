@@ -17,7 +17,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.OAS_30)
                 .useDefaultResponseMessages(false)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.example.springswagger.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.common.dipping.api"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());

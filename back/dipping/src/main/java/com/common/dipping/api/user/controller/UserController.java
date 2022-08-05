@@ -50,11 +50,11 @@ public class UserController {
 
         // set을 통해 profileDto에 데이터 설정
         profileDto.setEmail(userinfo.getEmail());
-        profileDto.setUserNickname(userinfo.getUserNickname());
+        profileDto.setNickname(userinfo.getNickname());
         profileDto.setProfileImgUrl(userinfo.getProfileImgUrl());
-        profileDto.setUserMusicTaste(userinfo.getUserMusicTaste());
+        profileDto.setMusicTaste(userinfo.getMusicTaste());
         profileDto.setProvider(userinfo.getProvider());
-        profileDto.setMusicGerne(userinfo.getMusicGerne());
+        profileDto.setMusicGenre(userinfo.getMusicGenre());
         // profileDto의 createdAt은 String인 반면 User는 LocalDateTime이여서 형변환이 필요하다.
         profileDto.setCreateAt(userinfo.getCreatedAt().format(DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss")));
         profileDto.setUpdateAt(userinfo.getUpdatedAt().format(DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss")));

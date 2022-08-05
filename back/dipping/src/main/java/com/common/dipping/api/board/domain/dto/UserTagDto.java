@@ -5,9 +5,9 @@ import lombok.Data;
 @Data
 public class UserTagDto {
 
-	private long userTagSeq;
-	private long boardSeq;
-	private long userSeq;
-	private long userSeq2;
+	private Long userTagId;
+	private Long boardId;
+	private Long senderId;
+	private Long receiverId;
 	private String content;
 }
