@@ -17,7 +17,7 @@ export const MainNavBar = () => {
         borderColor={color}
         position="fixed"
         top="0vh"
-        zIndex="popover"
+        zIndex="sticky"
         bg={bg}
       >
         <Box position="relative" top="15%" h="70%" w="full">

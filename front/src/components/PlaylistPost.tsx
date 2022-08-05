@@ -2,6 +2,7 @@ import { Box, useColorModeValue, Image, Avatar } from '@chakra-ui/react';
 import { useState } from 'react';
 import { PlayerLarge } from './PlayerLarge';
 import { PlayerLarge2 } from './PlayerLarge2';
+import { PostComment } from './PostComment';
 
 const postfeed = {
   title: 'Track_Emocore',
@@ -116,13 +117,14 @@ export const PlaylistPost = (props: any) => {
         <Box position="absolute" left="12vw" fontSize="24px" lineHeight="30px">
           {postfeed.likes}
         </Box>
-        <Box
+        {/* <Box
           position="absolute"
           right="20vw"
           className="fa-regular fa-comment"
           fontSize="24px"
           lineHeight="30px"
-        />
+        /> */}
+        <PostComment />
         <Box
           position="absolute"
           right="12vw"
