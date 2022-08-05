@@ -10,6 +10,7 @@ public class BoardResponse {
 	private Long id;
 	private Long boardId;
 	private Long userId;
+	private String nickname;
 	private String content;
 	private Boolean openPost;
 	private Boolean openComment;
@@ -25,6 +26,7 @@ public class BoardResponse {
 		this.openPost = board.isOpenPost();
 		this.openComment = board.isOpenComment();
 		this.albumArt = board.isAlbumArt();
+		this.nickname = board.getUser().getNickname();
 	}
 	
 }

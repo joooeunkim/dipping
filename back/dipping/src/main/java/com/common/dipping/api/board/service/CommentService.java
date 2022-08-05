@@ -13,7 +13,7 @@ public class CommentService {
 
 	private final CommentRepository commentRepository;
 
-	public long getCountById(Board board) {
+	public long getCountByBoardId(Board board) {
 		return commentRepository.countByBoardId(board);
 	}
 }
