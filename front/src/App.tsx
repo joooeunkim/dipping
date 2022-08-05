@@ -15,6 +15,7 @@ import { RegisterProcessLayout } from './views/users/register_process/RegisterPr
 import { UserInfo } from './views/users/register_process/UserInfo';
 import { SetPassword } from './views/users/SetPassword';
 import { ProfileEdit } from './views/profile/ProfileEdit';
+import { PersonalInfoEdit } from './views/profile/PersonalInfoEdit';
 
 import { ProtectedRouteProps } from './ProtectedRoute';
 
@@ -32,6 +33,7 @@ export const App = () => (
         <Route path="search" element={<SearchMain />} />
         <Route path="profile" element={<ProfileMain />} />
         <Route path="profile/edit" element={<ProfileEdit />} />
+        <Route path="profile/edit/person" element={<PersonalInfoEdit />} />
         <Route path="profile/:nickname" element={<ProfileMain />} />
       </Route>
       <Route path="/login" element={<Login />} />
