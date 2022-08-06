@@ -37,7 +37,7 @@ export const BottomTabBar = () => {
       borderColor={borderColor}
       position="fixed"
       bottom="0px"
-      zIndex="popover"
+      zIndex="sticky"
       bg={bgColor}
     >
       <Box position="relative" top="25%" h="50%" w="full">

@@ -18,6 +18,7 @@ export const ModalNavBar = (props: any) => {
         top="0px"
         borderBottom="1px"
         borderColor={color}
+        zIndex="sticky"
         bg={bg}
       >
         <Box id="bar" position="relative" top="6px" h="36px" w="full" bg="">
