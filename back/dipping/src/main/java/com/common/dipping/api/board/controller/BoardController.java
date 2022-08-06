@@ -129,7 +129,7 @@ public class BoardController {
 		commentDto.setUserId(userInfo.getId());
 		Long commentId = commentService.registerComment(commentDto);
 
-		if(commentId != 0L){
+		if(commentId == 0L){
 			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<Void>(HttpStatus.OK);
@@ -139,7 +139,7 @@ public class BoardController {
 	public ResponseEntity<?> getCommentByBoardId(@Param("boardId") Long boardId){
 		List<Comment> comments = commentService.getlistCommentByboardId(boardId);
 		Map<String, Object> result = new HashMap<String, Object>();
-		if(comments != null){
+		if(!comments.isEmpty()){
 			result.put("code", 200);
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("comment", comments);
