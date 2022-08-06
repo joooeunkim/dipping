@@ -103,7 +103,7 @@ export const ProfileEdit = () => {
           </FormControl>
         </Flex>
         <Flex>
-          <Link>개인정보 변경</Link>
+          <Link href="edit/person">개인정보 변경</Link>
         </Flex>
       </Container>
     </Box>

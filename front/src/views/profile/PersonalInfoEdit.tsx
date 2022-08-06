@@ -1,4 +1,4 @@
-import { Container, Flex, Image, Box, Text, Input, Spacer } from '@chakra-ui/react';
+import { Container, Flex, Image, Box, Text, Input } from '@chakra-ui/react';
 import { ModalNavBar } from '../../components/ModalNavBar';
 import React from 'react';
 
