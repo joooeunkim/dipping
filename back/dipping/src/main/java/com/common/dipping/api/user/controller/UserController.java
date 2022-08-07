@@ -74,6 +74,25 @@ public class UserController {
         return ResponseEntity.ok().body(result);
     }
 
+    @PostMapping(value="/newpw")
+    public ResponseEntity<?> updateNewPassword(@RequestBody LoginDto loginDto) throws MessagingException {
+        Map<String, Object> result = new HashMap<>();
+
+        if(userService.isEmailDuplicated(loginDto.getEmail())){ //회원정보 존재
+            if(userService.isProviderDipping(loginDto.getEmail())){//디핑으로 회원가입한 경우
+                userService.updatePassword(loginDto.getEmail(), loginDto.getPassword());
+                result.put("code", ApiResponseType.SUCCESS.getCode());
+            } else{//소셜로그인한 경우
+                result.put("code", ApiResponseType.NOT_VALID_RESPONSE.getCode());
+                result.put("msg","카카오 또는 구글 계정이 존재합니다");
+            }
+        } else{ //회원가입 하지 않은 경우
+            result.put("code", ApiResponseType.NOT_FOUND_DATA_RESPONSE.getCode());
+            result.put("msg","계정이 존재하지 않습니다. 회원가입 해주세요");
+        }
+        return ResponseEntity.ok().body(result);
+    }
+
 
     @GetMapping(value = "/profile")
     public ResponseEntity<?> profile(@Param("userNickname") String userNickname) {

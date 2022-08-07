@@ -106,10 +106,6 @@ public class User extends Common {
         this.pw = pw;
     }
 
-    public void haha(){
-        this.profileImgUrl = "hhhhhhhhhhhhhhhhhhhhhhhh";
-    }
-
     public void profileEdit(String userNickname, String profileImgUrl, String musicTaste, Boolean openUser, String musicGenre) {
         this.nickname = userNickname;
         this.profileImgUrl = profileImgUrl;

@@ -77,9 +77,7 @@ public class UserService {
         User user = userRepository.findByEmail(email).orElse(null);
         if(user!=null){
             user.newPassword(passwordEncoder.encode(newPw));
-            user.haha();
-            User nuser = userRepository.save(user);
-            System.out.println(nuser.getPw());
+            userRepository.save(user);
         }
     }
 
