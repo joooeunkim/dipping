@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
+import static com.common.dipping.common.UserRole.ROLE_GUEST;
 import static com.common.dipping.common.UserRole.ROLE_USER;
 
 @Getter
@@ -20,6 +21,7 @@ public class OAuthAttributes {
 
     @Builder
     public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String email, String provider){
+        System.out.println("OAuthAttributes-OauthAttributes의 builder");
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.email = email;
@@ -27,9 +29,7 @@ public class OAuthAttributes {
     }
 
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes){
-
-        log.info("look here regId:{}, uNaN:{}, attribute:{}", registrationId, userNameAttributeName, attributes);
-
+        System.out.println("OAuthAttributes-Of: [registrationId]: "+registrationId+ " [userNameAttributeName]: "+ userNameAttributeName + " [attributes]: "+ attributes.toString());
         if("kakao".equals(registrationId)){
             return ofKakao(registrationId, userNameAttributeName, attributes);
         }
@@ -59,6 +59,6 @@ public class OAuthAttributes {
     }
 
     public User toEntity(){
-            return User.builder().email(email).role(ROLE_USER).provider(provider).build();
+            return User.builder().email(email).pw("1234").role(ROLE_GUEST).provider(provider).build();
     }
 }

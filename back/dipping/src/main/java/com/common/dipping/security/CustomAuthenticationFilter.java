@@ -17,6 +17,7 @@ import java.io.IOException;
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
+        System.out.println("CustomAuthenticationFilter-CustomAuthenticationFilter");
         super.setAuthenticationManager(authenticationManager);
     }
 
@@ -24,8 +25,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         final UsernamePasswordAuthenticationToken authRequest;
-
         final LoginDto loginDto;
+        System.out.println("CustomAuthenticationFilter-attemptAuthentication");
         try {
             // 사용자 요청 정보로 UserPasswordAuthenticationToken 발급
             loginDto = new ObjectMapper().readValue(request.getInputStream(), LoginDto.class);

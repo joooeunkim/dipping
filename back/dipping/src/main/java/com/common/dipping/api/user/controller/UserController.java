@@ -5,12 +5,21 @@ import com.common.dipping.api.user.domain.dto.ProfileDto;
 import com.common.dipping.api.user.domain.dto.ProfileEditDto;
 import com.common.dipping.api.user.domain.dto.SignUpDto;
 import com.common.dipping.api.user.service.UserService;
+import com.common.dipping.common.ApiResponse;
+import com.common.dipping.jwt.JwtProvider;
+import com.common.dipping.security.UserDetailsImpl;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +31,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final JwtProvider jwtProvider;
 
     @PostMapping(value = "/signUp")
     public ResponseEntity signUp(@RequestBody final SignUpDto signUpDto) {
@@ -32,6 +42,16 @@ public class UserController {
             userService.signUp(signUpDto);
             return ResponseEntity.ok().build();
         }
+    }
+
+    //소셜 로그인 후 사용자가 제공받은 토큰을 헤더에 담고, 추가정보(이메일, 닉네임, 음악 장르, 음악 취향)를 body에 보내면
+    //아직 user의 Role이 GUEST이기 때문에 서버는 이 요청을 회원가입의 연장으로 이해하여 추가정보를 저장하고 user의 Role를 USER로 변경 후 토큰을 재발행해준다.
+    @PostMapping(value="/signUp/info")
+    public void signUpAddInfo(HttpServletResponse response, @AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody final SignUpDto signUpDto) throws IOException {
+
+        User user = userService.signUpAddInfo(userInfo.getUsername(), userInfo.getProvider(), signUpDto);
+        String token = jwtProvider.generateJwtToken(new UsernamePasswordAuthenticationToken(user.getEmail(), "", userInfo.getAuthorities()));
+        ApiResponse.token(response, token);
     }
 
 

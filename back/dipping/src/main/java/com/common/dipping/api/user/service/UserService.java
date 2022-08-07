@@ -5,12 +5,14 @@ import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.domain.dto.ProfileEditDto;
 import com.common.dipping.api.user.domain.dto.SignUpDto;
 import com.common.dipping.api.user.repository.UserRepository;
+import com.common.dipping.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -22,7 +24,7 @@ public class UserService {
 
     @Transactional
     public User signUp(final SignUpDto signUpDto) {
-        final User user = User.builder()
+        User user = User.builder()
                 .email(signUpDto.getEmail())
                 .nickname(signUpDto.getNickname())
                 .pw(passwordEncoder.encode(signUpDto.getPassword()))
@@ -32,6 +34,16 @@ public class UserService {
                 .musicTaste(signUpDto.getMusicTaste())
                 .musicGenre(signUpDto.getMusicGenre())
                 .build();
+
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    public User signUpAddInfo(String email, String provider,  SignUpDto signUpDto){
+
+        User user = userRepository.findByEmailAndProvider(email, provider).orElse(null);
+
+        user.signUpAddInfo(UserRole.ROLE_USER, signUpDto.getNickname(), signUpDto.getMusicTaste(), signUpDto.getProfileImgUrl(), signUpDto.getMusicGenre());
 
         return userRepository.save(user);
     }
