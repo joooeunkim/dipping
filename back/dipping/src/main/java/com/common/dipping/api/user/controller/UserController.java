@@ -1,7 +1,9 @@
 package com.common.dipping.api.user.controller;
 
 import com.common.dipping.api.user.domain.dto.*;
+import com.common.dipping.api.user.domain.entity.Code;
 import com.common.dipping.api.user.domain.entity.User;
+import com.common.dipping.api.user.service.CodeService;
 import com.common.dipping.api.user.service.UserService;
 import com.common.dipping.common.ApiResponse;
 import com.common.dipping.common.ApiResponseType;
@@ -30,6 +32,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final CodeService codeService;
     private final JwtProvider jwtProvider;
 
     @PostMapping(value = "/signUp")
@@ -74,24 +77,35 @@ public class UserController {
         return ResponseEntity.ok().body(result);
     }
 
-    @PostMapping(value="/newpw")
-    public ResponseEntity<?> updateNewPassword(@RequestBody LoginDto loginDto) throws MessagingException {
+    @PostMapping(value="/findpw/reset")
+    public ResponseEntity<?> updateNewPassword(@RequestParam("code") String code, @RequestBody LoginDto loginDto) throws MessagingException {
         Map<String, Object> result = new HashMap<>();
 
-        if(userService.isEmailDuplicated(loginDto.getEmail())){ //회원정보 존재
-            if(userService.isProviderDipping(loginDto.getEmail())){//디핑으로 회원가입한 경우
-                userService.updatePassword(loginDto.getEmail(), loginDto.getPassword());
-                result.put("code", ApiResponseType.SUCCESS.getCode());
-            } else{//소셜로그인한 경우
-                result.put("code", ApiResponseType.NOT_VALID_RESPONSE.getCode());
-                result.put("msg","카카오 또는 구글 계정이 존재합니다");
-            }
-        } else{ //회원가입 하지 않은 경우
-            result.put("code", ApiResponseType.NOT_FOUND_DATA_RESPONSE.getCode());
-            result.put("msg","계정이 존재하지 않습니다. 회원가입 해주세요");
-        }
+        Code codeInfo = codeService.findByCode(code);
+        userService.updatePassword(codeInfo.getUser().getEmail(), loginDto.getPassword());
+        result.put("code", ApiResponseType.SUCCESS.getCode());
+
         return ResponseEntity.ok().body(result);
     }
+
+//    @PostMapping(value="/newpw")
+//    public ResponseEntity<?> updateNewPassword(@RequestBody LoginDto loginDto) throws MessagingException {
+//        Map<String, Object> result = new HashMap<>();
+//
+//        if(userService.isEmailDuplicated(loginDto.getEmail())){ //회원정보 존재
+//            if(userService.isProviderDipping(loginDto.getEmail())){//디핑으로 회원가입한 경우
+//                userService.updatePassword(loginDto.getEmail(), loginDto.getPassword());
+//                result.put("code", ApiResponseType.SUCCESS.getCode());
+//            } else{//소셜로그인한 경우
+//                result.put("code", ApiResponseType.NOT_VALID_RESPONSE.getCode());
+//                result.put("msg","카카오 또는 구글 계정이 존재합니다");
+//            }
+//        } else{ //회원가입 하지 않은 경우
+//            result.put("code", ApiResponseType.NOT_FOUND_DATA_RESPONSE.getCode());
+//            result.put("msg","계정이 존재하지 않습니다. 회원가입 해주세요");
+//        }
+//        return ResponseEntity.ok().body(result);
+//    }
 
 
     @GetMapping(value = "/profile")
