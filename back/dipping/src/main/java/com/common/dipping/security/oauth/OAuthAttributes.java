@@ -4,11 +4,12 @@ import com.common.dipping.api.user.domain.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 import static com.common.dipping.common.UserRole.ROLE_GUEST;
-import static com.common.dipping.common.UserRole.ROLE_USER;
 
 @Getter
 @Slf4j
@@ -59,6 +60,11 @@ public class OAuthAttributes {
     }
 
     public User toEntity(){
-            return User.builder().email(email).pw("1234").role(ROLE_GUEST).provider(provider).build();
+        final BCryptPasswordEncoder pwEncoder = passwordEncoder();
+        return User.builder().email(email).pw(pwEncoder.encode(email)).role(ROLE_GUEST).provider(provider).build();
+    }
+
+    private BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
