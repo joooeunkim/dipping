@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/api/user")
 public class FollowController {
 
     private final FollowService followService;
@@ -33,10 +33,11 @@ public class FollowController {
     }
 
     @GetMapping("/follow")
-    public ResponseEntity<?> followList(@Param("userNickname") String userNickname) {
+    public ResponseEntity<?> followList(@Param("nickname") String nickname) {
         Map<String,Object> result = new HashMap<>();
         Map<String,Object> followResult = new HashMap<>();
-        List<Follow> followList = followService.getFollowListByFromUserNickname(userNickname);
+        System.out.println(nickname);
+        List<Follow> followList = followService.getFollowListByFromUserNickname(nickname);
         result.put("code", 200); // code : 200
         followResult.put("follows", followList); // "user" : profileDto
         result.put("data", followResult);

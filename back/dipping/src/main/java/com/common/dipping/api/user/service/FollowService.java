@@ -45,8 +45,8 @@ public class FollowService {
     	return list;
     }
 
-    public List<Follow> getFollowListByFromUserNickname(String fromUser){
-        User user = userRepository.findByUserNickname(fromUser).orElse(null);
+    public List<Follow> getFollowListByFromUserNickname(String fromUserNickname){
+        User user = userRepository.findByNickname(fromUserNickname).orElse(null);
         List<Follow> list = followRepository.findAllBySender(user);
         return list;
     }
