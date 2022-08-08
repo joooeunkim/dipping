@@ -1,6 +1,6 @@
-import { Box, Image, VisuallyHidden } from '@chakra-ui/react';
+import { SearchNavBar } from '../../components/floatingbar/SearchNavBar';
 import { useEffect, useState } from 'react';
-import { SearchNavBar } from '../../components/SearchNavBar';
+import { Box, Image, VisuallyHidden } from '@chakra-ui/react';
 
 export const SearchMain = () => {
   const props = {
