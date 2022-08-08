@@ -43,7 +43,7 @@ public class BoardService {
 		return board;
 	}
 
-	public long register(BoardDto boardDto) {
+	public Board register(BoardDto boardDto) {
 
 		User user = userRepository.findById(boardDto.getUserId()).orElse(null);
 		// 포스트 기본 설정
@@ -53,20 +53,20 @@ public class BoardService {
 				.albumArt(boardDto.isAlbumArt())
 				.user(user).build();
 		
-		return boardRepository.save(board).getId();
+		return boardRepository.save(board);
 
 		// 리턴은 사용자 기준 게시판 중에서 내림차순으로 했을 때 첫번째가 가장 최근에 만들어진
 		// 게시판임으로 boardSeq 조회해서 반환
 	}
 
-	public void registerSong(List<BoardSongDto> boardSongDto, long boardId) {
+	public void registerSong(List<BoardSongDto> boardSongDto, Board board) {
 
 		for (int i = 0; i < boardSongDto.size(); i++) {
 			if (boardSongDto.get(i) != null) {
 				BoardSong boardSong = BoardSong.builder().songTitle(boardSongDto.get(i).getSongTitle())
 						.songSinger(boardSongDto.get(i).getSongSinger()).songUrl(boardSongDto.get(i).getSongUrl())
 						.songImgUrl(boardSongDto.get(i).getSongImgUrl())
-						.board(boardRepository.findById(boardId).orElse(null)).build();
+						.board(board).build();
 				boardSongRepository.save(boardSong);
 			}
 		}
@@ -74,7 +74,7 @@ public class BoardService {
 		// 게시판과 연결
 	}
 
-	public void registerTag(List<PostTagDto> postTagDto, List<UserTagDto> userTagDto, long boardId) {
+	public void registerTag(List<PostTagDto> postTagDto, List<UserTagDto> userTagDto, Board board) {
 
 		for (int i = 0; i < postTagDto.size(); i++) {
 			if (postTagDto.get(i) != null) {
@@ -87,7 +87,7 @@ public class BoardService {
 					tag = tagRepository.findByContent(postTagDto.get(i).getContent());
 					postTagDto.get(i).setTagId(tag.getId());
 				}
-				PostTag postTag = PostTag.builder().tag(tag).board(boardRepository.findById(boardId).orElse(null)).build();
+				PostTag postTag = PostTag.builder().tag(tag).board(board).build();
 				postTagRepository.save(postTag);
 			} else {
 				return;
@@ -98,7 +98,7 @@ public class BoardService {
 			if (userTagDto.get(i) != null) {
 				long userId = Long.parseLong(userTagDto.get(i).getContent());
 				User user = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("해당 게시글이 없습니다. id="+userId));
-				UserTag userTag = UserTag.builder().board(boardRepository.findById(boardId).orElse(null))
+				UserTag userTag = UserTag.builder().board(board)
 						.user(user).build();
 				userTagRepository.save(userTag);
 			}else {

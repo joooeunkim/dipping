@@ -12,11 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.common.dipping.api.board.domain.entity.Board;
 import com.common.dipping.api.board.domain.entity.BoardSong;
@@ -58,7 +54,6 @@ public class BoardController {
         ObjectMapper mapper = new ObjectMapper();
 
         BoardDto boardDto = mapper.treeToValue(registerObj.get("post"), BoardDto.class);
-        User user = userRepository.findById(boardDto.getUserId()).orElse(null);
 
         List<PostTagDto> postTagDto = Arrays
                 .asList(mapper.treeToValue(registerObj.get("post_tag"), PostTagDto[].class));
@@ -67,16 +62,17 @@ public class BoardController {
         List<BoardSongDto> boardSongDto = Arrays
                 .asList(mapper.treeToValue(registerObj.get("playlist"), BoardSongDto[].class));
 
-        Long boardId = boardService.register(boardDto);
-        boardService.registerSong(boardSongDto, boardId);
-        boardService.registerTag(postTagDto, userTagDto, boardId);
+        Board newboard = boardService.register(boardDto);
+        boardService.registerSong(boardSongDto, newboard);
+        boardService.registerTag(postTagDto, userTagDto, newboard);
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @GetMapping("/board")
-    public ResponseEntity<?> getBoardOne(@AuthenticationPrincipal UserDetailsImpl userInfo, @Param("boardId") long boardId) {
+    public ResponseEntity<?> getBoardOne(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestParam("boardId") int longId) {
 
+        Long boardId = Long.valueOf(longId);
         Board board = boardService.getboardOne(boardId);
         Map<String, Object> result = new HashMap<String, Object>();
         Map<String, Object> data = new HashMap<String, Object>();
@@ -110,7 +106,7 @@ public class BoardController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<?> getfollowingBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @Param("pageNum") int pageNum) {
+    public ResponseEntity<?> getfollowingBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestParam("pageNum") int pageNum) {
 
         Map<String, Object> result = new HashMap<String, Object>();
         // 해당 유저의 팔로우 유저들을 찾아와서 포스트 검색하여 Id 내림차순으로 정렬

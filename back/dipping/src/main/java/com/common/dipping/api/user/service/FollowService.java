@@ -33,7 +33,7 @@ public class FollowService {
             followRepository.deleteById(follow.getId());
             return follow.getId();
         }else {
-            Follow newFollow = Follow.builder().fromUser(sender).toUser(receiver).build();
+            Follow newFollow = Follow.builder().sender(sender).receiver(receiver).build();
             followRepository.save(newFollow);
             return -1;
         }

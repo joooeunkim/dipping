@@ -2,6 +2,7 @@ package com.common.dipping.api.board.domain.entity;
 
 import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.common.Common;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,8 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Heart extends Common {
 
@@ -27,10 +30,4 @@ public class Heart extends Common {
     @JoinColumn(name = "commentId", nullable = true)
     private Comment comment;
 
-    @Builder
-    public Heart(User user, Board board, Comment comment) {
-        this.user = user;
-        this.board = board;
-        this.comment = comment;
-    }
 }

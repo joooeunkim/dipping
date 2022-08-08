@@ -11,6 +11,8 @@ import javax.persistence.*;
 @Getter
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 public class Code extends Common {
 
     @Column(nullable = false, unique = true)
@@ -19,11 +21,5 @@ public class Code extends Common {
     @OneToOne
     @JoinColumn(name = "userId")
     User user;
-
-    @Builder
-    public Code(String code, User user) {
-        this.code = code;
-        this.user = user;
-    }
 
 }

@@ -1,19 +1,19 @@
 package com.common.dipping.api.board.domain.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.common.dipping.common.Common;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class BoardSong extends Common {
 
@@ -21,16 +21,7 @@ public class BoardSong extends Common {
 	private String songSinger;
 	private String songUrl;
 	private String songImgUrl;
-	
-	@Builder
-	public BoardSong(String songTitle, String songSinger, String songUrl, String songImgUrl, Board board) {
-		this.songTitle = songTitle;
-		this.songSinger = songSinger;
-		this.songUrl = songUrl;
-		this.songImgUrl = songImgUrl;
-		this.board = board;
-	}
-	
+
 
 	// 게시판번호 연결
 	@ManyToOne

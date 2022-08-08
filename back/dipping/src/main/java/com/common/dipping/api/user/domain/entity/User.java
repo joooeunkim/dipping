@@ -34,6 +34,7 @@ import lombok.Setter;
 @Table(name = "USER")
 @Getter
 @AllArgsConstructor
+@Builder
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends Common {

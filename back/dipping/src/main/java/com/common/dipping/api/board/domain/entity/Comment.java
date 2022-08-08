@@ -8,12 +8,15 @@ import javax.persistence.*;
 import com.common.dipping.api.user.domain.entity.User;
 
 import com.common.dipping.common.Common;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Comment extends Common {
 
