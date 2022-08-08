@@ -1,8 +1,8 @@
 package com.common.dipping.api.user.controller;
 
 import com.common.dipping.api.user.domain.dto.FollowDto;
-import com.common.dipping.api.user.domain.dto.FollowListDto;
-import com.common.dipping.api.user.domain.entity.Follow;
+import com.common.dipping.api.user.domain.dto.FollowerListDto;
+import com.common.dipping.api.user.domain.dto.FollowingListDto;
 import com.common.dipping.api.user.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
@@ -37,8 +37,8 @@ public class FollowController {
     public ResponseEntity<?> followList(@Param("nickname") String nickname) {
         Map<String,Object> result = new HashMap<>();
         Map<String,Object> followResult = new HashMap<>();
-        List<FollowListDto> followingList = followService.getFollowListBySenderNickname(nickname);
-        List<FollowListDto> followerList = followService.getFollowListByReceiverNickname(nickname);
+        List<FollowingListDto> followingList = followService.getFollowListBySenderNickname(nickname);
+        List<FollowerListDto> followerList = followService.getFollowListByReceiverNickname(nickname);
         result.put("code", 200); // code : 200
         followResult.put("followings", followingList); // "user" : profileDto
         followResult.put("followers", followerList);

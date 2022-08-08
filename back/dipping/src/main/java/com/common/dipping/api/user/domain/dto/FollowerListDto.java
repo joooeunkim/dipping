@@ -5,11 +5,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FollowListDto {
+public class FollowerListDto {
 
     private Long followSeq;
     private Long senderSeq;
-    private Long receiverSeq;
     private String followCreated;
+    private String profileImgUrl;
+    private String nickname;
 
 }

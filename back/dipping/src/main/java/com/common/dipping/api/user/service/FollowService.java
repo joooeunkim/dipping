@@ -4,7 +4,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.common.dipping.api.user.domain.dto.FollowListDto;
+import com.common.dipping.api.user.domain.dto.FollowerListDto;
+import com.common.dipping.api.user.domain.dto.FollowingListDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,35 +49,37 @@ public class FollowService {
     	return list;
     }
 
-    public List<FollowListDto> getFollowListBySenderNickname(String senderNickname){
+    public List<FollowingListDto> getFollowListBySenderNickname(String senderNickname){
         User user = userRepository.findByNickname(senderNickname).orElse(null);
         List<Follow> list = followRepository.findAllBySender(user);
-        List<FollowListDto> followList = new ArrayList<>();
+        List<FollowingListDto> followingList = new ArrayList<>();
         System.out.println(list.size());
         for (int i = 0; i < list.size(); i++) {
-            FollowListDto followListDto = new FollowListDto();
-            followListDto.setFollowSeq(list.get(i).getId());
-            followListDto.setReceiverSeq(list.get(i).getReceiver().getId());
-            followListDto.setSenderSeq(list.get(i).getSender().getId());
-            followListDto.setFollowCreated(list.get(i).getCreatedAt().format(DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss")));
-            followList.add(i, followListDto);
+            FollowingListDto followingListDto = new FollowingListDto();
+            followingListDto.setFollowSeq(list.get(i).getId());
+            followingListDto.setReceiverSeq(list.get(i).getReceiver().getId());
+            followingListDto.setFollowCreated(list.get(i).getCreatedAt().format(DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss")));
+            followingListDto.setProfileImgUrl(list.get(i).getReceiver().getProfileImgUrl());
+            followingListDto.setNickname(list.get(i).getReceiver().getNickname());
+            followingList.add(i, followingListDto);
         }
-        return followList;
+        return followingList;
     }
 
-    public List<FollowListDto> getFollowListByReceiverNickname(String receiverNickname){
+    public List<FollowerListDto> getFollowListByReceiverNickname(String receiverNickname){
         User user = userRepository.findByNickname(receiverNickname).orElse(null);
         List<Follow> list = followRepository.findAllByReceiver(user);
-        List<FollowListDto> followList = new ArrayList<>();
+        List<FollowerListDto> followerList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            FollowListDto followListDto = new FollowListDto();
-            followListDto.setFollowSeq(list.get(i).getId());
-            followListDto.setReceiverSeq(list.get(i).getReceiver().getId());
-            followListDto.setSenderSeq(list.get(i).getSender().getId());
-            followListDto.setFollowCreated(list.get(i).getCreatedAt().format(DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss")));
-            followList.add(i, followListDto);
+            FollowerListDto followerListDto = new FollowerListDto();
+            followerListDto.setFollowSeq(list.get(i).getId());
+            followerListDto.setSenderSeq(list.get(i).getSender().getId());
+            followerListDto.setFollowCreated(list.get(i).getCreatedAt().format(DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss")));
+            followerListDto.setProfileImgUrl(list.get(i).getSender().getProfileImgUrl());
+            followerListDto.setNickname(list.get(i).getSender().getNickname());
+            followerList.add(i, followerListDto);
         }
-        return followList;
+        return followerList;
     }
 
 //    @Transactional
