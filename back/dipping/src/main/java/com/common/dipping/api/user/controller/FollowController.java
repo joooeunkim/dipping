@@ -1,6 +1,7 @@
 package com.common.dipping.api.user.controller;
 
 import com.common.dipping.api.user.domain.dto.FollowDto;
+import com.common.dipping.api.user.domain.dto.FollowListDto;
 import com.common.dipping.api.user.domain.entity.Follow;
 import com.common.dipping.api.user.service.FollowService;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +37,11 @@ public class FollowController {
     public ResponseEntity<?> followList(@Param("nickname") String nickname) {
         Map<String,Object> result = new HashMap<>();
         Map<String,Object> followResult = new HashMap<>();
-        System.out.println(nickname);
-        List<Follow> followList = followService.getFollowListByFromUserNickname(nickname);
+        List<FollowListDto> followingList = followService.getFollowListBySenderNickname(nickname);
+        List<FollowListDto> followerList = followService.getFollowListByReceiverNickname(nickname);
         result.put("code", 200); // code : 200
-        followResult.put("follows", followList); // "user" : profileDto
+        followResult.put("followings", followingList); // "user" : profileDto
+        followResult.put("followers", followerList);
         result.put("data", followResult);
         /*
         {
