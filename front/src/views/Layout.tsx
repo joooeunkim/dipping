@@ -13,9 +13,7 @@ export const Layout = () => (
     <Box h="48px" w="full" />
 
     {/* ==Floating Component== */}
-    <VisuallyHidden>
-      <div id="player" />
-    </VisuallyHidden>
+    <VisuallyHidden>{/* <div id="player" /> */}</VisuallyHidden>
     <BottomTabBar />
   </div>
 );

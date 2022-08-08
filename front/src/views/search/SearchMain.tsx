@@ -10,26 +10,27 @@ export const SearchMain = () => {
 
   //test
   const [playing, setPlaying] = useState(0);
-  const [progress, setProgress] = useState(
-    (window as any).player.getCurrentTime() / (window as any).player.getDuration(),
-  );
+  const [progress, setProgress] = useState(0.2);
 
   useEffect(() => {
-    async function loadIFrame() {
-      console.log('useEffect!');
-      // If not, load the youtube ifram api script asynchronously
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
+    console.log('useEffect for player init');
 
-      const firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    tag.setAttribute('onload', 'onYouTubeIframeReady()');
 
-      (window as any).onYouTubeIframeAPIReady = function () {
-        (window as any).player = new (window as any).YT.Player('player', {
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+
+    (window as any).onYouTubeIframeReady = function () {
+      console.log('iframe ready');
+      (window as any).YT.ready(function () {
+        console.log('YT ready');
+        (window as any).player = new (window as any).YT.Player('playerone', {
           width: 'auto',
           height: 'auto',
           playerVars: { playsinline: 1, autoplay: 1 },
-          videoId: 'Gc4sY98Jn9I',
+          videoId: 'sGPrx9bjgC8',
           events: {
             onStateChange: (event: any) => {
               if (event.data === (window as any).YT.PlayerState.ENDED) {
@@ -44,14 +45,13 @@ export const SearchMain = () => {
               }
             },
             onReady: () => {
-              console.log('iframe ready');
+              console.log('player ready');
               (window as any).player.setVolume(100);
             },
           },
         });
-      };
-    }
-    loadIFrame();
+      });
+    };
   }, []);
 
   useEffect(() => {
@@ -68,6 +68,7 @@ export const SearchMain = () => {
     <Box>
       <SearchNavBar {...props} />
       SearchMain
+      <div id="playerone" />
       {/* <VisuallyHidden>
         <div id="player" />
       </VisuallyHidden> */}
