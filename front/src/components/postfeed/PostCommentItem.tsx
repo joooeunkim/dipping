@@ -1,6 +1,6 @@
 import { Box, Avatar, Flex, Spacer } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { ModalNavBar } from './ModalNavBar';
+import { ModalNavBar } from '../floatingbar/ModalNavBar';
 
 export const PostCommentItem = (props: any) => {
   const { user, comment } = props;

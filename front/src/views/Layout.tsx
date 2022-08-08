@@ -1,10 +1,10 @@
 import { Box } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
-import { BottomTabBar } from '../components/BottomTabBar';
-import { MainNavBar } from '../components/MainNavBar';
-import { ModalNavBar } from '../components/ModalNavBar';
-import { SearchNavBar } from '../components/SearchNavBar';
+import { BottomTabBar } from '../components/floatingbar/BottomTabBar';
+import { MainNavBar } from '../components/floatingbar/MainNavBar';
+import { ModalNavBar } from '../components/floatingbar/ModalNavBar';
+import { SearchNavBar } from '../components/floatingbar/SearchNavBar';
 
 export const Layout = () => (
   <div>

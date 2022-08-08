@@ -1,8 +1,8 @@
 import { Box, Spinner } from '@chakra-ui/react';
 import { useRef, useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import { MainNavBar } from '../../components/MainNavBar';
-import { PlaylistPost } from '../../components/PlaylistPost';
+import { MainNavBar } from '../../components/floatingbar/MainNavBar';
+import { PlaylistPost } from '../../components/postfeed/PlaylistPost';
 import { HomeFeedData, FeedPost } from '../../testdata/HomeFeedData';
 
 export const HomeMain = () => {

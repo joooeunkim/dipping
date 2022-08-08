@@ -19,7 +19,7 @@ import {
   Grid,
   GridItem,
 } from '@chakra-ui/react';
-import { ModalNavBar } from '../../components/ModalNavBar';
+import { ModalNavBar } from '../../components/floatingbar/ModalNavBar';
 
 export const ProfileMain = () => {
   const props = {
