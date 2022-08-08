@@ -41,7 +41,10 @@ export const SearchMain = () => {
                 // setProgress(progress);
               }
             },
-            onReady: () => {},
+            onReady: () => {
+              console.log('iframe ready');
+              (window as any).player.setVolume(100);
+            },
           },
         });
       };
@@ -63,9 +66,9 @@ export const SearchMain = () => {
     <Box>
       <SearchNavBar {...props} />
       SearchMain
-      <VisuallyHidden>
+      {/* <VisuallyHidden>
         <div id="player" />
-      </VisuallyHidden>
+      </VisuallyHidden> */}
       <Box position="relative" h="22px" w="full" bg="">
         <Box position="absolute" left="4vw" h="6px" w="92%" borderRadius="2px" bg="gray.400" />
         <Box
