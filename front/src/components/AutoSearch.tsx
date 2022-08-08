@@ -1,20 +1,19 @@
-import { Box, Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
+import { Box, InputGroup, Select } from '@chakra-ui/react';
+import React, { useState } from 'react';
+
+const options = [
+  { value: 'chocolate', label: 'Chocolate' },
+  { value: 'strawberry', label: 'Strawberry' },
+  { value: 'vanilla', label: 'Vanilla' },
+];
 
 export const AutoSearch = () => {
+  const [selectedOption, setSelectedOption] = useState(null);
+
   return (
     <Box width="100%">
       <InputGroup>
-        <InputLeftElement
-          h="32px"
-          children={<Box fontSize="16px" className="fa-regular fa-magnifying-glass" />}
-        />
-        <Input
-          h="32px"
-          variant="filled"
-          borderRadius="1.5vh"
-          type="text"
-          placeholder="검색어를 입력하세요."
-        />
+        <Select defaultValue={selectedOption} onChange={setSelectedOption} options={options} />
       </InputGroup>
     </Box>
   );
