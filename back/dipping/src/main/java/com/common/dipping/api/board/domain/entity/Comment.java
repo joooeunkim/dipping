@@ -22,7 +22,7 @@ public class Comment extends Common {
 
 	private String content;
 
-	@Column(nullable = true)
+	@Column(nullable = true, columnDefinition = "Long default 0")
 	private long parentId;
 	
 	@Builder

@@ -112,12 +112,12 @@ public class BoardService {
 		//User user = userRepository.findById(reciveuser.getId()).orElse(null);
 		// 최근 일주일안에 생성된 포스트만 가져온다.
 		LocalDateTime week = LocalDateTime.now();
-		List<Board> list = boardRepository.findAllByUserIdAndCreatedAtBefore(reciveuser,week.minusDays(7));
+		List<Board> list = boardRepository.findAllByUserIdAndCreatedAtAfter(reciveuser,week.minusDays(7));
 		return list;
 	}
 
 	public List<BoardSong> getBoardSongAllById(Board board) {
-		List<BoardSong> list = boardSongRepository.findAllByBoardId(board);
+		List<BoardSong> list = boardSongRepository.findBoardSongByBoardId(board.getId());
 		return list;
 	}
 	

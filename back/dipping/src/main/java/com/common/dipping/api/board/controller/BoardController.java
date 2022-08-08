@@ -70,13 +70,12 @@ public class BoardController {
     }
 
     @GetMapping("/board")
-    public ResponseEntity<?> getBoardOne(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestParam("boardId") int longId) {
+    public ResponseEntity<?> getBoardOne(@AuthenticationPrincipal UserDetailsImpl userInfo, @Param("boardId") Long boardId) {
 
-        Long boardId = Long.valueOf(longId);
         Board board = boardService.getboardOne(boardId);
         Map<String, Object> result = new HashMap<String, Object>();
         Map<String, Object> data = new HashMap<String, Object>();
-        if (board != null) {
+        if (board.getId() >= 0) {
             result.put("code", 200);
             Map<String, Object> post = new HashMap<String, Object>();
 
@@ -91,9 +90,18 @@ public class BoardController {
 
             // music input
             List<BoardSong> boardSongs = boardService.getBoardSongAllById(board);
-
-            if (boardSongs != null) {
-                post.put("music", boardSongs);
+            List<BoardSongDto> boardSongDtos = new ArrayList<>();
+            if (!boardSongs.isEmpty()) {
+                for (BoardSong boardSong:boardSongs ) {
+                    BoardSongDto boardSongDto = new BoardSongDto();
+                    boardSongDto.setId(boardSong.getId());
+                    boardSongDto.setSongTitle(boardSong.getSongTitle());
+                    boardSongDto.setSongSinger(boardSong.getSongSinger());
+                    boardSongDto.setSongUrl(boardSong.getSongUrl());
+                    boardSongDto.setSongImgUrl(boardSong.getSongImgUrl());
+                    boardSongDtos.add(boardSongDto);
+                }
+                post.put("music", boardSongDtos);
             }
 
             data.put("post", post);
@@ -162,8 +170,13 @@ public class BoardController {
     }
 
 	@PostMapping("/comment")
-	public ResponseEntity<?> registerComment(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody CommentDto commentDto) {
-		commentDto.setUserId(userInfo.getId());
+	public ResponseEntity<?> registerComment(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+
+        CommentDto commentDto = mapper.treeToValue(registerObj.get("comment"), CommentDto.class);
+        //commentDto.setUserId(userInfo.getId());
 		Long commentId = commentService.registerComment(commentDto);
 
 		if(commentId == 0L){

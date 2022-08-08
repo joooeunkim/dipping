@@ -22,8 +22,8 @@ public class CommentService {
 	private final UserRepository userRepository;
 	private final BoardRepository boardRepository;
 
-	public long getCountByBoardId(Board board) {
-		return commentRepository.countByBoardId(board);
+	public int getCountByBoardId(Board board) {
+		return commentRepository.findCommentsCount(board.getId());
 	}
 
     public Long registerComment(CommentDto commentDto) {
@@ -31,16 +31,16 @@ public class CommentService {
 		User user = userRepository.findById(commentDto.getUserId()).orElse(null);
 		Board board = boardRepository.findById(commentDto.getBoardId()).orElse(null);
 		Comment comment;
-		if(commentDto.getParentId() == 0L){
+		if(commentDto.getParentId() > 0){
 			comment = Comment.builder()
 					.content(commentDto.getContent())
+					.parentId(commentDto.getParentId())
 					.board(board)
 					.user(user)
 					.build();
 		}else {
 			comment = Comment.builder()
 					.content(commentDto.getContent())
-					.parentId(commentDto.getParentId())
 					.board(board)
 					.user(user)
 					.build();

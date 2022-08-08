@@ -11,7 +11,7 @@ import com.common.dipping.api.user.domain.entity.User;
 
 public interface BoardRepository extends JpaRepository<Board, Long>{
 
-	Optional<Board> findById(Long boardId);
+	Optional<Board> findById(Long bosrdId);
 
-    List<Board> findAllByUserIdAndCreatedAtBefore(User reciveuser, LocalDateTime minusDays);
+    List<Board> findAllByUserIdAndCreatedAtAfter(User reciveuser, LocalDateTime createdAt);
 }
