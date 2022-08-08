@@ -56,8 +56,8 @@ public class FollowService {
         System.out.println(list.size());
         for (int i = 0; i < list.size(); i++) {
             FollowingListDto followingListDto = new FollowingListDto();
-            followingListDto.setFollowSeq(list.get(i).getId());
-            followingListDto.setReceiverSeq(list.get(i).getReceiver().getId());
+            followingListDto.setFollowId(list.get(i).getId());
+            followingListDto.setReceiverId(list.get(i).getReceiver().getId());
             followingListDto.setFollowCreated(list.get(i).getCreatedAt().format(DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss")));
             followingListDto.setProfileImgUrl(list.get(i).getReceiver().getProfileImgUrl());
             followingListDto.setNickname(list.get(i).getReceiver().getNickname());
@@ -72,8 +72,8 @@ public class FollowService {
         List<FollowerListDto> followerList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             FollowerListDto followerListDto = new FollowerListDto();
-            followerListDto.setFollowSeq(list.get(i).getId());
-            followerListDto.setSenderSeq(list.get(i).getSender().getId());
+            followerListDto.setFollowId(list.get(i).getId());
+            followerListDto.setSenderId(list.get(i).getSender().getId());
             followerListDto.setFollowCreated(list.get(i).getCreatedAt().format(DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss")));
             followerListDto.setProfileImgUrl(list.get(i).getSender().getProfileImgUrl());
             followerListDto.setNickname(list.get(i).getSender().getNickname());

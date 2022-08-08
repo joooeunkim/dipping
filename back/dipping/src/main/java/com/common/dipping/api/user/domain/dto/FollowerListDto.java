@@ -7,8 +7,8 @@ import lombok.Setter;
 @Setter
 public class FollowerListDto {
 
-    private Long followSeq;
-    private Long senderSeq;
+    private Long followId;
+    private Long senderId;
     private String followCreated;
     private String profileImgUrl;
     private String nickname;
