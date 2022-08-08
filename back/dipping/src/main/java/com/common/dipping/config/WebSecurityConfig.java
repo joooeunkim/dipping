@@ -3,7 +3,7 @@ package com.common.dipping.config;
 import com.common.dipping.security.CustomAuthenticationFilter;
 import com.common.dipping.jwt.JwtFilter;
 import com.common.dipping.jwt.JwtProvider;
-import com.common.dipping.security.oauth.CustomOAuth2UserService;
+import com.common.dipping.security.oauth.OAuth2UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final AccessDeniedHandler accessDeniedHandler;
 
     //oauth2
-    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2UserServiceImpl OAuth2UserServiceImpl;
 
     //security 적용 무시
     @Override
@@ -60,7 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(authenticationEntryPoint) //인증 실패
                 .accessDeniedHandler(accessDeniedHandler) //인가 실패
                 .and().authorizeRequests()
-                .antMatchers("/api/login", "/api/signUp").permitAll() //로그인 및 회원가입 요청은 허용
+                .antMatchers("/api/login", "/api/signUp","/api/findpw/*").permitAll() //로그인 및 회원가입 요청은 허용
+                .antMatchers("/api/signUp/info").hasRole("GUEST")
                 .antMatchers("/api/**").authenticated() //나머지 요청에 대해서는 인증을 요구
                 //.antMatchers("/api/**").permitAll()
                 .and()
@@ -68,8 +69,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login()
+                .defaultSuccessUrl("/login-success") //oauth2 인증이 성공했을 때, 이동되는 url을 설정.
+                .successHandler(authenticationSuccessHandler) //인증 프로세스에 따라 사용자 정의 로직을 실행.
                 .userInfoEndpoint()
-                .userService(customOAuth2UserService);
+                .userService(OAuth2UserServiceImpl); //로그인이 성공하면 해당 유저의 정보를 들고 customOAuth2UserService에서 후처리
     }
 
     //사용자 요청 정보로 UserPasswordAuthenticationToken 발급하는 필터

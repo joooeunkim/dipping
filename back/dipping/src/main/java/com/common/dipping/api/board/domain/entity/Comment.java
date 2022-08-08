@@ -23,9 +23,11 @@ public class Comment extends Common {
 	private long parentId;
 	
 	@Builder
-	public Comment(String content, Long parentId) {
+	public Comment(String content, Long parentId, Board board, User user) {
 		this.content = content;
 		this.parentId = parentId;
+		this.board = board;
+		this.user = user;
 	}
 	
 //	@ManyToMany(mappedBy = "comments", fetch = FetchType.LAZY)
