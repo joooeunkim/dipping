@@ -20,6 +20,8 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+
+        System.out.println("AuthenticationSuccessHandlerImpl-onAuthenticationSuccess: authentication="+authentication.toString());
         // 전달받은 인증정보 SecurityContextHolder에 저장
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // JWT Token 발급
