@@ -16,6 +16,9 @@ public class ProfileDto {
     private String createAt;
     private String updateAt;
     private Boolean openUser;
+    private int boardCount;
+    private Long followerCount;
+    private Long followingCount;
 
 
 }

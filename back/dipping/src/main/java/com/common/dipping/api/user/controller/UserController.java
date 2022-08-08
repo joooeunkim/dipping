@@ -132,6 +132,9 @@ public class UserController {
         profileDto.setCreateAt(userinfo.getCreatedAt().format(DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss")));
         profileDto.setUpdateAt(userinfo.getUpdatedAt().format(DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss")));
         profileDto.setOpenUser(userinfo.getOpenUser());
+        profileDto.setBoardCount(userinfo.getBoards().size());
+        profileDto.setFollowerCount(userService.followerCount(userinfo));
+        profileDto.setFollowingCount(userService.followingCount(userinfo));
 
         // result는 code와 data는 key값이
         Map<String,Object> result = new HashMap<>();
