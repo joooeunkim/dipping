@@ -10,7 +10,9 @@ export const SearchMain = () => {
 
   //test
   const [playing, setPlaying] = useState(0);
-  const [progress, setProgress] = useState(0.2);
+  const [progress, setProgress] = useState(
+    (window as any).player.getCurrentTime() / (window as any).player.getDuration(),
+  );
 
   useEffect(() => {
     async function loadIFrame() {
@@ -97,6 +99,15 @@ export const SearchMain = () => {
         }}
       >
         {playing ? 'Pause' : 'Play'}
+      </Box>
+      <Box
+        w="100px"
+        border="1px"
+        onClick={() => {
+          (window as any).player.loadVideoById('qvlGmA1J478');
+        }}
+      >
+        Dead!
       </Box>
     </Box>
   );
