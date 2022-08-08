@@ -18,7 +18,7 @@ import {
   DrawerContent,
   DrawerCloseButton,
 } from '@chakra-ui/react';
-import { ModalNavBar } from './ModalNavBar';
+import { ModalNavBar } from '../floatingbar/ModalNavBar';
 import { PostCommentItem } from './PostCommentItem';
 
 export const PostComment = (props: any) => {

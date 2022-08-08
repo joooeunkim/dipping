@@ -1,5 +1,5 @@
 import { Container, Flex, Image, Box, Text, Input } from '@chakra-ui/react';
-import { ModalNavBar } from '../../components/ModalNavBar';
+import { ModalNavBar } from '../../components/floatingbar/ModalNavBar';
 import React from 'react';
 
 export const PersonalInfoEdit = () => {

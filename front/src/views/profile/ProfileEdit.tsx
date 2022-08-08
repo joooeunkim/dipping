@@ -11,7 +11,7 @@ import {
   Select,
   Link,
 } from '@chakra-ui/react';
-import { ModalNavBar } from '../../components/ModalNavBar';
+import { ModalNavBar } from '../../components/floatingbar/ModalNavBar';
 import { SetStateAction, useState } from 'react';
 import { Tag } from '../../components/Tag';
 

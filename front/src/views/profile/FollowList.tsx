@@ -11,7 +11,7 @@ import {
   Text,
   Spacer,
 } from '@chakra-ui/react';
-import { ModalNavBar } from '../../components/ModalNavBar';
+import { ModalNavBar } from '../../components/floatingbar/ModalNavBar';
 import { AutoSearch } from '../../components/AutoSearch';
 
 export const FollowList = () => {
