@@ -22,7 +22,7 @@ public class CommentService {
 	private final UserRepository userRepository;
 	private final BoardRepository boardRepository;
 
-	public long getCountById(Board board) {
+	public long getCountByBoardId(Board board) {
 		return commentRepository.countByBoardId(board);
 	}
 

@@ -1,7 +1,9 @@
 package com.common.dipping.api.board.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import com.common.dipping.api.user.domain.entity.Follow;
 import org.springframework.stereotype.Service;
 
 import com.common.dipping.api.board.domain.dto.BoardDto;
@@ -104,6 +106,14 @@ public class BoardService {
 			}
 		}
 
+	}
+
+	public List<Board> getBoardByUserId(User reciveuser){
+		//User user = userRepository.findById(reciveuser.getId()).orElse(null);
+		// 최근 일주일안에 생성된 포스트만 가져온다.
+		LocalDateTime week = LocalDateTime.now();
+		List<Board> list = boardRepository.findAllByUserIdAndCreatedAtBefore(reciveuser,week.minusDays(7));
+		return list;
 	}
 
 	public List<BoardSong> getBoardSongAllById(Board board) {
