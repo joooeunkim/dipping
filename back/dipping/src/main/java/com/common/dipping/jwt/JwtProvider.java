@@ -1,5 +1,6 @@
 package com.common.dipping.jwt;
 
+import com.common.dipping.security.UserDetailsImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -10,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -64,7 +66,16 @@ public final class JwtProvider {
      * 토큰 발급
      */
     public String generateJwtToken(Authentication authentication) {
-        Claims claims = Jwts.claims().setSubject(String.valueOf(authentication.getPrincipal()));
+
+        Claims claims;
+        if(authentication instanceof OAuth2AuthenticationToken) {//oauth2
+            System.out.println("generateJwtToken: userDetailsImpl입니다: authentication"+authentication.toString());
+            claims = Jwts.claims().setSubject(String.valueOf(((UserDetailsImpl) authentication.getPrincipal()).getUsername()));
+        } else{ //dipping
+            System.out.println("generateJwtToken: userDetailsImpl 아닙니다: authentication"+authentication.toString());
+            claims = Jwts.claims().setSubject(String.valueOf(authentication.getPrincipal()));
+        }
+
         claims.put("roles", authentication.getAuthorities());
         Date now = new Date();
         return Jwts.builder()
@@ -86,5 +97,6 @@ public final class JwtProvider {
             return false;
         }
     }
+
 
 }

@@ -1,5 +1,6 @@
 package com.common.dipping.api.board.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,4 +13,5 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
 
 	Optional<Board> findById(Long boardId);
 
+    List<Board> findAllByUserIdAndCreatedAtBefore(User reciveuser, LocalDateTime minusDays);
 }

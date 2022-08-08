@@ -34,6 +34,7 @@ import lombok.Setter;
 @Table(name = "USER")
 @Getter
 @AllArgsConstructor
+@Builder
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends Common {
@@ -93,6 +94,18 @@ public class User extends Common {
 
     @Column(nullable = true)
     private String musicGenre;
+
+    public void signUpAddInfo(UserRole role, String nickname, String musicTaste, String profileImgUrl, String musicGenre){
+        this.role = role;
+        this.nickname = nickname;
+        this.musicTaste = musicTaste;
+        this.profileImgUrl = profileImgUrl;
+        this.musicGenre = musicGenre;
+    }
+
+    public void newPassword(String pw){
+        this.pw = pw;
+    }
 
     public void profileEdit(String userNickname, String profileImgUrl, String musicTaste, Boolean openUser, String musicGenre) {
         this.nickname = userNickname;

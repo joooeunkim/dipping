@@ -8,12 +8,15 @@ import javax.persistence.*;
 import com.common.dipping.api.user.domain.entity.User;
 
 import com.common.dipping.common.Common;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Comment extends Common {
 
@@ -23,9 +26,11 @@ public class Comment extends Common {
 	private long parentId;
 	
 	@Builder
-	public Comment(String content, Long parentId) {
+	public Comment(String content, Long parentId, Board board, User user) {
 		this.content = content;
 		this.parentId = parentId;
+		this.board = board;
+		this.user = user;
 	}
 	
 //	@ManyToMany(mappedBy = "comments", fetch = FetchType.LAZY)

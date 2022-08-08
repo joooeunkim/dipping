@@ -11,12 +11,15 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.common.dipping.common.Common;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Tag extends Common {
 
