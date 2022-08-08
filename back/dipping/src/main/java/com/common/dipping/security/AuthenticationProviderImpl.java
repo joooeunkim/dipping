@@ -39,8 +39,9 @@ public class AuthenticationProviderImpl  implements AuthenticationProvider {
         UserDetailsImpl userDetail = (UserDetailsImpl) userDetailsService.loadUserByUsername(username);
 
         // 비밀번호 확인
-        if (!passwordEncoder.matches(password, userDetail.getPassword()))
+        if (!passwordEncoder.matches(password, userDetail.getPassword())){
             throw new BadCredentialsException(userDetail.getUsername() + "Invalid password");
+        }
 
         // 인증 성공 시 UsernamePasswordAuthenticationToken 반환
         return new UsernamePasswordAuthenticationToken(userDetail.getUsername(), "", userDetail.getAuthorities());

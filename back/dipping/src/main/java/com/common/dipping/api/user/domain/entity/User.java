@@ -102,6 +102,10 @@ public class User extends Common {
         this.musicGenre = musicGenre;
     }
 
+    public void newPassword(String pw){
+        this.pw = pw;
+    }
+
     public void profileEdit(String userNickname, String profileImgUrl, String musicTaste, Boolean openUser, String musicGenre) {
         this.nickname = userNickname;
         this.profileImgUrl = profileImgUrl;
