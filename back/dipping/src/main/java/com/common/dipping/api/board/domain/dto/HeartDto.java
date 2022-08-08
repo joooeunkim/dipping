@@ -3,7 +3,7 @@ package com.common.dipping.api.board.domain.dto;
 import lombok.Data;
 
 @Data
-public class LikeDto {
+public class HeartDto {
 
 	private Long likeId;
 	private String createdAt;

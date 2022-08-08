@@ -15,7 +15,7 @@ public class BoardResponse {
 	private Boolean openPost;
 	private Boolean openComment;
 	private Boolean albumArt;
-	private Long likeCount;
+	private int likeCount;
 	private Boolean myLike;
 	private int commentCount;
 	

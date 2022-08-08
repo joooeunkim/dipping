@@ -8,10 +8,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.common.dipping.api.board.domain.entity.Board;
 import com.common.dipping.api.user.domain.entity.User;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface BoardRepository extends JpaRepository<Board, Long>{
 
-	Optional<Board> findById(Long bosrdId);
+	Optional<Board> findById(Long id);
 
-    List<Board> findAllByUserIdAndCreatedAtAfter(User reciveuser, LocalDateTime createdAt);
+    @Query("select b from Board b where b.user.id = :userId and b.createdAt >= :createdAt")
+    List<Board> findAllWithUserIdAndCreatedAtAfter(@Param("userId") Long userId, @Param("createdAt") LocalDateTime createdAt);
 }

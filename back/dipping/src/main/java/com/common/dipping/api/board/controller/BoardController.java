@@ -2,6 +2,7 @@ package com.common.dipping.api.board.controller;
 
 import java.util.*;
 
+import com.common.dipping.api.board.service.HeartService;
 import com.common.dipping.security.UserDetailsImpl;
 import net.minidev.json.JSONArray;
 
@@ -36,8 +37,7 @@ public class BoardController {
 
     private final BoardService boardService;
     private final CommentService commentService;
-    private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
+    private final HeartService heartService;
     private final FollowService followService;
 
     static class boardIdCompare implements Comparator<Board> {
@@ -83,8 +83,8 @@ public class BoardController {
             BoardResponse boardResponse = new BoardResponse(board);
             Long one = Long.valueOf(1);
             boardResponse.setId(one);
-            // boardResponse.setLikeCount(likeService.getCountByBoardSeq(board);
-            // boardResponse.setMyLike(likeService.isMylike(userInfo.getId(), board));
+            boardResponse.setLikeCount(heartService.getCountByBoardId(board));
+            boardResponse.setMyLike(heartService.isMylikeByBoardId(userInfo.getId(), board));
             boardResponse.setCommentCount(commentService.getCountByBoardId(board));
             post.put("item", boardResponse);
 
@@ -106,7 +106,7 @@ public class BoardController {
 
             data.put("post", post);
             result.put("data", data);
-        } else if (board == null) {
+        } else if (board.getId() == 0L) {
             ResponseEntity.badRequest(); // 잘못된 요청
         }
 
@@ -136,22 +136,31 @@ public class BoardController {
         List<Object> posts = new ArrayList<>();
         for (int i = pageNum - 5; i < pageNum; i++) {
             JSONArray jArray = new JSONArray();
-            if (posting.get(i) != null) {
+            if ( i < posting.size()) {
                 Map<String,Object> item = new HashMap<>();
                 BoardResponse boardResponse = new BoardResponse(posting.get(i));
                 Long num = Long.valueOf(i) + 1;
                 boardResponse.setId(num);
-                // boardResponse.setLikeCount(likeService.getCountByBoardSeq(boards.get(i)));
-                // boardResponse.setMyLike(likeService.isMylike(userSeq, boards.get(i)));
+                boardResponse.setLikeCount(heartService.getCountByBoardId(posting.get(i)));
+                boardResponse.setMyLike(heartService.isMylikeByBoardId(userInfo.getId(), posting.get(i)));
                 boardResponse.setCommentCount(commentService.getCountByBoardId(posting.get(i)));
                 item.put("item", boardResponse);
                 jArray.add(item);
 
                 List<BoardSong> boardSongs = boardService.getBoardSongAllById(posting.get(i));
-
-                if (boardSongs != null) {
+                List<BoardSongDto> boardSongDtos = new ArrayList<>();
+                if (!boardSongs.isEmpty()) {
                     Map<String,Object> music = new HashMap<>();
-                    music.put("music", boardSongs);
+                    for (BoardSong boardSong:boardSongs ) {
+                        BoardSongDto boardSongDto = new BoardSongDto();
+                        boardSongDto.setId(boardSong.getId());
+                        boardSongDto.setSongTitle(boardSong.getSongTitle());
+                        boardSongDto.setSongSinger(boardSong.getSongSinger());
+                        boardSongDto.setSongUrl(boardSong.getSongUrl());
+                        boardSongDto.setSongImgUrl(boardSong.getSongImgUrl());
+                        boardSongDtos.add(boardSongDto);
+                    }
+                    music.put("music", boardSongDtos);
                     jArray.add(music);
                 }
 

@@ -97,7 +97,7 @@ public class BoardService {
 		for (int i = 0; i < userTagDto.size(); i++) {
 			if (userTagDto.get(i) != null) {
 				long userId = Long.parseLong(userTagDto.get(i).getContent());
-				User user = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("해당 게시글이 없습니다. id="+userId));
+				User user = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("해당 유저가 없습니다. id="+userId));
 				UserTag userTag = UserTag.builder().board(board)
 						.user(user).build();
 				userTagRepository.save(userTag);
@@ -112,7 +112,7 @@ public class BoardService {
 		//User user = userRepository.findById(reciveuser.getId()).orElse(null);
 		// 최근 일주일안에 생성된 포스트만 가져온다.
 		LocalDateTime week = LocalDateTime.now();
-		List<Board> list = boardRepository.findAllByUserIdAndCreatedAtAfter(reciveuser,week.minusDays(7));
+		List<Board> list = boardRepository.findAllWithUserIdAndCreatedAtAfter(reciveuser.getId(),week.minusDays(7));
 		return list;
 	}
 
