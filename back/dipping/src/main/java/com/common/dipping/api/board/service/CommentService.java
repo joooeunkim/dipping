@@ -30,8 +30,8 @@ public class CommentService {
 
     public Long registerComment(CommentDto commentDto) {
 
-		User user = userRepository.findById(commentDto.getUserId()).orElse(null);
-		Board board = boardRepository.findById(commentDto.getBoardId()).orElse(null);
+		User user = userRepository.findById(commentDto.getUserId()).orElseThrow(()->new IllegalArgumentException("해당 유저가 없습니다. id="+commentDto.getUserId()));
+		Board board = boardRepository.findById(commentDto.getBoardId()).orElseThrow(()->new IllegalArgumentException("해당 게시물이 없습니다. id="+commentDto.getBoardId()));
 		Comment comment;
 		comment = Comment.builder()
 				.content(commentDto.getContent())
