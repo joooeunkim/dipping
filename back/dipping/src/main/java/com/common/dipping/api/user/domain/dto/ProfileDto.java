@@ -19,6 +19,7 @@ public class ProfileDto {
     private int boardCount;
     private Long followerCount;
     private Long followingCount;
+    private Boolean isMe;
 
 
 }

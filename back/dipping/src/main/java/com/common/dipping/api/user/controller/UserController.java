@@ -109,7 +109,7 @@ public class UserController {
 
 
     @GetMapping(value = "/profile")
-    public ResponseEntity<?> profile(@Param("userNickname") String userNickname) {
+    public ResponseEntity<?> profile(@AuthenticationPrincipal UserDetailsImpl requestUser, @Param("userNickname") String userNickname) {
         User userinfo = userService.profile(userNickname);
         if(userinfo == null) {
             return ResponseEntity.badRequest().build();
@@ -118,7 +118,10 @@ public class UserController {
         if (!userinfo.getOpenUser()) {
             return ResponseEntity.ok().body("해당 유저는 비공개 상태입니다.");
         }
-
+        Boolean isMe = false;
+        if (requestUser.getNickname().equals(userNickname)) {
+            isMe = true;
+        }
         ProfileDto profileDto = new ProfileDto();
 
         // set을 통해 profileDto에 데이터 설정
@@ -135,6 +138,7 @@ public class UserController {
         profileDto.setBoardCount(userinfo.getBoards().size());
         profileDto.setFollowerCount(userService.followerCount(userinfo));
         profileDto.setFollowingCount(userService.followingCount(userinfo));
+        profileDto.setIsMe(isMe);
 
         // result는 code와 data는 key값이
         Map<String,Object> result = new HashMap<>();
