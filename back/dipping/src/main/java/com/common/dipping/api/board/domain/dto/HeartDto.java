@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class HeartDto {
 
-	private Long likeId;
-	private String createdAt;
+	private Long Id;
 	private Long commentId;
 	private Long boardId;
+	private Long userId;
 }

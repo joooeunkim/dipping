@@ -19,13 +19,14 @@ public interface HeartRepository extends JpaRepository<Heart, Long> {
     @Query("select count(h) from Heart h where h.comment.id = :commentId ")
     int findHeartsCountByCommentId(@Param("commentId") Long commentId);
 
-    boolean existsByUserIdAndBoardId(Long user_id, Long board_id);
+    boolean existsByUserAndBoard(User user, Board board);
 
-    Optional<Heart> findByUserIdAndBoardId(User user, Board board);
+    Optional<Heart> findByUserAndBoard(User user, Board board);
 
-    List<Heart> findAllByBoardId(Board board);
+    Optional<List<Heart>> findAllByBoard(Board board);
+    Optional<List<Heart>> findAllByComment(Comment comment);
 
-    boolean existsByUserIdAndCommentId(User user, Comment comment);
+    boolean existsByUserAndComment(User user, Comment comment);
 
-    Optional<Heart> findByUserIdAndCommentId(User user, Comment comment);
+    Optional<Heart> findByUserAndComment(User user, Comment comment);
 }

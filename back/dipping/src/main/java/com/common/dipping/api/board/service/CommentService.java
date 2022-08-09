@@ -12,6 +12,7 @@ import com.common.dipping.api.board.repository.CommentRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,6 +22,7 @@ public class CommentService {
 	private final CommentRepository commentRepository;
 	private final UserRepository userRepository;
 	private final BoardRepository boardRepository;
+	private final HeartService heartService;
 
 	public int getCountByBoardId(Board board) {
 		return commentRepository.findCommentsCount(board.getId());
@@ -31,27 +33,39 @@ public class CommentService {
 		User user = userRepository.findById(commentDto.getUserId()).orElse(null);
 		Board board = boardRepository.findById(commentDto.getBoardId()).orElse(null);
 		Comment comment;
-		if(commentDto.getParentId() > 0){
-			comment = Comment.builder()
-					.content(commentDto.getContent())
-					.parentId(commentDto.getParentId())
-					.board(board)
-					.user(user)
-					.build();
-		}else {
-			comment = Comment.builder()
-					.content(commentDto.getContent())
-					.board(board)
-					.user(user)
-					.build();
-		}
+		comment = Comment.builder()
+				.content(commentDto.getContent())
+				.parentId(commentDto.getParentId())
+				.board(board)
+				.user(user)
+				.build();
 
 		return commentRepository.save(comment).getId();
     }
 
-	public List<Comment> getlistCommentByboardId(Long boardId){
-		Board board = boardRepository.findById(boardId).orElse(null);
-		List<Comment> comments = commentRepository.findAllByBoardId(board);
-		return comments;
+	public List<CommentDto> getlistCommentByboardId(Long userId,Long boardId){
+		//Board board = boardRepository.findById(boardId).orElse(null);
+		List<Comment> comments = commentRepository.findlistByBoardId(boardId).orElse(new ArrayList<>());
+		List<CommentDto> commentDtos = new ArrayList<>();
+		if(comments.isEmpty()){
+			return commentDtos;
+		}
+
+		for (Comment c: comments) {
+			CommentDto commentDto = new CommentDto();
+
+			commentDto.setCommentId(c.getId());
+			commentDto.setBoardId(c.getBoard().getId());
+			commentDto.setUserId(c.getUser().getId());
+			commentDto.setContent(c.getContent());
+			commentDto.setParentId(c.getParentId());
+			commentDto.setCreatedAt(c.getCreatedAt().toString());
+			commentDto.setUpdatedAt(c.getUpdatedAt().toString());
+			commentDto.setLikeCount(heartService.getCountByCommentId(c));
+			commentDto.setMyLike(heartService.isMylikeByCommentId(userId,c));
+
+			commentDtos.add(commentDto);
+		}
+		return commentDtos;
 	}
 }

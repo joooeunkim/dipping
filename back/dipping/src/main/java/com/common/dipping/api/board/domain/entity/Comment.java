@@ -22,16 +22,8 @@ public class Comment extends Common {
 
 	private String content;
 
-	@Column(nullable = true, columnDefinition = "Long default 0")
-	private long parentId;
-	
-	@Builder
-	public Comment(String content, Long parentId, Board board, User user) {
-		this.content = content;
-		this.parentId = parentId;
-		this.board = board;
-		this.user = user;
-	}
+	@Column(nullable = true, columnDefinition = "bigint default 0")
+	private Long parentId;
 	
 //	@ManyToMany(mappedBy = "comments", fetch = FetchType.LAZY)
 //    private List<Like> Likes = new ArrayList<>();

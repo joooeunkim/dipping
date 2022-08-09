@@ -32,8 +32,6 @@ public class BoardService {
 	private final UserRepository userRepository;
 	private final BoardRepository boardRepository;
 	private final BoardSongRepository boardSongRepository;
-	//private final CommentRepository commentRepository;
-	//private final LikeRepository likeRepository;
 	private final PostTagRepository postTagRepository;
 	private final TagRepository tagRepository;
 	private final UserTagRepository userTagRepository;

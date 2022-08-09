@@ -95,6 +95,7 @@ public class BoardController {
                 for (BoardSong boardSong:boardSongs ) {
                     BoardSongDto boardSongDto = new BoardSongDto();
                     boardSongDto.setId(boardSong.getId());
+                    boardSongDto.setBoardId(boardSong.getBoard().getId());
                     boardSongDto.setSongTitle(boardSong.getSongTitle());
                     boardSongDto.setSongSinger(boardSong.getSongSinger());
                     boardSongDto.setSongUrl(boardSong.getSongUrl());
@@ -119,8 +120,12 @@ public class BoardController {
         Map<String, Object> result = new HashMap<String, Object>();
         // 해당 유저의 팔로우 유저들을 찾아와서 포스트 검색하여 Id 내림차순으로 정렬
 
-        result.put("code", 200);
+
         List<Follow> follows = followService.getfollowListByFromUser(userInfo.getId());
+        if(follows.isEmpty()){
+            result.put("code", 201);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }
 
         List<Board> posting = new ArrayList<>();
 
@@ -130,6 +135,12 @@ public class BoardController {
                 posting.add(b);
             }
         }
+
+        if(posting.isEmpty()){
+            result.put("code", 201);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }
+        result.put("code", 200);
 
         Collections.sort(posting, new boardIdCompare());
 
@@ -154,6 +165,7 @@ public class BoardController {
                     for (BoardSong boardSong:boardSongs ) {
                         BoardSongDto boardSongDto = new BoardSongDto();
                         boardSongDto.setId(boardSong.getId());
+                        boardSongDto.setBoardId(boardSong.getBoard().getId());
                         boardSongDto.setSongTitle(boardSong.getSongTitle());
                         boardSongDto.setSongSinger(boardSong.getSongSinger());
                         boardSongDto.setSongUrl(boardSong.getSongUrl());
@@ -195,13 +207,13 @@ public class BoardController {
 	}
 
 	@GetMapping("/comment")
-	public ResponseEntity<?> getCommentByBoardId(@Param("boardId") Long boardId){
-		List<Comment> comments = commentService.getlistCommentByboardId(boardId);
+	public ResponseEntity<?> getCommentByBoardId(@AuthenticationPrincipal UserDetailsImpl userInfo, @Param("boardId") Long boardId){
+		List<CommentDto> commentDtos = commentService.getlistCommentByboardId(userInfo.getId(), boardId);
 		Map<String, Object> result = new HashMap<String, Object>();
-		if(!comments.isEmpty()){
+		if(!commentDtos.isEmpty()){
 			result.put("code", 200);
 			Map<String, Object> data = new HashMap<String, Object>();
-			data.put("comment", comments);
+			data.put("comment", commentDtos);
 			result.put("data",data);
 			return ResponseEntity.status(HttpStatus.OK).body(result);
 		}else {
@@ -209,5 +221,50 @@ public class BoardController {
 			return ResponseEntity.status(HttpStatus.OK).body(result);
 		}
 	}
+
+    @PostMapping("/like")
+    public ResponseEntity<?> likeUnlike(@AuthenticationPrincipal UserDetailsImpl userInfo,@RequestBody ObjectNode registerObj) throws JsonProcessingException{
+
+        ObjectMapper mapper = new ObjectMapper();
+
+
+        HeartDto heartDto = mapper.treeToValue(registerObj.get("postLike"), HeartDto.class);
+        int result = -1;
+        // 초기값인 경우
+        if(heartDto.getBoardId() > 0L){
+            result = heartService.setHeartByUserIdAndBoardId(userInfo.getId(),heartDto.getBoardId());
+        } else if(heartDto.getCommentId() > 0L){
+            result = heartService.setHeartByUserIdAndCommentId(userInfo.getId(),heartDto.getCommentId());
+        }else {
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
+
+        if (result == 1 || result == 0){
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/like")
+    public ResponseEntity<?> getCommentByBoardId(@RequestParam(name = "boardId", required = false,defaultValue = "0") Long boardId, @RequestParam(name = "commentId", required = false,defaultValue = "0") Long commentId){
+        List<HeartDto> heartDtos = new ArrayList<>();
+        if(boardId > 0L) {
+            heartDtos = heartService.getListByBoardId(boardId);
+        }else if( commentId > 0L){
+            heartDtos = heartService.getListByCommentId(commentId);
+        }
+        Map<String, Object> result = new HashMap<String, Object>();
+        if(!heartDtos.isEmpty()){
+            result.put("code", 200);
+            Map<String, Object> data = new HashMap<String, Object>();
+            data.put("likes", heartDtos);
+            result.put("data",data);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }else {
+            result.put("code",201);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }
+    }
     
 }

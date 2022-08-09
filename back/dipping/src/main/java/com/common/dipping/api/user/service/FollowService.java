@@ -1,5 +1,6 @@
 package com.common.dipping.api.user.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -42,6 +43,9 @@ public class FollowService {
     public List<Follow> getfollowListByFromUser(Long fromUser){
     	User user = userRepository.findById(fromUser).orElse(null);
     	List<Follow> list = followRepository.findAllBySender(user);
+        if(list.isEmpty()){
+            return new ArrayList<>();
+        }
     	return list;
     }
 
