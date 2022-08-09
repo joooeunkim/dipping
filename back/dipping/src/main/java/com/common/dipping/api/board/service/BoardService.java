@@ -59,6 +59,13 @@ public class BoardService {
 		// 게시판임으로 boardSeq 조회해서 반환
 	}
 
+	public Board edit(BoardDto boardDto){
+		User user = userRepository.findById(boardDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + boardDto.getUserId()));
+		Board board = boardRepository.findById(boardDto.getId()).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다. id=" + boardDto.getId()));;
+		board.update(boardDto.getContent(),boardDto.isOpenPost(),boardDto.isOpenComment(),boardDto.isAlbumArt());
+		return boardRepository.save(board);
+	}
+
 	public void registerSong(List<BoardSongDto> boardSongDto, Board board) {
 
 		for (int i = 0; i < boardSongDto.size(); i++) {

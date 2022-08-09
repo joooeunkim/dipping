@@ -49,6 +49,13 @@ public class Board extends Common {
 		this.user = user;
 	}
 
+	public void update(String content, boolean openPost, boolean openComment, boolean albumArt){
+		this.content = content;
+		this.openPost = openPost;
+		this.openComment = openComment;
+		this.albumArt = albumArt;
+	}
+
 	// 사용자 번호 연결해야 한다.
 	@ManyToOne
 	@JoinColumn(name = "userId")
