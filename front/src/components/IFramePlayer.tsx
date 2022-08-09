@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { VisuallyHidden } from '@chakra-ui/react';
 import { useEffect } from 'react';
 
@@ -20,7 +21,7 @@ export const IFramePlayer = () => {
         (window as any).player = new (window as any).YT.Player('player', {
           width: 'auto',
           height: 'auto',
-          playerVars: { playsinline: 1, autoplay: 1 },
+          playerVars: { playsinline: 1, autoplay: 0 },
           videoId: 'r5MR7_INQwg',
           events: {
             onStateChange: (event: any) => {
