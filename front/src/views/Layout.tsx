@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box, VisuallyHidden } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
 import { BottomTabBar } from '../components/floatingbar/BottomTabBar';
@@ -13,6 +13,7 @@ export const Layout = () => (
     <Box h="48px" w="full" />
 
     {/* ==Floating Component== */}
+    <VisuallyHidden>{/* <div id="player" /> */}</VisuallyHidden>
     <BottomTabBar />
   </div>
 );
