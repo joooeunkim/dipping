@@ -3,6 +3,7 @@ package com.common.dipping.api.user.service;
 import com.common.dipping.api.user.domain.dto.MailDto;
 import com.common.dipping.api.user.domain.entity.Code;
 import com.common.dipping.api.user.repository.CodeRepository;
+import com.common.dipping.api.user.repository.FollowRepository;
 import com.common.dipping.common.ApplicationYamlRead;
 import com.common.dipping.common.UserRole;
 import com.common.dipping.api.user.domain.entity.User;
@@ -30,6 +31,7 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final ApplicationYamlRead applicationYamlRead;
     private final JavaMailSender javaMailSender;
+    private final FollowRepository followRepository;
 
 
     @Transactional
@@ -148,5 +150,12 @@ public class UserService {
         return true;
     }
 
+    public Long followingCount(User user) {
+        return followRepository.countAllBySender(user);
+    }
+
+    public Long followerCount(User user) {
+        return followRepository.countAllByReceiver(user);
+    }
 
 }
