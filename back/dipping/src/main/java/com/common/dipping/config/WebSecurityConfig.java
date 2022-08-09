@@ -62,6 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                 .antMatchers("/api/login", "/api/signUp","/api/findpw/*").permitAll() //로그인 및 회원가입 요청은 허용
                 .antMatchers("/api/signUp/info").hasRole("GUEST")
+                .antMatchers("/**").permitAll()
                 .antMatchers("/api/**").authenticated() //나머지 요청에 대해서는 인증을 요구
                 //.antMatchers("/api/**").permitAll()
                 .and()
