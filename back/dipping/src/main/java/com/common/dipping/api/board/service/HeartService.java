@@ -109,7 +109,6 @@ public class HeartService {
                 HeartDto heartDto = new HeartDto();
                 heartDto.setId(h.getId());
                 heartDto.setBoardId(h.getBoard().getId());
-                heartDto.setCommentId(h.getComment().getId());
                 heartDto.setUserId(h.getUser().getId());
 
                 heartDtos.add(heartDto);
@@ -129,7 +128,6 @@ public class HeartService {
             for (Heart h: hearts) {
                 HeartDto heartDto = new HeartDto();
                 heartDto.setId(h.getId());
-                heartDto.setBoardId(h.getBoard().getId());
                 heartDto.setCommentId(h.getComment().getId());
                 heartDto.setUserId(h.getUser().getId());
 
