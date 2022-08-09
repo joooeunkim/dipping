@@ -7,51 +7,27 @@ export const SearchMain = () => {
     leftDisplay: 'none',
     rightDisplay: 'none',
   };
+  console.log('SearchMain');
 
   //test
-  const [playing, setPlaying] = useState(0);
+  const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0.2);
 
   useEffect(() => {
-    console.log('useEffect for player init');
+    console.log('useEffect test');
 
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    tag.setAttribute('onload', 'onYouTubeIframeReady()');
-
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
-
-    (window as any).onYouTubeIframeReady = function () {
-      console.log('iframe ready');
+    (window as any).onYouTubeIframeAPIReady = function () {
+      console.log('iframe checked');
       (window as any).YT.ready(function () {
-        console.log('YT ready');
-        (window as any).player = new (window as any).YT.Player('playerone', {
-          width: 'auto',
-          height: 'auto',
-          playerVars: { playsinline: 1, autoplay: 1 },
-          videoId: 'sGPrx9bjgC8',
-          events: {
-            onStateChange: (event: any) => {
-              if (event.data === (window as any).YT.PlayerState.ENDED) {
-                // duration: (window as any).player.getDuration(),
-                // currentTime: (window as any).player.getDuration(),
-              } else if (event.data === (window as any).YT.PlayerState.PLAYING) {
-                // const progress = {
-                //   duration: (window as any).player.getDuration(),
-                //   currentTime: (window as any).player.getCurrentTime(),
-                // };
-                // setProgress(progress);
-              }
-            },
-            onReady: () => {
-              console.log('player ready');
-              (window as any).player.setVolume(100);
-            },
-          },
-        });
+        console.log('YT checked');
+        setPlaying((window as any).player?.getPlayerState() === 1 ? true : false);
+        editProgress();
       });
     };
+  }, []);
+
+  useEffect(() => {
+    console.log('set init');
   }, []);
 
   useEffect(() => {
@@ -68,10 +44,7 @@ export const SearchMain = () => {
     <Box>
       <SearchNavBar {...props} />
       SearchMain
-      <div id="playerone" />
-      {/* <VisuallyHidden>
-        <div id="player" />
-      </VisuallyHidden> */}
+      {/* progress bar */}
       <Box position="relative" h="22px" w="full" bg="">
         <Box position="absolute" left="4vw" h="6px" w="92%" borderRadius="2px" bg="gray.400" />
         <Box
@@ -90,11 +63,11 @@ export const SearchMain = () => {
         onClick={() => {
           if (playing) {
             (window as any).player.pauseVideo();
-            setPlaying(0);
+            setPlaying(false);
             editProgress();
           } else {
             (window as any).player.playVideo();
-            setPlaying(1);
+            setPlaying(true);
             editProgress();
           }
         }}
@@ -109,6 +82,15 @@ export const SearchMain = () => {
         }}
       >
         Dead!
+      </Box>
+      <Box
+        w="140px"
+        border="1px"
+        onClick={() => {
+          (window as any).player.cuePlaylist(['r5MR7_INQwg', 'qvlGmA1J478']);
+        }}
+      >
+        Playlist
       </Box>
     </Box>
   );

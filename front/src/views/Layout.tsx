@@ -5,15 +5,16 @@ import { BottomTabBar } from '../components/floatingbar/BottomTabBar';
 import { MainNavBar } from '../components/floatingbar/MainNavBar';
 import { ModalNavBar } from '../components/floatingbar/ModalNavBar';
 import { SearchNavBar } from '../components/floatingbar/SearchNavBar';
+import { IFramePlayer } from '../components/IFramePlayer';
 
 export const Layout = () => (
   <div>
+    {/* ==Floating Component== */}
+    <IFramePlayer />
+    <BottomTabBar />
+
     <Box h="48px" w="full" />
     <Outlet />
     <Box h="48px" w="full" />
-
-    {/* ==Floating Component== */}
-    <VisuallyHidden>{/* <div id="player" /> */}</VisuallyHidden>
-    <BottomTabBar />
   </div>
 );

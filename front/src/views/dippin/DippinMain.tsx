@@ -19,7 +19,7 @@ export const DippinMain = () => {
 
     (window as any).onYouTubeIframeReady = function () {
       setPlayer(
-        new (window as any).YT.Player('player', {
+        new (window as any).YT.Player('player2', {
           videoId: 'Gc4sY98Jn9I',
           autoplay: true,
 
@@ -39,11 +39,7 @@ export const DippinMain = () => {
     <Box>
       <SearchNavBar {...props} />
       DippinMain
-      <div id="player" />
-      <object>
-        <param name="movie" value="http://www.youtube.com/v/Gc4sY98Jn9I" />
-        <embed src="http://www.youtube.com/v/Gc4sY98Jn9I" type="application/x-shockwave-flash" />
-      </object>
+      <div id="player2" />
     </Box>
   );
 };
