@@ -1,13 +1,15 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-const SERVER_ADDRESS = 'http://i7b210.p.ssafy.io/api';
+const SERVER_ADDRESS = '/api';
 
 const accessToken = localStorage.getItem('accessToken');
 
 export const DefaultAxios: AxiosInstance = axios.create({
   baseURL: `${SERVER_ADDRESS}`,
   headers: {
-    access_token: accessToken || '',
+    access_token: 'bearer ' + accessToken || '',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
   },
 });
 
