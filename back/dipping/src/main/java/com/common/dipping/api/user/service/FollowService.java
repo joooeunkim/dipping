@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.common.dipping.api.user.domain.dto.FollowerListDto;
 import com.common.dipping.api.user.domain.dto.FollowingListDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
+@Slf4j
 public class FollowService {
 
     private final UserRepository userRepository;
@@ -52,6 +54,20 @@ public class FollowService {
     	return list;
     }
 
+//    @Transactional
+//    public Follow save(String fromUserEmail, String toUserEmail) {
+//        User fromUser = userRepository.findByEmail(fromUserEmail).orElse(null);
+//        User toUser = userRepository.findByEmail(toUserEmail).orElse(null);
+//
+//        Follow follow = Follow.builder().fromUser(fromUser).toUser(toUser).build();
+//
+//        return followRepository.save(follow);
+//    }
+//
+//    @Transactional
+//    public void unFollow(Long id) {
+//        followRepository.deleteById(id);
+//    }
     public List<FollowingListDto> getFollowListBySenderNickname(String senderNickname){
         User user = userRepository.findByNickname(senderNickname).orElse(null);
         List<Follow> list = followRepository.findAllBySender(user);
@@ -68,7 +84,6 @@ public class FollowService {
         }
         return followingList;
     }
-
     public List<FollowerListDto> getFollowListByReceiverNickname(String receiverNickname){
         User user = userRepository.findByNickname(receiverNickname).orElse(null);
         List<Follow> list = followRepository.findAllByReceiver(user);
@@ -85,18 +100,4 @@ public class FollowService {
         return followerList;
     }
 
-//    @Transactional
-//    public Follow save(String fromUserEmail, String toUserEmail) {
-//        User fromUser = userRepository.findByEmail(fromUserEmail).orElse(null);
-//        User toUser = userRepository.findByEmail(toUserEmail).orElse(null);
-//
-//        Follow follow = Follow.builder().fromUser(fromUser).toUser(toUser).build();
-//
-//        return followRepository.save(follow);
-//    }
-//
-//    @Transactional
-//    public void unFollow(Long id) {
-//        followRepository.deleteById(id);
-//    }
 }

@@ -55,24 +55,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint) //인증 실패
-                .accessDeniedHandler(accessDeniedHandler) //인가 실패
-                .and().authorizeRequests()
-                .antMatchers("/api/login", "/api/signUp","/api/findpw/*").permitAll() //로그인 및 회원가입 요청은 허용
-                .antMatchers("/api/signUp/info").hasRole("GUEST")
-                .antMatchers("/api/**").authenticated() //나머지 요청에 대해서는 인증을 요구
-                //.antMatchers("/api/**").permitAll()
-                .and()
-                .formLogin().disable() //로그인 페이지 사용X
-                .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
-                .oauth2Login()
-                .defaultSuccessUrl("/login-success") //oauth2 인증이 성공했을 때, 이동되는 url을 설정.
-                .successHandler(authenticationSuccessHandler) //인증 프로세스에 따라 사용자 정의 로직을 실행.
-                .userInfoEndpoint()
-                .userService(OAuth2UserServiceImpl); //로그인이 성공하면 해당 유저의 정보를 들고 customOAuth2UserService에서 후처리
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and().exceptionHandling()
+            .authenticationEntryPoint(authenticationEntryPoint) //인증 실패
+            .accessDeniedHandler(accessDeniedHandler) //인가 실패
+            .and().authorizeRequests()
+            .antMatchers("/api/login", "/api/signUp","/api/findpw/*").permitAll() //로그인 및 회원가입 요청은 허용
+            .antMatchers("/api/signUp/info").hasRole("GUEST")
+            .antMatchers("/api/**").authenticated() //나머지 요청에 대해서는 인증을 요구
+            //.antMatchers("/api/**").permitAll()
+            .and()
+            .formLogin().disable() //로그인 페이지 사용X
+            .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
+            .oauth2Login()
+            .defaultSuccessUrl("/login-success") //oauth2 인증이 성공했을 때, 이동되는 url을 설정.
+            .successHandler(authenticationSuccessHandler) //인증 프로세스에 따라 사용자 정의 로직을 실행.
+            .userInfoEndpoint()
+            .userService(OAuth2UserServiceImpl); //로그인이 성공하면 해당 유저의 정보를 들고 customOAuth2UserService에서 후처리
     }
 
     //사용자 요청 정보로 UserPasswordAuthenticationToken 발급하는 필터

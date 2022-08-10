@@ -6,11 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FollowingListDto {
-
     private Long followId;
     private Long receiverId;
     private String followCreated;
     private String profileImgUrl;
     private String nickname;
-
 }
