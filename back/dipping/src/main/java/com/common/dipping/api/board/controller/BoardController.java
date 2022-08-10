@@ -216,6 +216,18 @@ public class BoardController {
 		}
 	}
 
+    @PostMapping("/comment/edit")
+    public ResponseEntity<?> editComment(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        CommentDto commentDto = mapper.treeToValue(registerObj.get("comment"), CommentDto.class);
+        //commentDto.setUserId(userInfo.getId());
+        commentService.editComment(commentDto);
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
     @PostMapping("/like")
     public ResponseEntity<?> likeUnlike(@AuthenticationPrincipal UserDetailsImpl userInfo,@RequestBody ObjectNode registerObj) throws JsonProcessingException{
 
