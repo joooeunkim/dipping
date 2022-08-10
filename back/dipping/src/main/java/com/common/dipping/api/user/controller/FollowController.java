@@ -15,7 +15,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api/user")
+@RequestMapping(value = "/user")
 public class FollowController {
 
     private final FollowService followService;
@@ -33,6 +33,11 @@ public class FollowController {
         return ResponseEntity.ok().body("언팔로잉");
     }
 
+//    @DeleteMapping("/follow")
+//    public void unFollowUser(@RequestBody FollowDto followDto) {
+//        Long id = followService.getFollowIdByFromEmailToEmail(followDto.getFromUser(), followDto.getToUser());
+//        followService.unFollow(id);
+//    }
     @GetMapping("/follow")
     public ResponseEntity<?> followList(@Param("nickname") String nickname) {
         Map<String,Object> result = new HashMap<>();
@@ -43,27 +48,21 @@ public class FollowController {
         followResult.put("followings", followingList); // "user" : profileDto
         followResult.put("followers", followerList);
         result.put("data", followResult);
-        /*
-        {
-          "code": "200",
-          "data": {
-            "follows": [
-              {
-                "followSeq": 0,
-                "senderSeq": 0,
-                "receiverSeq": 1,
-                "followCreated": ""
+            /*
+            {
+              "code": "200",
+              "data": {
+                "follows": [
+                  {
+                    "followSeq": 0,
+                    "senderSeq": 0,
+                    "receiverSeq": 1,
+                    "followCreated": ""
+                  }
+                ]
               }
-            ]
-          }
-        }
-        */
+            }
+            */
         return ResponseEntity.ok().body(result);
     }
-
-//    @DeleteMapping("/follow")
-//    public void unFollowUser(@RequestBody FollowDto followDto) {
-//        Long id = followService.getFollowIdByFromEmailToEmail(followDto.getFromUser(), followDto.getToUser());
-//        followService.unFollow(id);
-//    }
 }

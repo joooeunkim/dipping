@@ -69,6 +69,38 @@ public class BoardController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+    @DeleteMapping
+    public ResponseEntity<?> deleteBoard(@Param("boardId") Long boardId){
+        boolean result = boardService.deleteBoard(boardId);
+        if(!result){
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/edit")
+    public ResponseEntity<?> editBoard(@RequestBody ObjectNode registerObj)
+            throws JsonProcessingException, IllegalArgumentException {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        BoardDto boardDto = mapper.treeToValue(registerObj.get("post"), BoardDto.class);
+
+        List<PostTagDto> postTagDto = Arrays
+                .asList(mapper.treeToValue(registerObj.get("post_tag"), PostTagDto[].class));
+        List<UserTagDto> userTagDto = Arrays
+                .asList(mapper.treeToValue(registerObj.get("user_tag"), UserTagDto[].class));
+        List<BoardSongDto> boardSongDto = Arrays
+                .asList(mapper.treeToValue(registerObj.get("playlist"), BoardSongDto[].class));
+
+        Board newboard = boardService.edit(boardDto);
+        boardService.editSong(boardSongDto, newboard);
+        boardService.editTag(postTagDto, userTagDto, newboard);
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
     @GetMapping("/board")
     public ResponseEntity<?> getBoardOne(@AuthenticationPrincipal UserDetailsImpl userInfo, @Param("boardId") Long boardId) {
 
@@ -224,6 +256,18 @@ public class BoardController {
         }else {
             return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping("/comment/edit")
+    public ResponseEntity<?> editComment(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        CommentDto commentDto = mapper.treeToValue(registerObj.get("comment"), CommentDto.class);
+        //commentDto.setUserId(userInfo.getId());
+        commentService.editComment(commentDto);
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @PostMapping("/like")
