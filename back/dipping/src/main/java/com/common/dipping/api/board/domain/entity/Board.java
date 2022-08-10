@@ -4,16 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.common.dipping.api.user.domain.entity.User;
 
@@ -61,10 +52,18 @@ public class Board extends Common {
 	@JoinColumn(name = "userId")
 	private User user;
 
-	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
 	private List<Comment> comments = new ArrayList<>();
 	
-//	@ManyToMany(mappedBy = "boards", fetch = FetchType.LAZY)
-//    private List<Like> Likes = new ArrayList<>();
+	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
+    private List<Heart> hearts = new ArrayList<>();
 
+	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
+	private List<BoardSong> boardSongs = new ArrayList<>();
+
+	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
+	private List<PostTag> postTags = new ArrayList<>();
+
+	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
+	private List<UserTag> userTags = new ArrayList<>();
 }

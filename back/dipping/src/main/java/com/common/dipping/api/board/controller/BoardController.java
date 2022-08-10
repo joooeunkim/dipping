@@ -69,6 +69,16 @@ public class BoardController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+    @DeleteMapping
+    public ResponseEntity<?> deleteBoard(@Param("boardId") Long boardId){
+        boolean result = boardService.deleteBoard(boardId);
+        if(!result){
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("/edit")
     public ResponseEntity<?> editBoard(@RequestBody ObjectNode registerObj)
             throws JsonProcessingException, IllegalArgumentException {
@@ -90,7 +100,6 @@ public class BoardController {
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
-
 
     @GetMapping("/board")
     public ResponseEntity<?> getBoardOne(@AuthenticationPrincipal UserDetailsImpl userInfo, @Param("boardId") Long boardId) {
