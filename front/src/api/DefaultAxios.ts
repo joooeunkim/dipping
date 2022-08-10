@@ -11,6 +11,8 @@ export const DefaultAxios: AxiosInstance = axios.create({
   },
 });
 
+DefaultAxios.defaults.withCredentials = true;
+
 // 토큰 있는지 체크
 // export const checkToken = async (config: AxiosRequestConfig) => {
 //   if (!accessToken) {
