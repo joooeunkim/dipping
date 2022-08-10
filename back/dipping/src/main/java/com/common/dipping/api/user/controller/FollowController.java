@@ -1,10 +1,17 @@
 package com.common.dipping.api.user.controller;
 
 import com.common.dipping.api.user.domain.dto.FollowDto;
+import com.common.dipping.api.user.domain.dto.FollowerListDto;
+import com.common.dipping.api.user.domain.dto.FollowingListDto;
 import com.common.dipping.api.user.service.FollowService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -31,4 +38,31 @@ public class FollowController {
 //        Long id = followService.getFollowIdByFromEmailToEmail(followDto.getFromUser(), followDto.getToUser());
 //        followService.unFollow(id);
 //    }
+    @GetMapping("/follow")
+    public ResponseEntity<?> followList(@Param("nickname") String nickname) {
+        Map<String,Object> result = new HashMap<>();
+        Map<String,Object> followResult = new HashMap<>();
+        List<FollowingListDto> followingList = followService.getFollowListBySenderNickname(nickname);
+        List<FollowerListDto> followerList = followService.getFollowListByReceiverNickname(nickname);
+        result.put("code", 200); // code : 200
+        followResult.put("followings", followingList); // "user" : profileDto
+        followResult.put("followers", followerList);
+        result.put("data", followResult);
+            /*
+            {
+              "code": "200",
+              "data": {
+                "follows": [
+                  {
+                    "followSeq": 0,
+                    "senderSeq": 0,
+                    "receiverSeq": 1,
+                    "followCreated": ""
+                  }
+                ]
+              }
+            }
+            */
+        return ResponseEntity.ok().body(result);
+    }
 }
