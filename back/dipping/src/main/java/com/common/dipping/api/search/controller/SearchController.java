@@ -1,6 +1,8 @@
 package com.common.dipping.api.search.controller;
 
 
+import com.common.dipping.api.board.domain.dto.BoardDto;
+import com.common.dipping.api.board.domain.entity.Board;
 import com.common.dipping.api.search.service.SearchService;
 import com.common.dipping.api.user.domain.dto.MiniProfileDto;
 import com.common.dipping.api.user.domain.entity.User;
@@ -49,6 +51,19 @@ public class SearchController {
         List<MiniProfileDto> userList = searchService.searchUser(keyword, userInfo);
         result.put("code", 200);
         searchResult.put("users", userList);
+        result.put("data", searchResult);
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/post")
+    public ResponseEntity<?> searchPost(@AuthenticationPrincipal UserDetailsImpl userInfo, @Param("keyword") String keyword) {
+        Map<String,Object> result = new HashMap<>();
+        Map<String,Object> searchResult = new HashMap<>();
+
+        List<BoardDto> boardList = searchService.searchPost(keyword, userInfo);
+        result.put("code", 200);
+        searchResult.put("posts", boardList);
         result.put("data", searchResult);
 
         return ResponseEntity.ok().body(result);
