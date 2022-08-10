@@ -35,7 +35,7 @@ import {
   InputRightAddon,
 } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
-import { WritePost } from './WritePost';
+import { WritePost } from '../WritePost';
 
 export const BottomTabBar = () => {
   const bgColor = useColorModeValue('white', 'gray.800');
