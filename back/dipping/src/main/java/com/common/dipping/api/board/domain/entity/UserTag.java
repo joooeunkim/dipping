@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserTag extends Common {
 
-	@OneToOne
+	@ManyToOne
     @JoinColumn(name = "userId")
     private User user;
 	
