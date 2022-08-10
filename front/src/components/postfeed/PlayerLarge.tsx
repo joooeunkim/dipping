@@ -1,14 +1,17 @@
 import { Box, Image, useColorModeValue } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { PlayerState, setPlayState } from '../../reducers/iframeReducer';
+import { PlayerState, setPlayState, setPostID } from '../../reducers/iframeReducer';
 import { ProgressBar } from '../ProgressBar';
-import { PlaylistItem } from './PlaylistItem';
+import { PlayerLargeItem } from './PlayerLargeItem';
 
 export const PlayerLarge = (props: any) => {
-  const { playlists } = props;
+  const { playlists, id } = props;
   const dispatch = useDispatch();
   const playstate = useSelector((state: any) => state.iframeReducer.playstate);
+  const playlistindex = useSelector((state: any) => state.iframeReducer.playlistindex);
+  const playlist = useSelector((state: any) => state.iframeReducer.playlist);
+  const postid = useSelector((state: any) => state.iframeReducer.postid);
 
   // 앨범 목록 표시
   const [albumvisible, toggleAlbumVisible] = useState(0);
@@ -18,8 +21,23 @@ export const PlayerLarge = (props: any) => {
 
   // 곡 선택
   const [currentitem, setCurrentItem] = useState(0);
-  const onClickItem = (index: number) => () => {
+  const onClickItem = (index: number) => {
+    dispatch(setPostID(id));
     setCurrentItem(index);
+    (window as any).player.loadVideoById(playlists[index].id);
+  };
+
+  const PlayPause = () => {
+    console.log('playpause');
+    if (postid !== id) {
+      onClickItem(0);
+    } else {
+      if (playstate == PlayerState.PLAYING) {
+        (window as any).player.pauseVideo();
+      } else {
+        (window as any).player.playVideo();
+      }
+    }
   };
 
   return (
@@ -59,8 +77,13 @@ export const PlayerLarge = (props: any) => {
             >
               <Box w="90vw" h="100%" overflow="auto">
                 {playlists.map((item: any, index: number) => (
-                  <div key={index} onClick={onClickItem(index)}>
-                    <PlaylistItem {...item} selected={currentitem == index ? true : false} />
+                  <div
+                    key={index}
+                    onClick={() => {
+                      onClickItem(index);
+                    }}
+                  >
+                    <PlayerLargeItem {...item} selected={currentitem == index ? true : false} />
                     {index != playlists.length - 1 && <Box position="relative" w="full" h="3vw" />}
                   </div>
                 ))}
@@ -106,27 +129,38 @@ export const PlayerLarge = (props: any) => {
           onClick={onClickAlbum}
         />
 
-        <Box
-          position="absolute"
-          right="4vw"
-          top="8px"
-          className={playstate == PlayerState.PLAYING ? 'fa-solid fa-pause' : 'fa-solid fa-play'}
-          fontSize={playstate == PlayerState.PLAYING ? '30px' : '28px'}
-          lineHeight="30px"
-          onClick={() => {
-            if (playstate == PlayerState.PLAYING) {
-              (window as any).player.pauseVideo();
-              // dispatch(setPlayState(PlayerState.PAUSED));
-            } else {
-              (window as any).player.playVideo();
-              // dispatch(setPlayState(PlayerState.PLAYING));
-            }
-          }}
-        />
+        {/* play&pause */}
+        {postid === id && playstate === PlayerState.PLAYING ? (
+          <Box
+            position="absolute"
+            right="4vw"
+            top="8px"
+            className="fa-solid fa-pause"
+            fontSize="30px"
+            lineHeight="30px"
+            onClick={PlayPause}
+          />
+        ) : (
+          <Box
+            position="absolute"
+            right="4vw"
+            top="8px"
+            className="fa-solid fa-play"
+            fontSize="28px"
+            lineHeight="30px"
+            onClick={PlayPause}
+          />
+        )}
       </Box>
 
       {/* progress bar */}
-      <ProgressBar />
+      {postid === id ? (
+        <ProgressBar />
+      ) : (
+        <Box position="relative" h="22px" w="full" bg="">
+          <Box position="absolute" left="4vw" h="6px" w="92%" borderRadius="2px" bg="gray.400" />
+        </Box>
+      )}
     </>
   );
 };

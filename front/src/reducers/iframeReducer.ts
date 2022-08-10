@@ -16,6 +16,7 @@ const iframeReducer = createSlice({
     progress: { time: 0, duration: 60 },
     playlist: [],
     playlistindex: -1,
+    postid: -1,
     playerinited: false,
   },
   reducers: {
@@ -31,12 +32,21 @@ const iframeReducer = createSlice({
     setPlayListIndex(state, { payload: playlistindex }) {
       return { ...state, playlistindex };
     },
+    setPostID(state, { payload: postid }) {
+      return { ...state, postid };
+    },
     setPlayerInited(state, { payload: playerinited }) {
       return { ...state, playerinited };
     },
   },
 });
 
-export const { setPlayState, setProgress, setPlayList, setPlayListIndex, setPlayerInited } =
-  iframeReducer.actions;
+export const {
+  setPlayState,
+  setProgress,
+  setPlayList,
+  setPlayListIndex,
+  setPostID,
+  setPlayerInited,
+} = iframeReducer.actions;
 export default iframeReducer.reducer;

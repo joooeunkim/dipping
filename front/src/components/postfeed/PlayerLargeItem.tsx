@@ -1,7 +1,7 @@
 import { Box, Image, useColorModeValue } from '@chakra-ui/react';
 import { useState } from 'react';
 
-export const PlaylistItem = (props: any) => {
+export const PlayerLargeItem = (props: any) => {
   const borderColor = useColorModeValue('gray.200', 'gray.600');
   const { artist, title, albumart, selected } = props;
   return (

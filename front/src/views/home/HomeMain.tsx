@@ -48,7 +48,7 @@ export const HomeMain = () => {
     <Box>
       <MainNavBar />
       {posts.map((item, index) => (
-        <PlaylistPost postfeed={postfeeds[0]} key={index} />
+        <PlaylistPost postfeed={postfeeds[index % 2]} id={index} key={index} />
       ))}
       <Box position="relative" w="full" h="300px">
         <Spinner
