@@ -1,6 +1,6 @@
 package com.common.dipping.config;
 
-import com.common.dipping.filter.HeaderFilter;
+//import com.common.dipping.filter.HeaderFilter;
 //import com.common.dipping.interceptor.JwtTokenInterceptor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -33,18 +33,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //        registry.addInterceptor(jwtTokenInterceptor()).excludePathPatterns("/api/login/*").excludePathPatterns("/api/signUp");
 //    }
 
-    @Bean
-    public FilterRegistrationBean<HeaderFilter> getFilterRegistrationBean() {
-        FilterRegistrationBean<HeaderFilter> registrationBean = new FilterRegistrationBean<>(createHeaderFilter());
-        registrationBean.setOrder(Integer.MIN_VALUE);
-        registrationBean.addUrlPatterns("/**");
-        return registrationBean;
-    }
-
-    @Bean
-    public HeaderFilter createHeaderFilter() {
-        return new HeaderFilter();
-    }
+//    @Bean
+//    public FilterRegistrationBean<HeaderFilter> getFilterRegistrationBean() {
+//        FilterRegistrationBean<HeaderFilter> registrationBean = new FilterRegistrationBean<>(createHeaderFilter());
+//        registrationBean.setOrder(Integer.MIN_VALUE);
+//        registrationBean.addUrlPatterns("/**");
+//        return registrationBean;
+//    }
+//
+//    @Bean
+//    public HeaderFilter createHeaderFilter() {
+//        return new HeaderFilter();
+//    }
 
 //    @Bean
 //    public HandlerInterceptor jwtTokenInterceptor() {
