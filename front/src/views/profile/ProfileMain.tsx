@@ -20,6 +20,7 @@ import {
   GridItem,
 } from '@chakra-ui/react';
 import { ModalNavBar } from '../../components/floatingbar/ModalNavBar';
+import { HomeFeedData, FeedPost } from '../../testdata/HomeFeedData';
 
 export const ProfileMain = () => {
   const props = {

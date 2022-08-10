@@ -17,6 +17,7 @@ import { SetPassword } from './views/users/SetPassword';
 import { ProfileEdit } from './views/profile/ProfileEdit';
 import { PersonalInfoEdit } from './views/profile/PersonalInfoEdit';
 import { FollowList } from './views/profile/FollowList';
+import { ProfilePost } from './views/profile/ProfilePost';
 
 import { ProtectedRouteProps } from './ProtectedRoute';
 
@@ -37,6 +38,7 @@ export const App = () => (
         <Route path="profile/edit/person" element={<PersonalInfoEdit />} />
         <Route path="follow" element={<FollowList />} />
         <Route path="profile/:nickname" element={<ProfileMain />} />
+        <Route path="profile/post" element={<ProfilePost />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
