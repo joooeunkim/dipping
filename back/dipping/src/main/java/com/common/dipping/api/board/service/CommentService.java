@@ -68,4 +68,10 @@ public class CommentService {
 		}
 		return commentDtos;
 	}
+
+	public boolean deleteComment(Long commentId) {
+		commentRepository.deleteById(commentId);
+		commentRepository.deleteByParentId(commentId);
+		return commentRepository.existsById(commentId);
+	}
 }
