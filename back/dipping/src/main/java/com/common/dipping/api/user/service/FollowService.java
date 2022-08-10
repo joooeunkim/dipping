@@ -2,6 +2,9 @@ package com.common.dipping.api.user.service;
 
 import java.util.List;
 
+import com.common.dipping.api.user.domain.dto.FollowerListDto;
+import com.common.dipping.api.user.domain.dto.FollowingListDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
+@Slf4j
 public class FollowService {
 
     private final UserRepository userRepository;
@@ -42,6 +46,9 @@ public class FollowService {
     public List<Follow> getfollowListByFromUser(Long fromUser){
     	User user = userRepository.findById(fromUser).orElse(null);
     	List<Follow> list = followRepository.findAllBySender(user);
+        if(list.isEmpty()){
+            return new ArrayList<>();
+        }
     	return list;
     }
 

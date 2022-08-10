@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class BoardSongDto {
 
-	private Long songId;
+	private Long Id;
 	private String songTitle;
 	private String songSinger;
 	private String songUrl;
