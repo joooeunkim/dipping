@@ -22,5 +22,5 @@ public class Search extends Common {
 
     @JoinColumn()
     @ManyToOne
-    private User userId;
+    private User user;
 }

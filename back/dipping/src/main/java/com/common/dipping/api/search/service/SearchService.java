@@ -37,7 +37,7 @@ public class SearchService {
         User userId = userRepository.findById(user.getId()).orElse(null);
         Search search = Search.builder()
                 .word(keyword)
-                .userId(userId)
+                .user(userId)
                 .build();
         searchRepository.save(search);
         return miniProfileDtos;
