@@ -12,4 +12,6 @@ public class CommentDto {
 	private String updatedAt;
 	private Long userId;
 	private Long boardId;
+	private Boolean myLike;
+	private int likeCount;
 }

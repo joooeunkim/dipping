@@ -46,6 +46,9 @@ public class FollowService {
     public List<Follow> getfollowListByFromUser(Long fromUser){
     	User user = userRepository.findById(fromUser).orElse(null);
     	List<Follow> list = followRepository.findAllBySender(user);
+        if(list.isEmpty()){
+            return new ArrayList<>();
+        }
     	return list;
     }
 
