@@ -85,8 +85,8 @@ public class BoardController {
                 .asList(mapper.treeToValue(registerObj.get("playlist"), BoardSongDto[].class));
 
         Board newboard = boardService.edit(boardDto);
-        boardService.registerSong(boardSongDto, newboard);
-        boardService.registerTag(postTagDto, userTagDto, newboard);
+        boardService.editSong(boardSongDto, newboard);
+        boardService.editTag(postTagDto, userTagDto, newboard);
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

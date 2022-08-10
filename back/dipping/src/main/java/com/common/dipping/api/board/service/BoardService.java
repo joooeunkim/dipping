@@ -62,6 +62,17 @@ public class BoardService {
 		return boardRepository.save(board);
 	}
 
+    public void editSong(List<BoardSongDto> boardSongDto, Board board){
+        boardSongRepository.deleteAllByBoard(board);
+        registerSong(boardSongDto,board);
+    }
+
+    public void editTag(List<PostTagDto> postTagDto, List<UserTagDto> userTagDto, Board board){
+        postTagRepository.deleteAllByBoard(board);
+        userTagRepository.deleteAllByBoard(board);
+        registerTag(postTagDto,userTagDto,board);
+    }
+
     public void registerSong(List<BoardSongDto> boardSongDto, Board board) {
 
         if (!boardSongDto.isEmpty()) {
