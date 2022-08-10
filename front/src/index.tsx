@@ -5,15 +5,22 @@ import { App } from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
+import { configureStore } from '@reduxjs/toolkit';
+import rootReducer from './reducers';
+import { Provider } from 'react-redux';
 
 const container = document.getElementById('root');
 if (!container) throw new Error('Failed to find the root element');
 const root = ReactDOM.createRoot(container);
 
+const store = configureStore({ reducer: rootReducer });
+
 root.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>,
 );
 
 // If you want your app to work offline and load faster, you can change

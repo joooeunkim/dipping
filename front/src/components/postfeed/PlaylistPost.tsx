@@ -1,16 +1,13 @@
 import { Box, useColorModeValue, Image, Avatar } from '@chakra-ui/react';
 import { useState } from 'react';
 import { PlayerLarge } from './PlayerLarge';
-import { PlayerLarge2 } from './PlayerLarge2';
+import { PostComment } from './PostComment';
 
 export const PlaylistPost = (props: any) => {
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
 
-  // const { leftDisplay, rightDisplay } = props;
-
-  const article =
-    "The Black Parade is the third studio album by American rock band My Chemical Romance. Released in Europe on October 20, 2006, through Reprise Records, it was produced by the band with Rob Cavallo, known for having produced multiple albums for the Goo Goo Dolls and Green Day. It is a rock opera centering on a dying character with cancer known as 'The Patient'. The album tells the story of his apparent death, experiences in the afterlife, and subsequent reflections on his life. It is the band's only studio album to feature drummer Bob Bryar before his departure in 2010.";
+  const { postfeed } = props;
 
   // 본문 더보기
   const [limit, setLimit] = useState(95);
@@ -37,7 +34,7 @@ export const PlaylistPost = (props: any) => {
           lineHeight="24px"
           bg=""
         >
-          Clockwork_Orange
+          {postfeed.title}
         </Box>
         <Box
           position="absolute"
@@ -48,14 +45,19 @@ export const PlaylistPost = (props: any) => {
           lineHeight="32px"
           bg=""
         >
-          mocha_oca
-          <Avatar marginLeft="1vw" boxSize="32px" name="mocha_oca" src="https://bit.ly/3A2BqqJ" />
+          {postfeed.user.name}
+          <Avatar
+            marginLeft="1vw"
+            boxSize="32px"
+            name="mocha_oca"
+            src={postfeed.user.profile_image}
+          />
         </Box>
       </Box>
 
       {/* music player */}
       {/* <PlayerLarge /> */}
-      <PlayerLarge2 />
+      <PlayerLarge playlists={postfeed.playlists} />
 
       {/* icon set */}
       <Box position="relative" h="30px" w="full" bg="" marginBottom="16px">
@@ -68,14 +70,13 @@ export const PlaylistPost = (props: any) => {
           color="cyan.400"
         />
         <Box position="absolute" left="12vw" fontSize="24px" lineHeight="30px">
-          10.2k
+          {postfeed.likes}
         </Box>
-        <Box
-          position="absolute"
-          right="20vw"
-          className="fa-regular fa-comment"
-          fontSize="24px"
-          lineHeight="30px"
+        <PostComment
+          user={postfeed.user}
+          article={postfeed.article}
+          last_modified={postfeed.last_modified}
+          comments={postfeed.comments}
         />
         <Box
           position="absolute"
@@ -97,15 +98,15 @@ export const PlaylistPost = (props: any) => {
       {/* article set */}
       <Box position="relative" h="" w="full" bg="" marginBottom="16px">
         <Box position="relative" marginX="4vw" fontWeight="400" fontSize="14px" lineHeight="18px">
-          {toggleEllipsis(article, limit).string}
-          {toggleEllipsis(article, limit).isShowMore && '...'}
-          {toggleEllipsis(article, limit).isShowMore && (
+          {toggleEllipsis(postfeed.article, limit).string}
+          {toggleEllipsis(postfeed.article, limit).isShowMore && '...'}
+          {toggleEllipsis(postfeed.article, limit).isShowMore && (
             <Box
               position="absolute"
               bottom="0"
               right="0"
               color="gray.400"
-              onClick={onClickMore(article)}
+              onClick={onClickMore(postfeed.article)}
             >
               더보기
             </Box>
@@ -120,7 +121,7 @@ export const PlaylistPost = (props: any) => {
           lineHeight="18px"
           color="gray.500"
         >
-          #MCR #emocore #black_parade
+          {postfeed.tags}
         </Box>
       </Box>
     </Box>
