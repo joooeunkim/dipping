@@ -16,11 +16,9 @@ import {
   Link,
   FormHelperText,
   Spacer,
-  Grid,
-  GridItem,
 } from '@chakra-ui/react';
 import { ModalNavBar } from '../../components/floatingbar/ModalNavBar';
-import { HomeFeedData, FeedPost } from '../../testdata/HomeFeedData';
+import { HomeFeed, DippinFeed, UserShort } from '../../components/FeedUserShort';
 
 export const ProfileMain = () => {
   const props = {
@@ -136,184 +134,13 @@ export const ProfileMain = () => {
 
           <TabPanels>
             <TabPanel paddingLeft="0" paddingRight="0">
-              <Grid templateColumns="repeat(3, 10fr)">
-                <GridItem>
-                  <Image
-                    src="https://images.unsplash.com/photo-1619983081563-430f63602796?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8bXVzaWN8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-                    boxSize="114.33px"
-                    alt="Post"
-                  />
-                </GridItem>
-                <GridItem>
-                  <Image
-                    src="https://images.unsplash.com/photo-1477233534935-f5e6fe7c1159?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fG11c2ljfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                    boxSize="114.33px"
-                    alt="Post"
-                  />
-                </GridItem>
-                <GridItem>
-                  <Image
-                    src="https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fG11c2ljfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                    boxSize="114.33px"
-                    alt="Post"
-                  />
-                </GridItem>
-                <GridItem>
-                  <Image
-                    src="https://images.unsplash.com/photo-1538402074774-8e624f3f7e5d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fG11c2ljJTIwYmFja2dyb3VuZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                    boxSize="114.33px"
-                    alt="Post"
-                  />
-                </GridItem>
-                <GridItem>
-                  <Image
-                    src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bXVzaWN8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-                    boxSize="114.33px"
-                    alt="Post"
-                  />
-                </GridItem>
-                <GridItem>
-                  <Image
-                    src="https://images.unsplash.com/photo-1610970883859-fbc973bffbd8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fG11c2ljJTIwYmFja2dyb3VuZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                    boxSize="114.33px"
-                    alt="Post"
-                  />
-                </GridItem>
-              </Grid>
+              <HomeFeed />
             </TabPanel>
             <TabPanel paddingLeft="0" paddingRight="0">
-              <Flex marginBottom="8px">
-                <Image
-                  src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                  borderRadius="full"
-                  boxSize="36px"
-                  alt="ProfileImg"
-                />
-                <Spacer />
-                <Box width="200px">
-                  <Text>제목인듯</Text>
-                  <Text marginTop="8px" width="200px" fontSize="8px">
-                    게시물 내용 대충 어쩌구 적으면 글자수가 이렇게 채워지겠지 그러면 두줄이
-                  </Text>
-                  <Flex fontSize="8px" marginRight="0" width="40px">
-                    <Box fontSize="8px" rowGap="2">
-                      <i className="fa-light fa-comment">6</i>
-                    </Box>
-                    <Spacer />
-                    <Box fontSize="8px" rowGap="2">
-                      <i className="fa-light fa-heart">12</i>
-                    </Box>
-                  </Flex>
-                </Box>
-                <Spacer />
-                <Image
-                  src="https://images.unsplash.com/photo-1420161900862-9a86fa1f5c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjB8fG11c2ljJTIwYmFja2dyb3VuZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                  borderRadius="10%"
-                  boxSize="80px"
-                  alt="DippinImg"
-                />
-              </Flex>
-              <Flex marginBottom="8px">
-                <Image
-                  src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                  borderRadius="full"
-                  boxSize="36px"
-                  alt="ProfileImg"
-                />
-                <Spacer />
-                <Box width="200px">
-                  <Text>추천좀</Text>
-                  <Text marginTop="8px" width="200px" fontSize="8px">
-                    게시물 내용 대충 어쩌구 적으면 글자수가 이렇게 채워지겠지 그러면 두줄이
-                  </Text>
-                  <Flex fontSize="8px" marginRight="0" width="40px">
-                    <Box fontSize="8px" rowGap="2">
-                      <i className="fa-light fa-comment">6</i>
-                    </Box>
-                    <Spacer />
-                    <Box fontSize="8px" rowGap="2">
-                      <i className="fa-light fa-heart">12</i>
-                    </Box>
-                  </Flex>
-                </Box>
-                <Spacer />
-                <Image
-                  src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8bXVzaWMlMjBjb25jZXJ0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                  borderRadius="10%"
-                  boxSize="80px"
-                  alt="DippinImg"
-                />
-              </Flex>
-              <Flex marginBottom="8px">
-                <Image
-                  src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                  borderRadius="full"
-                  boxSize="36px"
-                  alt="ProfileImg"
-                />
-                <Spacer />
-                <Box width="200px">
-                  <Text>이것좀..</Text>
-                  <Text marginTop="8px" width="200px" fontSize="8px">
-                    게시물 내용 대충 어쩌구 적으면 글자수가 이렇게 채워지겠지 그러면 두줄이
-                  </Text>
-                  <Flex fontSize="8px" marginRight="0" width="40px">
-                    <Box fontSize="8px" rowGap="2">
-                      <i className="fa-light fa-comment">6</i>
-                    </Box>
-                    <Spacer />
-                    <Box fontSize="8px" rowGap="2">
-                      <i className="fa-light fa-heart">12</i>
-                    </Box>
-                  </Flex>
-                </Box>
-                <Spacer />
-                <Image
-                  src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bXVzaWMlMjBiYWNrZ3JvdW5kfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                  borderRadius="10%"
-                  boxSize="80px"
-                  alt="DippinImg"
-                />
-              </Flex>
+              <DippinFeed />
             </TabPanel>
             <TabPanel paddingLeft="0" paddingRight="0">
-              <Grid templateColumns="repeat(3, 10fr)">
-                <GridItem>
-                  <Image
-                    src="https://images.unsplash.com/photo-1477233534935-f5e6fe7c1159?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fG11c2ljfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                    boxSize="114.33px"
-                    alt="Post"
-                  />
-                </GridItem>
-                <GridItem>
-                  <Image
-                    src="https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fG11c2ljfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                    boxSize="114.33px"
-                    alt="Post"
-                  />
-                </GridItem>
-                <GridItem>
-                  <Image
-                    src="https://images.unsplash.com/photo-1538402074774-8e624f3f7e5d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fG11c2ljJTIwYmFja2dyb3VuZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                    boxSize="114.33px"
-                    alt="Post"
-                  />
-                </GridItem>
-                <GridItem>
-                  <Image
-                    src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bXVzaWN8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-                    boxSize="114.33px"
-                    alt="Post"
-                  />
-                </GridItem>
-                <GridItem>
-                  <Image
-                    src="https://images.unsplash.com/photo-1610970883859-fbc973bffbd8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fG11c2ljJTIwYmFja2dyb3VuZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                    boxSize="114.33px"
-                    alt="Post"
-                  />
-                </GridItem>
-              </Grid>
+              <UserShort />
             </TabPanel>
           </TabPanels>
         </Tabs>

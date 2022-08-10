@@ -18,6 +18,7 @@ import { ProfileEdit } from './views/profile/ProfileEdit';
 import { PersonalInfoEdit } from './views/profile/PersonalInfoEdit';
 import { FollowList } from './views/profile/FollowList';
 import { ProfilePost } from './views/profile/ProfilePost';
+import { SearchResult } from './views/search/SearchResult';
 
 import { ProtectedRouteProps } from './ProtectedRoute';
 
@@ -33,6 +34,7 @@ export const App = () => (
         <Route index element={<HomeMain />} />
         <Route path="dippin" element={<DippinMain />} />
         <Route path="search" element={<SearchMain />} />
+        <Route path="search/result" element={<SearchResult />} />
         <Route path="profile" element={<ProfileMain />} />
         <Route path="profile/edit" element={<ProfileEdit />} />
         <Route path="profile/edit/person" element={<PersonalInfoEdit />} />
