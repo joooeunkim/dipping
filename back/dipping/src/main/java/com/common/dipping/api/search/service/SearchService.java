@@ -25,7 +25,7 @@ public class SearchService {
     private final UserRepository userRepository;
     private final SearchRepository searchRepository;
 
-    public List<MiniProfileDto> searchUser(String keyword, UserDetailsImpl user) {
+    public List<MiniProfileDto> searchUser(String keyword, UserDetailsImpl userDetails) {
         List<User> usersList = userRepository.findAllByNicknameContaining(keyword);
         List<MiniProfileDto> miniProfileDtos = new ArrayList<MiniProfileDto>();
         for (int i = 0; i < usersList.size(); i++) {
@@ -34,10 +34,10 @@ public class SearchService {
             userInfo.setProfileImgUrl(usersList.get(i).getProfileImgUrl());
             miniProfileDtos.add(userInfo);
         }
-        User userId = userRepository.findById(user.getId()).orElse(null);
+        User user = userRepository.findById(userDetails.getId()).orElse(null);
         Search search = Search.builder()
                 .word(keyword)
-                .user(userId)
+                .user(user)
                 .build();
         searchRepository.save(search);
         return miniProfileDtos;
