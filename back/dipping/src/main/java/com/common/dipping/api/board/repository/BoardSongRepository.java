@@ -16,4 +16,5 @@ public interface BoardSongRepository extends JpaRepository<BoardSong, Long>{
 	@Query("select bs from BoardSong bs where bs.board.id = :boardId ")
 	List<BoardSong> findBoardSongByBoardId(@Param("boardId") Long boardId);
 
+	void deleteAllByBoard(Board board);
 }
