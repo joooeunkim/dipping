@@ -2,6 +2,7 @@ package com.common.dipping.api.board.controller;
 
 import java.util.*;
 
+import com.common.dipping.api.board.service.HeartService;
 import com.common.dipping.security.UserDetailsImpl;
 import net.minidev.json.JSONArray;
 
@@ -36,8 +37,7 @@ public class BoardController {
 
     private final BoardService boardService;
     private final CommentService commentService;
-    private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
+    private final HeartService heartService;
     private final FollowService followService;
 
     static class boardIdCompare implements Comparator<Board> {
@@ -93,13 +93,12 @@ public class BoardController {
 
 
     @GetMapping("/board")
-    public ResponseEntity<?> getBoardOne(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestParam("boardId") int longId) {
+    public ResponseEntity<?> getBoardOne(@AuthenticationPrincipal UserDetailsImpl userInfo, @Param("boardId") Long boardId) {
 
-        Long boardId = Long.valueOf(longId);
         Board board = boardService.getboardOne(boardId);
         Map<String, Object> result = new HashMap<String, Object>();
         Map<String, Object> data = new HashMap<String, Object>();
-        if (board != null) {
+        if (board.getId() >= 0) {
             result.put("code", 200);
             Map<String, Object> post = new HashMap<String, Object>();
 
@@ -107,21 +106,31 @@ public class BoardController {
             BoardResponse boardResponse = new BoardResponse(board);
             Long one = Long.valueOf(1);
             boardResponse.setId(one);
-            // boardResponse.setLikeCount(likeService.getCountByBoardSeq(board);
-            // boardResponse.setMyLike(likeService.isMylike(userInfo.getId(), board));
+            boardResponse.setLikeCount(heartService.getCountByBoardId(board));
+            boardResponse.setMyLike(heartService.isMylikeByBoardId(userInfo.getId(), board));
             boardResponse.setCommentCount(commentService.getCountByBoardId(board));
             post.put("item", boardResponse);
 
             // music input
             List<BoardSong> boardSongs = boardService.getBoardSongAllById(board);
-
-            if (boardSongs != null) {
-                post.put("music", boardSongs);
+            List<BoardSongDto> boardSongDtos = new ArrayList<>();
+            if (!boardSongs.isEmpty()) {
+                for (BoardSong boardSong:boardSongs ) {
+                    BoardSongDto boardSongDto = new BoardSongDto();
+                    boardSongDto.setId(boardSong.getId());
+                    boardSongDto.setBoardId(boardSong.getBoard().getId());
+                    boardSongDto.setSongTitle(boardSong.getSongTitle());
+                    boardSongDto.setSongSinger(boardSong.getSongSinger());
+                    boardSongDto.setSongUrl(boardSong.getSongUrl());
+                    boardSongDto.setSongImgUrl(boardSong.getSongImgUrl());
+                    boardSongDtos.add(boardSongDto);
+                }
+                post.put("music", boardSongDtos);
             }
 
             data.put("post", post);
             result.put("data", data);
-        } else if (board == null) {
+        } else if (board.getId() == 0L) {
             ResponseEntity.badRequest(); // 잘못된 요청
         }
 
@@ -129,13 +138,15 @@ public class BoardController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<?> getfollowingBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestParam("pageNum") int pageNum) {
+    public ResponseEntity<?> getfollowingBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestParam(name = "pageNum", required = false,defaultValue = "5") int pageNum) {
 
         Map<String, Object> result = new HashMap<String, Object>();
         // 해당 유저의 팔로우 유저들을 찾아와서 포스트 검색하여 Id 내림차순으로 정렬
-
-        result.put("code", 200);
         List<Follow> follows = followService.getfollowListByFromUser(userInfo.getId());
+        if(follows.isEmpty()){
+            result.put("code", 201);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }
 
         List<Board> posting = new ArrayList<>();
 
@@ -146,27 +157,43 @@ public class BoardController {
             }
         }
 
+        if(posting.isEmpty()){
+            result.put("code", 201);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }
+        result.put("code", 200);
+
         Collections.sort(posting, new boardIdCompare());
 
         List<Object> posts = new ArrayList<>();
         for (int i = pageNum - 5; i < pageNum; i++) {
             JSONArray jArray = new JSONArray();
-            if (posting.get(i) != null) {
+            if ( i < posting.size()) {
                 Map<String,Object> item = new HashMap<>();
                 BoardResponse boardResponse = new BoardResponse(posting.get(i));
                 Long num = Long.valueOf(i) + 1;
                 boardResponse.setId(num);
-                // boardResponse.setLikeCount(likeService.getCountByBoardSeq(boards.get(i)));
-                // boardResponse.setMyLike(likeService.isMylike(userSeq, boards.get(i)));
+                boardResponse.setLikeCount(heartService.getCountByBoardId(posting.get(i)));
+                boardResponse.setMyLike(heartService.isMylikeByBoardId(userInfo.getId(), posting.get(i)));
                 boardResponse.setCommentCount(commentService.getCountByBoardId(posting.get(i)));
                 item.put("item", boardResponse);
                 jArray.add(item);
 
                 List<BoardSong> boardSongs = boardService.getBoardSongAllById(posting.get(i));
-
-                if (boardSongs != null) {
+                List<BoardSongDto> boardSongDtos = new ArrayList<>();
+                if (!boardSongs.isEmpty()) {
                     Map<String,Object> music = new HashMap<>();
-                    music.put("music", boardSongs);
+                    for (BoardSong boardSong:boardSongs ) {
+                        BoardSongDto boardSongDto = new BoardSongDto();
+                        boardSongDto.setId(boardSong.getId());
+                        boardSongDto.setBoardId(boardSong.getBoard().getId());
+                        boardSongDto.setSongTitle(boardSong.getSongTitle());
+                        boardSongDto.setSongSinger(boardSong.getSongSinger());
+                        boardSongDto.setSongUrl(boardSong.getSongUrl());
+                        boardSongDto.setSongImgUrl(boardSong.getSongImgUrl());
+                        boardSongDtos.add(boardSongDto);
+                    }
+                    music.put("music", boardSongDtos);
                     jArray.add(music);
                 }
 
@@ -177,16 +204,17 @@ public class BoardController {
         }
         result.put("data", posts);
 
-//        if (result.get("posts") == null) {
-//
-//        }
-
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 	@PostMapping("/comment")
-	public ResponseEntity<?> registerComment(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody CommentDto commentDto) {
-		commentDto.setUserId(userInfo.getId());
+	public ResponseEntity<?> registerComment(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+
+        CommentDto commentDto = mapper.treeToValue(registerObj.get("comment"), CommentDto.class);
+        //commentDto.setUserId(userInfo.getId());
 		Long commentId = commentService.registerComment(commentDto);
 
 		if(commentId == 0L){
@@ -196,13 +224,13 @@ public class BoardController {
 	}
 
 	@GetMapping("/comment")
-	public ResponseEntity<?> getCommentByBoardId(@Param("boardId") Long boardId){
-		List<Comment> comments = commentService.getlistCommentByboardId(boardId);
+	public ResponseEntity<?> getCommentByBoardId(@AuthenticationPrincipal UserDetailsImpl userInfo, @Param("boardId") Long boardId){
+		List<CommentDto> commentDtos = commentService.getlistCommentByboardId(userInfo.getId(), boardId);
 		Map<String, Object> result = new HashMap<String, Object>();
-		if(!comments.isEmpty()){
+		if(!commentDtos.isEmpty()){
 			result.put("code", 200);
 			Map<String, Object> data = new HashMap<String, Object>();
-			data.put("comment", comments);
+			data.put("comment", commentDtos);
 			result.put("data",data);
 			return ResponseEntity.status(HttpStatus.OK).body(result);
 		}else {
@@ -210,5 +238,50 @@ public class BoardController {
 			return ResponseEntity.status(HttpStatus.OK).body(result);
 		}
 	}
+
+    @PostMapping("/like")
+    public ResponseEntity<?> likeUnlike(@AuthenticationPrincipal UserDetailsImpl userInfo,@RequestBody ObjectNode registerObj) throws JsonProcessingException{
+
+        ObjectMapper mapper = new ObjectMapper();
+
+
+        HeartDto heartDto = mapper.treeToValue(registerObj.get("postLike"), HeartDto.class);
+        int result = -1;
+        // 초기값인 경우
+        if(heartDto.getBoardId() > 0L){
+            result = heartService.setHeartByUserIdAndBoardId(userInfo.getId(),heartDto.getBoardId());
+        } else if(heartDto.getCommentId() > 0L){
+            result = heartService.setHeartByUserIdAndCommentId(userInfo.getId(),heartDto.getCommentId());
+        }else {
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
+
+        if (result == 1 || result == 0){
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/like")
+    public ResponseEntity<?> getCommentByBoardId(@RequestParam(name = "boardId", required = false,defaultValue = "0") Long boardId, @RequestParam(name = "commentId", required = false,defaultValue = "0") Long commentId){
+        List<HeartDto> heartDtos = new ArrayList<>();
+        if(boardId > 0L) {
+            heartDtos = heartService.getListByBoardId(boardId);
+        }else if( commentId > 0L){
+            heartDtos = heartService.getListByCommentId(commentId);
+        }
+        Map<String, Object> result = new HashMap<String, Object>();
+        if(!heartDtos.isEmpty()){
+            result.put("code", 200);
+            Map<String, Object> data = new HashMap<String, Object>();
+            data.put("likes", heartDtos);
+            result.put("data",data);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }else {
+            result.put("code",201);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }
+    }
     
 }

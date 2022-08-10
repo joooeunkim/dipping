@@ -77,8 +77,8 @@ public class User extends Common {
 //    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
 //    private List<Like> likes = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    private UserTag userTag;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<UserTag> userTags = new ArrayList<>();
 
     @Column(nullable = true)
     private String profileImgUrl;
