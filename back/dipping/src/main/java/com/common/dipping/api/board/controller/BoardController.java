@@ -3,6 +3,8 @@ package com.common.dipping.api.board.controller;
 import java.util.*;
 
 import com.common.dipping.api.board.service.HeartService;
+import com.common.dipping.api.user.repository.StorageRepository;
+import com.common.dipping.api.user.service.StorageService;
 import com.common.dipping.security.UserDetailsImpl;
 import net.minidev.json.JSONArray;
 
@@ -39,6 +41,7 @@ public class BoardController {
     private final CommentService commentService;
     private final HeartService heartService;
     private final FollowService followService;
+    private final StorageService storageService;
 
     static class boardIdCompare implements Comparator<Board> {
         @Override
@@ -260,5 +263,16 @@ public class BoardController {
             return ResponseEntity.status(HttpStatus.OK).body(result);
         }
     }
-    
+
+    @PostMapping("/collection")
+    public ResponseEntity<?> collectionBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+
+        StorageDto storageDto = mapper.treeToValue(registerObj.get("collection"), StorageDto.class);
+        storageService.storageBoard(storageDto.getUserId(),storageDto.getBoardId());
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
 }
