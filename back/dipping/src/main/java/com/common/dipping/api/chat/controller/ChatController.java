@@ -29,11 +29,12 @@ public class ChatController {
     // 메시지 전송
     @PostMapping("/chat/message")
     public void message(@RequestBody ChatMessage message) {
-        // 로그인 회원 정보로 대화명 설정
-        message.setSender(nickname);
-        message.setUserCount(chatRoomRepository.getUserCount(message.getRoomId()));
-        message.setImg(user.getProfileImgUrl());
-        message.setUserId(user.getId());
+        System.out.println(message.getType());
+        System.out.println(message.getRoomId());
+        System.out.println(message.getSender());
+        System.out.println(message.getReceiver());
+        System.out.println(message.getMessage());
+        System.out.println(message.getProfileImgUrl());
 
         //메시지 저장
         chatRoomRepository.saveMessage(message.getRoomId(), message);

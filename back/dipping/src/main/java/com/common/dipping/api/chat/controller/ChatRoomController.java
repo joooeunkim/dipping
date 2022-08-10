@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * STOMP 라이브러리를 이용해서 subscribe(구독자) 구현
- */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/chat")
