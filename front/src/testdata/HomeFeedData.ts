@@ -7,6 +7,7 @@ export type Music = {
   title: string;
   artist: string;
   albumart: string;
+  id: string;
 };
 
 export type Comment = {
@@ -50,29 +51,34 @@ export const HomeFeedData: Array<FeedPost> = [
     },
     playlists: [
       {
+        title: 'Stressed Out',
+        artist: '​twenty one pilots',
+        albumart: 'https://i.ytimg.com/vi/Gc4sY98Jn9I/maxresdefault.jpg',
+        id: 'Gc4sY98Jn9I',
+      },
+      {
         title: 'Welcome To The Black Parade',
         artist: 'My Chemical Romance',
-        albumart: 'https://bit.ly/3PXNy1o',
+        albumart: 'https://i.ytimg.com/vi/G-I9csAflBs/maxresdefault.jpg',
+        id: 'G-I9csAflBs',
       },
       {
         title: 'LA Devotee',
         artist: 'Panic! At The Disco',
-        albumart: 'https://bit.ly/3QdDcu6',
+        albumart: 'https://i.ytimg.com/vi/RzMITAmJfeg/maxresdefault.jpg',
+        id: 'RzMITAmJfeg',
       },
       {
         title: '백색왜성',
         artist: '넬',
-        albumart: 'https://bit.ly/3bwSzPF',
-      },
-      {
-        title: 'Stressed Out',
-        artist: '​twenty one pilots',
-        albumart: 'https://bit.ly/3PcIrtn',
+        albumart: 'https://i.ytimg.com/vi/qRaAvEbKmt0/hqdefault.jpg',
+        id: 'qRaAvEbKmt0',
       },
       {
         title: 'Dead!',
         artist: 'My Chemical Romance',
-        albumart: 'https://bit.ly/3PXNy1o',
+        albumart: 'https://i.ytimg.com/vi/H48kOqqaWv0/hqdefault.jpg',
+        id: 'H48kOqqaWv0',
       },
     ],
     comments: [

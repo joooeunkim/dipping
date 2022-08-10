@@ -17,6 +17,7 @@ export const PlaylistItem = (props: any) => {
         boxSize="16vw"
         marginX="0vw"
         borderRadius="2vw"
+        objectFit="cover"
         src={albumart}
       />
       <Box

@@ -1,22 +1,19 @@
 import { Box, Image, useColorModeValue } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { PlayerState, setPlayState } from '../../reducers/iframeReducer';
+import { ProgressBar } from '../ProgressBar';
 import { PlaylistItem } from './PlaylistItem';
 
 export const PlayerLarge = (props: any) => {
-  const borderColor = useColorModeValue('gray.200', 'gray.600');
-
   const { playlists } = props;
+  const dispatch = useDispatch();
+  const playstate = useSelector((state: any) => state.iframeReducer.playstate);
 
   // 앨범 목록 표시
   const [albumvisible, toggleAlbumVisible] = useState(0);
   const onClickAlbum = () => {
     toggleAlbumVisible(albumvisible ^ 1);
-  };
-
-  // 재생-정지
-  const [playing, togglePlaying] = useState(0);
-  const onClickPlaying = () => {
-    togglePlaying(playing ^ 1);
   };
 
   // 곡 선택
@@ -33,6 +30,7 @@ export const PlayerLarge = (props: any) => {
           borderRadius="20px"
           boxShadow="0 0 2px gray"
           boxSize="92vw"
+          objectFit="cover"
           src={playlists[currentitem].albumart}
         />
 
@@ -112,59 +110,23 @@ export const PlayerLarge = (props: any) => {
           position="absolute"
           right="4vw"
           top="8px"
-          className={playing ? 'fa-solid fa-pause' : 'fa-solid fa-play'}
-          fontSize={playing ? '30px' : '28px'}
+          className={playstate == PlayerState.PLAYING ? 'fa-solid fa-pause' : 'fa-solid fa-play'}
+          fontSize={playstate == PlayerState.PLAYING ? '30px' : '28px'}
           lineHeight="30px"
-          onClick={onClickPlaying}
+          onClick={() => {
+            if (playstate == PlayerState.PLAYING) {
+              (window as any).player.pauseVideo();
+              // dispatch(setPlayState(PlayerState.PAUSED));
+            } else {
+              (window as any).player.playVideo();
+              // dispatch(setPlayState(PlayerState.PLAYING));
+            }
+          }}
         />
       </Box>
 
       {/* progress bar */}
-      <Box position="relative" h="22px" w="full" bg="">
-        <Box position="absolute" left="4vw" h="6px" w="92vw" borderRadius="2px" bg={borderColor} />
-        <Box
-          position="absolute"
-          left="4vw"
-          h="6px"
-          w="42vw"
-          borderRadius="2px"
-          bgGradient="linear(to-r, blue.400, cyan.200)"
-        />
-      </Box>
-
-      {/* icon set */}
-      <Box
-        position="relative"
-        h="30px"
-        w="full"
-        bg=""
-        marginBottom="16px"
-        textAlign="center"
-        display="none"
-      >
-        <Box
-          position="relative"
-          right="6vw"
-          className="fa-solid fa-backward-step"
-          fontSize="28px"
-          lineHeight="30px"
-        />
-        <Box
-          position="relative"
-          w="30px"
-          className={playing ? 'fa-solid fa-pause' : 'fa-solid fa-play'}
-          fontSize={playing ? '30px' : '30px'}
-          lineHeight="30px"
-          onClick={onClickPlaying}
-        />
-        <Box
-          position="relative"
-          left="6vw"
-          className="fa-solid fa-forward-step"
-          fontSize="28px"
-          lineHeight="30px"
-        />
-      </Box>
+      <ProgressBar />
     </>
   );
 };

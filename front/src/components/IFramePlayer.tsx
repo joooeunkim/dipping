@@ -1,9 +1,15 @@
 /* eslint-disable no-console */
 import { VisuallyHidden } from '@chakra-ui/react';
 import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setProgress, setPlayState, setPlayerInited, PlayerState } from '../reducers/iframeReducer';
 
 export const IFramePlayer = () => {
   console.log('IFramePlayer');
+  const dispatch = useDispatch();
+  const playlistindex = useSelector((state: any) => state.iframeReducer.playlistindex);
+  const playlist = useSelector((state: any) => state.iframeReducer.playlist);
+  const playerinited = useSelector((state: any) => state.iframeReducer.playerinited);
 
   useEffect(() => {
     console.log('useEffect for player init');
@@ -22,20 +28,50 @@ export const IFramePlayer = () => {
           width: 'auto',
           height: 'auto',
           playerVars: { playsinline: 1, autoplay: 0 },
-          videoId: 'r5MR7_INQwg',
+          videoId: 'Gc4sY98Jn9I',
           events: {
             onStateChange: (event: any) => {
-              // pass
+              if (event.data === (window as any).YT.PlayerState.ENDED) {
+                console.log('ENDED');
+                dispatch(
+                  setProgress({
+                    time: (window as any).player.getDuration(),
+                    duration: (window as any).player.getDuration(),
+                  }),
+                );
+                //다음 음악
+              } else if (event.data === (window as any).YT.PlayerState.PLAYING) {
+                console.log('PLAYING');
+                dispatch(setPlayState(PlayerState.PLAYING));
+                dispatch(
+                  setProgress({
+                    time: (window as any).player.getCurrentTime(),
+                    duration: (window as any).player.getDuration(),
+                  }),
+                );
+              } else if (event.data === (window as any).YT.PlayerState.PAUSED) {
+                console.log('PAUSED');
+                dispatch(setPlayState(PlayerState.PAUSED));
+              }
             },
             onReady: () => {
               console.log('player ready');
               (window as any).player.setVolume(100);
+              dispatch(setPlayerInited(true));
             },
           },
         });
       });
     };
   }, []);
+
+  useEffect(() => {
+    if (!playerinited) return;
+    const player = (window as any).player;
+    if (player.getPlayerState() == PlayerState.ENDED) {
+      player.loadVideoById({ videoId: playlist[playlistindex] });
+    }
+  }, [playlistindex, playlist, playerinited]);
 
   return (
     <VisuallyHidden>

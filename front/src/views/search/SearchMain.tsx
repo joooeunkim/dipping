@@ -1,40 +1,45 @@
 import { SearchNavBar } from '../../components/floatingbar/SearchNavBar';
 import { useEffect, useState } from 'react';
 import { Box, Image, VisuallyHidden } from '@chakra-ui/react';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  setProgress,
+  setPlayState,
+  setPlayerInited,
+  PlayerState,
+} from '../../reducers/iframeReducer';
+import { ProgressBar } from '../../components/ProgressBar';
 
 export const SearchMain = () => {
-  const props = {
-    leftDisplay: 'none',
-    rightDisplay: 'none',
-  };
   console.log('SearchMain');
+  const dispatch = useDispatch();
+  const playstate = useSelector((state: any) => state.iframeReducer.playstate);
 
   //test
-  const [playing, setPlaying] = useState(false);
-  const [progress, setProgress] = useState(0.2);
+  const [_progress, setProgress] = useState(0.2);
 
-  useEffect(() => {
-    console.log('useEffect test');
+  // useEffect(() => {
+  //   console.log('useEffect test');
 
-    (window as any).onYouTubeIframeAPIReady = function () {
-      console.log('iframe checked');
-      (window as any).YT.ready(function () {
-        console.log('YT checked');
-        setPlaying((window as any).player?.getPlayerState() === 1 ? true : false);
-        editProgress();
-      });
-    };
-  }, []);
+  //   (window as any).onYouTubeIframeAPIReady = function () {
+  //     console.log('iframe checked');
+  //     (window as any).YT.ready(function () {
+  //       console.log('YT checked');
+  //       setPlaying((window as any).player?.getPlayerState() === 1 ? true : false);
+  //       editProgress();
+  //     });
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    console.log('set init');
-  }, []);
+  // useEffect(() => {
+  //   console.log('set init');
+  // }, []);
 
-  useEffect(() => {
-    console.log('useeffectinterval');
-    const intervalId = setInterval(() => editProgress(), 1000);
-    return () => clearInterval(intervalId);
-  }, []);
+  // useEffect(() => {
+  //   console.log('useeffectinterval');
+  //   const intervalId = setInterval(() => editProgress(), 1000);
+  //   return () => clearInterval(intervalId);
+  // }, []);
 
   const editProgress = () => {
     setProgress((window as any).player.getCurrentTime() / (window as any).player.getDuration());
@@ -42,7 +47,7 @@ export const SearchMain = () => {
 
   return (
     <Box>
-      <SearchNavBar {...props} />
+      <SearchNavBar leftDisplay="none" rightDisplay="none" />
       SearchMain
       {/* progress bar */}
       <Box position="relative" h="22px" w="full" bg="">
@@ -51,7 +56,7 @@ export const SearchMain = () => {
           position="absolute"
           left="4vw"
           h="6px"
-          w={92 * progress + '%'}
+          w={92 * _progress + '%'}
           borderRadius="2px"
           bgGradient="linear(to-r, blue.400, cyan.200)"
         />
@@ -61,18 +66,18 @@ export const SearchMain = () => {
         w="100px"
         border="1px"
         onClick={() => {
-          if (playing) {
+          if (playstate == PlayerState.PLAYING) {
             (window as any).player.pauseVideo();
-            setPlaying(false);
+            dispatch(setPlayState(PlayerState.PAUSED));
             editProgress();
           } else {
             (window as any).player.playVideo();
-            setPlaying(true);
+            dispatch(setPlayState(PlayerState.PLAYING));
             editProgress();
           }
         }}
       >
-        {playing ? 'Pause' : 'Play'}
+        {playstate == PlayerState.PLAYING ? 'Pause' : 'Play'}
       </Box>
       <Box
         w="100px"
@@ -92,6 +97,7 @@ export const SearchMain = () => {
       >
         Playlist
       </Box>
+      <ProgressBar />
     </Box>
   );
 };
