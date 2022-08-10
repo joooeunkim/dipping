@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -59,9 +60,9 @@ public class SearchController {
     @GetMapping("/post")
     public ResponseEntity<?> searchPost(@AuthenticationPrincipal UserDetailsImpl userInfo, @Param("keyword") String keyword) {
         Map<String,Object> result = new HashMap<>();
-        Map<String,Object> searchResult = new HashMap<>();
+        Map<String,HashSet> searchResult = new HashMap<>();
 
-        List<BoardDto> boardList = searchService.searchPost(keyword, userInfo);
+        HashSet<BoardDto> boardList = searchService.searchPost(keyword, userInfo);
         result.put("code", 200);
         searchResult.put("posts", boardList);
         result.put("data", searchResult);

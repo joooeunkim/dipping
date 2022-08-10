@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -52,9 +53,9 @@ public class SearchService {
         return miniProfileDtos;
     }
 
-    public List<BoardDto> searchPost(String keyword, UserDetailsImpl userDetails) {
+    public HashSet<BoardDto> searchPost(String keyword, UserDetailsImpl userDetails) {
         List<Tag> tagList = tagRepository.findAllByContentContaining(keyword);
-        List<BoardDto> boardList = new ArrayList<>();
+        HashSet<BoardDto> boardList = new HashSet<>();
         for (int i = 0; i < tagList.size(); i++) {
             List<PostTag> postTags = postTagRepository.findAllByTag(tagList.get(i));
             for (PostTag postTag:postTags){
