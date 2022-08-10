@@ -248,6 +248,16 @@ public class BoardController {
 		}
 	}
 
+    @DeleteMapping("comment")
+    public ResponseEntity<?> deleteComment(@Param("commentId") Long commentId){
+        boolean result = commentService.deleteComment(commentId);
+        if(!result){
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("/comment/edit")
     public ResponseEntity<?> editComment(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
 
