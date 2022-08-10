@@ -15,9 +15,9 @@ public class BoardResponse {
 	private Boolean openPost;
 	private Boolean openComment;
 	private Boolean albumArt;
-	private Long likeCount;
+	private int likeCount;
 	private Boolean myLike;
-	private Long commentCount;
+	private int commentCount;
 	
 	public BoardResponse(Board board) {
 		this.boardId = board.getId();
