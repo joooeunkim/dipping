@@ -1,20 +1,20 @@
-import { Box } from '@chakra-ui/react';
+import { Box, VisuallyHidden } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
-import { BottomTabBar } from '../components/BottomTabBar';
-import { MainNavBar } from '../components/MainNavBar';
-import { ModalNavBar } from '../components/ModalNavBar';
-import { SearchNavBar } from '../components/SearchNavBar';
+import { BottomTabBar } from '../components/floatingbar/BottomTabBar';
+import { MainNavBar } from '../components/floatingbar/MainNavBar';
+import { ModalNavBar } from '../components/floatingbar/ModalNavBar';
+import { SearchNavBar } from '../components/floatingbar/SearchNavBar';
+import { IFramePlayer } from '../components/IFramePlayer';
 
 export const Layout = () => (
   <div>
+    {/* ==Floating Component== */}
+    <IFramePlayer />
+    <BottomTabBar />
+
     <Box h="48px" w="full" />
     <Outlet />
-    <div>layout</div>
-    <ColorModeSwitcher />
     <Box h="48px" w="full" />
-
-    {/* ==Floating Component== */}
-    <BottomTabBar />
   </div>
 );
