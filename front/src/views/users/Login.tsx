@@ -11,10 +11,31 @@ import {
   Spacer,
   Text,
 } from '@chakra-ui/react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+
+import { local } from '../../api/login/local';
 
 // 로그인 이메일, 비밀번호 임력하는 페이지 컴포넌트
 export const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const emailChangeHandler = (e: any) => {
+    setEmail(e.target.value);
+    console.log(email);
+  };
+
+  const passwordChangeHandler = (e: any) => {
+    setPassword(e.target.value);
+  };
+
+  const enterLogin = (e: any) => {
+    if (e.code === 'enter') {
+      local(email, password);
+    }
+  };
+
   return (
     <Container>
       <Box>
@@ -25,14 +46,17 @@ export const Login = () => {
         </Center>
         <Box width="100%" mt="20">
           <Input
+            id="email"
             variant="flushed"
             focusBorderColor="cyan.400"
             placeholder="이메일"
             type="email"
             size="lg"
             fontSize="medium"
+            onChange={emailChangeHandler}
           />
           <Input
+            id="password"
             variant="flushed"
             focusBorderColor="cyan.400"
             placeholder="비밀번호"
@@ -40,6 +64,8 @@ export const Login = () => {
             size="lg"
             fontSize="medium"
             mt="4"
+            onChange={passwordChangeHandler}
+            onKeyUp={e => enterLogin(e)}
           />
         </Box>
         <Box mt="4">
@@ -53,6 +79,9 @@ export const Login = () => {
             }}
             _active={{
               bg: 'cyan.500',
+            }}
+            onClick={() => {
+              local(email, password);
             }}
           >
             로그인

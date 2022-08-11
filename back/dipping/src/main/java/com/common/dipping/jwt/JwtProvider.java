@@ -2,6 +2,8 @@ package com.common.dipping.jwt;
 
 import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.repository.UserRepository;
+
+import com.common.dipping.exception.UserNotFoundException;
 import com.common.dipping.security.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import java.util.Date;
 @Slf4j
 public final class JwtProvider {
 
+    private final UserRepository userRepository;
     private final UserDetailsService userDetailsService;
     private final UserRepository userRepository;
 
@@ -32,7 +35,7 @@ public final class JwtProvider {
     private String secretKey;
 
     // access token 유효시간
-    private final long accessTokenValidTime = 2 * 60 * 60 * 1000L;
+    private final long accessTokenValidTime = 24 * 60 * 60 * 1000L;
 
     // refresh token 유효시간
     private final long refreshTokenValidTime = 2 * 7 * 24 * 60 * 60 * 1000L;
@@ -78,6 +81,9 @@ public final class JwtProvider {
             claims = Jwts.claims().setSubject(String.valueOf(authentication.getPrincipal()));
         }
 
+        User user = userRepository.findByEmail(claims.getSubject()).orElseThrow(UserNotFoundException::new);
+        claims.put("id", user.getId());
+        claims.put("nickname", user.getNickname());
         claims.put("roles", authentication.getAuthorities());
         Date now = new Date();
         return Jwts.builder()

@@ -30,4 +30,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmailAndProvider(String email, String dipping);
 
     List<User> findAllByNicknameContaining(String keyword);
+
+    List<User> findAll();
 }

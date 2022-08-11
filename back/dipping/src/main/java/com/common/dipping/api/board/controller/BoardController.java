@@ -3,6 +3,8 @@ package com.common.dipping.api.board.controller;
 import java.util.*;
 
 import com.common.dipping.api.board.service.HeartService;
+import com.common.dipping.api.user.repository.StorageRepository;
+import com.common.dipping.api.user.service.StorageService;
 import com.common.dipping.security.UserDetailsImpl;
 import net.minidev.json.JSONArray;
 
@@ -39,6 +41,7 @@ public class BoardController {
     private final CommentService commentService;
     private final HeartService heartService;
     private final FollowService followService;
+    private final StorageService storageService;
 
     static class boardIdCompare implements Comparator<Board> {
         @Override
@@ -48,7 +51,39 @@ public class BoardController {
     }
 
     @PostMapping
-    public ResponseEntity<?> register(@RequestBody ObjectNode registerObj)
+    public ResponseEntity<?> register(@AuthenticationPrincipal UserDetailsImpl userInfo,@RequestBody ObjectNode registerObj)
+            throws JsonProcessingException, IllegalArgumentException {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        BoardDto boardDto = mapper.treeToValue(registerObj.get("post"), BoardDto.class);
+        boardDto.setUserId(userInfo.getId());
+        List<PostTagDto> postTagDto = Arrays
+                .asList(mapper.treeToValue(registerObj.get("post_tag"), PostTagDto[].class));
+        List<UserTagDto> userTagDto = Arrays
+                .asList(mapper.treeToValue(registerObj.get("user_tag"), UserTagDto[].class));
+        List<BoardSongDto> boardSongDto = Arrays
+                .asList(mapper.treeToValue(registerObj.get("playlist"), BoardSongDto[].class));
+
+        Board newboard = boardService.register(boardDto);
+        boardService.registerSong(boardSongDto, newboard);
+        boardService.registerTag(postTagDto, userTagDto, newboard);
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteBoard(@Param("boardId") Long boardId){
+        boolean result = boardService.deleteBoard(boardId);
+        if(!result){
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/edit")
+    public ResponseEntity<?> editBoard(@RequestBody ObjectNode registerObj)
             throws JsonProcessingException, IllegalArgumentException {
 
         ObjectMapper mapper = new ObjectMapper();
@@ -62,9 +97,9 @@ public class BoardController {
         List<BoardSongDto> boardSongDto = Arrays
                 .asList(mapper.treeToValue(registerObj.get("playlist"), BoardSongDto[].class));
 
-        Board newboard = boardService.register(boardDto);
-        boardService.registerSong(boardSongDto, newboard);
-        boardService.registerTag(postTagDto, userTagDto, newboard);
+        Board newboard = boardService.edit(boardDto);
+        boardService.editSong(boardSongDto, newboard);
+        boardService.editTag(postTagDto, userTagDto, newboard);
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
@@ -189,9 +224,8 @@ public class BoardController {
 
         ObjectMapper mapper = new ObjectMapper();
 
-
         CommentDto commentDto = mapper.treeToValue(registerObj.get("comment"), CommentDto.class);
-        //commentDto.setUserId(userInfo.getId());
+        commentDto.setUserId(userInfo.getId());
 		Long commentId = commentService.registerComment(commentDto);
 
 		if(commentId == 0L){
@@ -215,6 +249,28 @@ public class BoardController {
 			return ResponseEntity.status(HttpStatus.OK).body(result);
 		}
 	}
+
+    @DeleteMapping("comment")
+    public ResponseEntity<?> deleteComment(@Param("commentId") Long commentId){
+        boolean result = commentService.deleteComment(commentId);
+        if(!result){
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/comment/edit")
+    public ResponseEntity<?> editComment(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        CommentDto commentDto = mapper.treeToValue(registerObj.get("comment"), CommentDto.class);
+        //commentDto.setUserId(userInfo.getId());
+        commentService.editComment(commentDto);
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
 
     @PostMapping("/like")
     public ResponseEntity<?> likeUnlike(@AuthenticationPrincipal UserDetailsImpl userInfo,@RequestBody ObjectNode registerObj) throws JsonProcessingException{
@@ -260,5 +316,16 @@ public class BoardController {
             return ResponseEntity.status(HttpStatus.OK).body(result);
         }
     }
-    
+
+    @PostMapping("/collection")
+    public ResponseEntity<?> collectionBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+
+        StorageDto storageDto = mapper.treeToValue(registerObj.get("collection"), StorageDto.class);
+        storageService.storageBoard(storageDto.getUserId(),storageDto.getBoardId());
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
 }

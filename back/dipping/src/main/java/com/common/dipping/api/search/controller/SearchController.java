@@ -1,6 +1,8 @@
 package com.common.dipping.api.search.controller;
 
 
+import com.common.dipping.api.board.domain.dto.BoardDto;
+import com.common.dipping.api.board.domain.entity.Board;
 import com.common.dipping.api.search.service.SearchService;
 import com.common.dipping.api.user.domain.dto.MiniProfileDto;
 import com.common.dipping.api.user.domain.entity.User;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +30,39 @@ public class SearchController {
 
     @Autowired
     private SearchService searchService;
+
+    /*
+    {
+      "code": "200",
+      "data": [
+        "users": [
+          {
+            "nickname": "ba_2_h",
+            "profileImgUrl": "/profile.png"
+          }
+        ],
+        "boards": [
+            {
+                BoardDto boardDto1
+            },
+            {
+                BoardDto boardDto2
+            }
+        ]
+      ]
+    }
+    */
+
+    @GetMapping("/")
+    public ResponseEntity<?> searchPage(@AuthenticationPrincipal UserDetailsImpl userInfo) {
+        Map<String,Object> result = new HashMap<>();
+        Map<String,Object> userResult = new HashMap<>();
+        List<MiniProfileDto> userList = searchService.searchRecommendedUser(userInfo);
+        result.put("code", 200);
+        userResult.put("users", userList);
+        result.put("data", userResult);
+        return ResponseEntity.ok().body(result);
+    }
 
     /*
     {
@@ -49,6 +85,19 @@ public class SearchController {
         List<MiniProfileDto> userList = searchService.searchUser(keyword, userInfo);
         result.put("code", 200);
         searchResult.put("users", userList);
+        result.put("data", searchResult);
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/post")
+    public ResponseEntity<?> searchPost(@AuthenticationPrincipal UserDetailsImpl userInfo, @Param("keyword") String keyword) {
+        Map<String,Object> result = new HashMap<>();
+        Map<String,HashSet> searchResult = new HashMap<>();
+
+        HashSet<BoardDto> boardList = searchService.searchPost(keyword, userInfo);
+        result.put("code", 200);
+        searchResult.put("posts", boardList);
         result.put("data", searchResult);
 
         return ResponseEntity.ok().body(result);

@@ -1,6 +1,6 @@
 package com.common.dipping.config;
 
-import com.common.dipping.filter.HeaderFilter;
+//import com.common.dipping.filter.HeaderFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,27 +28,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/**").addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
     }
 
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(jwtTokenInterceptor()).excludePathPatterns("/api/login/*").excludePathPatterns("/api/signUp");
-//    }
-
-    @Bean
-    public FilterRegistrationBean<HeaderFilter> getFilterRegistrationBean() {
-        FilterRegistrationBean<HeaderFilter> registrationBean = new FilterRegistrationBean<>(createHeaderFilter());
-        registrationBean.setOrder(Integer.MIN_VALUE);
-        registrationBean.addUrlPatterns("/**");
-        return registrationBean;
-    }
-
-    @Bean
-    public HeaderFilter createHeaderFilter() {
-        return new HeaderFilter();
-    }
 
 //    @Bean
-//    public HandlerInterceptor jwtTokenInterceptor() {
-//        return new JwtTokenInterceptor();
+//    public FilterRegistrationBean<HeaderFilter> getFilterRegistrationBean() {
+//        FilterRegistrationBean<HeaderFilter> registrationBean = new FilterRegistrationBean<>(createHeaderFilter());
+//        registrationBean.setOrder(Integer.MIN_VALUE);
+//        registrationBean.addUrlPatterns("/**");
+//        return registrationBean;
+//    }
+//
+//    @Bean
+//    public HeaderFilter createHeaderFilter() {
+//        return new HeaderFilter();
 //    }
 
 }
