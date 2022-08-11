@@ -41,7 +41,8 @@ public class UserController {
         if(userService.isEmailDuplicated(signUpDto.getEmail())){ //이메일이 이미 존재
             return ResponseEntity.badRequest().body("이미 가입된 회원입니다");
         } else{
-            userService.signUp(signUpDto);
+            User user = userService.signUp(signUpDto);
+            userService.registerIntersetTag(user);
             return ResponseEntity.ok().build();
         }
     }
