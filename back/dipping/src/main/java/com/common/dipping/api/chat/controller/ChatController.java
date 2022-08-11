@@ -35,8 +35,8 @@ public class ChatController {
 
     // 채팅방 생성
     @PostMapping("/room")
-    public ChatRoom createRoom(@RequestParam String name) {
-        return chatRoomRepository.createChatRoom(name);
+    public ChatRoom createRoom(@RequestParam String email, @AuthenticationPrincipal UserDetailsImpl userInfo) {
+        return chatService.createChatRoom(userInfo.getUsername()+","+email);//채팅방 이름은 두 유저의 이메일을 ,로 연결한 값
     }
 
     // 채팅방 파괴

@@ -25,14 +25,14 @@ public class ChatService {
     private final ChannelTopic channelTopic;
     private final RedisTemplate redisTemplate;
     private final UserRepository userRepository;
-    private final ChatRepository chatRoomRepository;
+    private final ChatRepository chatRepository;
 
 
     // 나의 전체 채팅방 목록 조회
     public List<ChatRoom> findAllRoomOfUser(String username) {
 
-        List<ChatRoom> chatRooms = chatRoomRepository.findAllRoom();
-        chatRooms.stream().forEach(room -> room.setUserCount(chatRoomRepository.getUserCount(room.getRoomId())));
+        List<ChatRoom> chatRooms = chatRepository.findAllRoom();
+        chatRooms.stream().forEach(room -> room.setUserCount(chatRepository.getUserCount(room.getRoomId())));
 
         List<ChatRoom> myChatRooms = new LinkedList<>();
         for (ChatRoom room: chatRooms) {
@@ -49,14 +49,22 @@ public class ChatService {
         List<ChatRoom> myChatRooms = findAllRoomOfUser(username);
         List<User> allUser = userRepository.findAll();
         for (User user: allUser) {
+            boolean isNew = true;
             for(ChatRoom chatRoom: myChatRooms){
-                if(!chatRoom.getName().contains(user.getEmail())){
-                    newUser.add(new ChatUserList(user.getEmail(), user.getNickname(), user.getProfileImgUrl()));
-                    break;
+                if(chatRoom.getName().contains(user.getEmail())){
+                    isNew = false;
                 }
+            }
+            if(isNew){
+                newUser.add(new ChatUserList(user.getEmail(), user.getNickname(), user.getProfileImgUrl()));
             }
         }
         return newUser;
+    }
+
+    //새로운 채팅방 생성하기
+    public ChatRoom createChatRoom(String name) {
+        return chatRepository.createChatRoom(name);
     }
 
     /**
@@ -75,7 +83,7 @@ public class ChatService {
      */
     public void sendChatMessage(ChatMessage chatMessage) {
 
-        chatMessage.setUserCount(chatRoomRepository.getUserCount(chatMessage.getRoomId()));
+        chatMessage.setUserCount(chatRepository.getUserCount(chatMessage.getRoomId()));
         if (ChatMessage.MessageType.ENTER.equals(chatMessage.getType())) {
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에 입장했습니다.");
             chatMessage.setSender("[알림]");
