@@ -47,7 +47,7 @@ export const DippinFeed = () => {
           <GridItem colSpan={5}>
             <Box>
               <Text>제목인듯</Text>
-              <Text marginTop="8px" fontSize="8px">
+              <Text fontSize="8px">
                 게시물 내용 대충 어쩌구 적으면 글자수가 이렇게 채워지겠지 그러면 두줄이
               </Text>
               <Flex fontSize="8px" marginRight="0" width="40px">
@@ -86,7 +86,7 @@ export const DippinFeed = () => {
           <GridItem colSpan={5}>
             <Box>
               <Text>제목인듯</Text>
-              <Text marginTop="8px" fontSize="8px">
+              <Text fontSize="8px">
                 게시물 내용 대충 어쩌구 적으면 글자수가 이렇게 채워지겠지 그러면 두줄이
               </Text>
               <Flex fontSize="8px" marginRight="0" width="40px">
@@ -125,7 +125,7 @@ export const DippinFeed = () => {
           <GridItem colSpan={5}>
             <Box>
               <Text>제목인듯</Text>
-              <Text marginTop="8px" fontSize="8px">
+              <Text fontSize="8px">
                 게시물 내용 대충 어쩌구 적으면 글자수가 이렇게 채워지겠지 그러면 두줄이
               </Text>
               <Flex fontSize="8px" marginRight="0" width="40px">

@@ -1,16 +1,4 @@
-import {
-  Box,
-  Container,
-  Flex,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
-  Image,
-  Spacer,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Container, Flex, Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react';
 import { HomeFeed, DippinFeed, UserShort } from '../../components/FeedUserShort';
 import { SearchNavBar } from '../../components/floatingbar/SearchNavBar';
 
@@ -38,10 +26,10 @@ export const SearchResult = () => {
                   <HomeFeed />
                 </Flex>
               </TabPanel>
-              <TabPanel>
+              <TabPanel padding="0px">
                 <UserShort />
               </TabPanel>
-              <TabPanel>
+              <TabPanel padding="0px">
                 <DippinFeed />
               </TabPanel>
             </TabPanels>
