@@ -2,14 +2,12 @@ package com.common.dipping.jwt;
 
 import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.repository.UserRepository;
+
 import com.common.dipping.exception.UserNotFoundException;
 import com.common.dipping.security.UserDetailsImpl;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
-import net.minidev.json.JSONArray;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,10 +23,12 @@ import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public final class JwtProvider {
 
     private final UserRepository userRepository;
     private final UserDetailsService userDetailsService;
+    private final UserRepository userRepository;
 
     // secret key
     @Value("${jwt.secret-key}")
@@ -102,8 +102,15 @@ public final class JwtProvider {
             Claims claims = getClaimsFormToken(token);
             return !claims.getExpiration().before(new Date());
         } catch (JwtException | NullPointerException exception) {
+            log.error("Token is invalid");
             return false;
         }
+    }
+
+    public User getUser(String token) {
+        Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+        String userId = String.valueOf(claims.getBody().get("userId"));
+        return userRepository.findById(Long.parseLong(userId)).orElse(null);
     }
 
 

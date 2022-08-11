@@ -45,6 +45,14 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+  redis:
+    lettuce:
+      pool:
+        max-active: -1
+        max-idle: -1
+        min-idle: 2
+    port: 6379
+    host: 127.0.0.1
 
 
   jpa:
