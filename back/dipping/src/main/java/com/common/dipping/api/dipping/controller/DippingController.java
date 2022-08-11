@@ -1,5 +1,9 @@
 package com.common.dipping.api.dipping.controller;
 
+import com.common.dipping.api.dipping.domain.dto.DippingResponseDto;
+import com.common.dipping.api.dipping.domain.dto.DippingSongDto;
+import com.common.dipping.api.dipping.domain.entity.Dipping;
+import com.common.dipping.api.dipping.domain.entity.DippingSong;
 import com.common.dipping.api.dipping.service.DippingHeartService;
 import com.common.dipping.api.dipping.service.DippingService;
 import com.common.dipping.security.UserDetailsImpl;
@@ -12,6 +16,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/dipping")
 @RequiredArgsConstructor
@@ -23,8 +32,61 @@ public class DippingController {
     @GetMapping
     public ResponseEntity<?> getDippingListOrDippingOne(@RequestParam(name = "dippingId", required = false) Long dippingId,
                                                         @RequestParam(name = "sort", required = false) String sort){
+        Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> Main = new HashMap<String, Object>();
+        List<Object> comment = new ArrayList<>();
+        if(dippingId > 0L) {
+            // 딥핑 단일 조회
+            Dipping dipping = dippingService.getDippingOne(dippingId);
 
-        return new ResponseEntity<Void>(HttpStatus.OK);
+            result.put("code", 200);
+
+            DippingResponseDto dippingResponseDto = new DippingResponseDto(dipping);
+            Main.put("item", dippingResponseDto);
+
+            // 딥핑 음악 정보
+            List<DippingSongDto> dippingSongDtos = dippingService.getDippingSongAllById(dipping);
+            Main.put("music", dippingSongDtos);
+            data.put("Main",Main);
+
+            List<Dipping> ChildDippings = dippingService.getChildByDippingId(dipping);
+            if(!ChildDippings.isEmpty()){
+                for (Dipping d: ChildDippings) {
+                    Map<String, Object> temp = new HashMap<String, Object>();
+                    DippingResponseDto child = new DippingResponseDto(d);
+                    List<DippingSongDto> childSong = dippingService.getDippingSongAllById(d);
+                    temp.put("item", child);
+                    temp.put("music", childSong);
+                    comment.add(temp);
+                }
+                data.put("comment",comment);
+            }
+        }
+        else if(sort.equals("recent")){
+            result.put("code", 200);
+            List<Dipping> dippings = dippingService.getListByDippingId();
+            if(!dippings.isEmpty()){
+                for (Dipping d: dippings) {
+                    Map<String, Object> temp = new HashMap<String, Object>();
+                    DippingResponseDto child = new DippingResponseDto(d);
+                    List<DippingSongDto> childSong = dippingService.getDippingSongAllById(d);
+                    temp.put("item", child);
+                    temp.put("music", childSong);
+                    comment.add(temp);
+                }
+                data.put("posts",comment);
+            }
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청"); // 잘못된 요청
+        }
+
+        if(!data.isEmpty()){
+            result.put("data",data);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PostMapping
