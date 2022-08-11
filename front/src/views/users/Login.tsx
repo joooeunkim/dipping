@@ -12,18 +12,21 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { local } from '../../api/login/local';
 
 // 로그인 이메일, 비밀번호 임력하는 페이지 컴포넌트
 export const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const emailChangeHandler = (e: any) => {
     setEmail(e.target.value);
-    console.log(email);
   };
 
   const passwordChangeHandler = (e: any) => {
@@ -31,10 +34,13 @@ export const Login = () => {
   };
 
   const enterLogin = (e: any) => {
-    if (e.code === 'enter') {
-      local(email, password);
+    if (e.code === 'Enter') {
+      local(email, password, dispatch, navigate);
     }
   };
+
+  // const token = useSelector((state: any) => state.tokenReducer.accessToken);
+  // console.log(token);
 
   return (
     <Container>
@@ -65,7 +71,7 @@ export const Login = () => {
             fontSize="medium"
             mt="4"
             onChange={passwordChangeHandler}
-            onKeyUp={e => enterLogin(e)}
+            onKeyUp={enterLogin}
           />
         </Box>
         <Box mt="4">
@@ -81,7 +87,7 @@ export const Login = () => {
               bg: 'cyan.500',
             }}
             onClick={() => {
-              local(email, password);
+              local(email, password, dispatch, navigate);
             }}
           >
             로그인
