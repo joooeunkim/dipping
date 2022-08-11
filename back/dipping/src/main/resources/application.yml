@@ -3,9 +3,20 @@ server:
 
 jwt:
   header: Authorization
-  secret: 236979CB6F1AD6B6A6184A31E6BE37DB3818CC36871E26235DD67DCFE4041492
+  secret-key: 236979CB6F1AD6B6A6184A31E6BE37DB3818CC36871E26235DD67DCFE4041492
 
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: /*네이버 이메일*/
+    password: /*네이버 계정 비밀번호*/
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/dipping?serverTimezone=UTC&characterEncoding=utf8
@@ -38,9 +49,11 @@ spring:
 
   jpa:
     show-sql: true
+    generate-ddl: true
     hibernate:
 #      format_sql: true
       ddl-auto: create
+
 
 
 logging:
