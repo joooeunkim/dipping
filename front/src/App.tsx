@@ -30,7 +30,8 @@ export const App = () => (
         element={
           <ProtectedRoute
             isAuthenticated={
-              useSelector((state: any) => state.tokenReducer.accessToken) ? true : false
+              // useSelector((state: any) => state.tokenReducer.accessToken) ? true : false
+              true
             }
             authenticationPath="/login"
             outlet={<Layout />}
