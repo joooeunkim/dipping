@@ -1,9 +1,9 @@
 import { Box, Image, useColorModeValue } from '@chakra-ui/react';
 import { useState } from 'react';
 
-export const PlaylistItem = (props: any) => {
+export const PlayerLargeItem = (props: any) => {
   const borderColor = useColorModeValue('gray.200', 'gray.600');
-  const { artist, title, albumart, selected } = props;
+  const { artist, title, albumart, id, selected } = props;
   return (
     <Box position="relative" left="1vw" w="86vw" h="18vw">
       {selected && (
@@ -17,7 +17,10 @@ export const PlaylistItem = (props: any) => {
         boxSize="16vw"
         marginX="0vw"
         borderRadius="2vw"
-        src={albumart}
+        objectFit="cover"
+        src={'https://i.ytimg.com/vi/' + id + '/maxresdefault.jpg'}
+        fallbackSrc={'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg'}
+        alt="why"
       />
       <Box
         position="absolute"

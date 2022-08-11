@@ -1,11 +1,22 @@
 import { Box, Image, useColorModeValue } from '@chakra-ui/react';
-import { useState } from 'react';
-import { PlaylistItem } from './PlaylistItem';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  PlayerState,
+  setPlayList,
+  setPlayListIndex,
+  setPlayState,
+  setPostID,
+} from '../../reducers/iframeReducer';
+import { ProgressBar } from '../musicplayer/ProgressBar';
+import { PlayerLargeItem } from './PlayerLargeItem';
 
 export const PlayerLarge = (props: any) => {
-  const borderColor = useColorModeValue('gray.200', 'gray.600');
-
-  const { playlists } = props;
+  const { playlist, id } = props;
+  const dispatch = useDispatch();
+  const playstate = useSelector((state: any) => state.iframeReducer.playstate);
+  const playlistindex = useSelector((state: any) => state.iframeReducer.playlistindex);
+  const postid = useSelector((state: any) => state.iframeReducer.postid);
 
   // 앨범 목록 표시
   const [albumvisible, toggleAlbumVisible] = useState(0);
@@ -13,17 +24,37 @@ export const PlayerLarge = (props: any) => {
     toggleAlbumVisible(albumvisible ^ 1);
   };
 
-  // 재생-정지
-  const [playing, togglePlaying] = useState(0);
-  const onClickPlaying = () => {
-    togglePlaying(playing ^ 1);
+  // 첫 재생시 store에 포스트 정보를 넘김
+  const setIFrameState = (index: number) => {
+    dispatch(setPostID(id));
+    dispatch(setPlayList(playlist));
+    dispatch(setPlayListIndex(index));
+    setCurrentItem(index);
   };
 
   // 곡 선택
   const [currentitem, setCurrentItem] = useState(0);
-  const onClickItem = (index: number) => () => {
-    setCurrentItem(index);
+  const onClickItem = (index: number) => {
+    setIFrameState(index);
   };
+
+  // 재생-정지
+  const PlayPause = () => {
+    console.log('playpause');
+    if (postid !== id) {
+      onClickItem(0);
+    } else {
+      if (playstate == PlayerState.PLAYING) {
+        (window as any).player.pauseVideo();
+      } else {
+        (window as any).player.playVideo();
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (postid === id) setCurrentItem(playlistindex);
+  }, [playlistindex]);
 
   return (
     <>
@@ -33,7 +64,8 @@ export const PlayerLarge = (props: any) => {
           borderRadius="20px"
           boxShadow="0 0 2px gray"
           boxSize="92vw"
-          src={playlists[currentitem].albumart}
+          objectFit="cover"
+          src={'https://i.ytimg.com/vi/' + playlist[currentitem].id + '/maxresdefault.jpg'}
         />
 
         {/* playlist popover */}
@@ -60,10 +92,15 @@ export const PlayerLarge = (props: any) => {
               position="relative"
             >
               <Box w="90vw" h="100%" overflow="auto">
-                {playlists.map((item: any, index: number) => (
-                  <div key={index} onClick={onClickItem(index)}>
-                    <PlaylistItem {...item} selected={currentitem == index ? true : false} />
-                    {index != playlists.length - 1 && <Box position="relative" w="full" h="3vw" />}
+                {playlist.map((item: any, index: number) => (
+                  <div
+                    key={index}
+                    onClick={() => {
+                      onClickItem(index);
+                    }}
+                  >
+                    <PlayerLargeItem {...item} selected={currentitem == index ? true : false} />
+                    {index != playlist.length - 1 && <Box position="relative" w="full" h="3vw" />}
                   </div>
                 ))}
               </Box>
@@ -84,7 +121,7 @@ export const PlayerLarge = (props: any) => {
           bg=""
           color="gray.400"
         >
-          {playlists[currentitem].artist}
+          {playlist[currentitem].artist}
         </Box>
         <Box
           position="relative"
@@ -95,7 +132,7 @@ export const PlayerLarge = (props: any) => {
           lineHeight="24px"
           bg=""
         >
-          {playlists[currentitem].title}
+          {playlist[currentitem].title}
         </Box>
 
         <Box
@@ -108,63 +145,38 @@ export const PlayerLarge = (props: any) => {
           onClick={onClickAlbum}
         />
 
-        <Box
-          position="absolute"
-          right="4vw"
-          top="8px"
-          className={playing ? 'fa-solid fa-pause' : 'fa-solid fa-play'}
-          fontSize={playing ? '30px' : '28px'}
-          lineHeight="30px"
-          onClick={onClickPlaying}
-        />
+        {/* play&pause */}
+        {postid === id && playstate === PlayerState.PLAYING ? (
+          <Box
+            position="absolute"
+            right="4vw"
+            top="8px"
+            className="fa-solid fa-pause"
+            fontSize="30px"
+            lineHeight="30px"
+            onClick={PlayPause}
+          />
+        ) : (
+          <Box
+            position="absolute"
+            right="4vw"
+            top="8px"
+            className="fa-solid fa-play"
+            fontSize="28px"
+            lineHeight="30px"
+            onClick={PlayPause}
+          />
+        )}
       </Box>
 
       {/* progress bar */}
-      <Box position="relative" h="22px" w="full" bg="">
-        <Box position="absolute" left="4vw" h="6px" w="92vw" borderRadius="2px" bg={borderColor} />
-        <Box
-          position="absolute"
-          left="4vw"
-          h="6px"
-          w="42vw"
-          borderRadius="2px"
-          bgGradient="linear(to-r, blue.400, cyan.200)"
-        />
-      </Box>
-
-      {/* icon set */}
-      <Box
-        position="relative"
-        h="30px"
-        w="full"
-        bg=""
-        marginBottom="16px"
-        textAlign="center"
-        display="none"
-      >
-        <Box
-          position="relative"
-          right="6vw"
-          className="fa-solid fa-backward-step"
-          fontSize="28px"
-          lineHeight="30px"
-        />
-        <Box
-          position="relative"
-          w="30px"
-          className={playing ? 'fa-solid fa-pause' : 'fa-solid fa-play'}
-          fontSize={playing ? '30px' : '30px'}
-          lineHeight="30px"
-          onClick={onClickPlaying}
-        />
-        <Box
-          position="relative"
-          left="6vw"
-          className="fa-solid fa-forward-step"
-          fontSize="28px"
-          lineHeight="30px"
-        />
-      </Box>
+      {postid === id ? (
+        <ProgressBar />
+      ) : (
+        <Box position="relative" h="22px" w="full" bg="">
+          <Box position="absolute" left="4vw" h="6px" w="92%" borderRadius="2px" bg="gray.400" />
+        </Box>
+      )}
     </>
   );
 };

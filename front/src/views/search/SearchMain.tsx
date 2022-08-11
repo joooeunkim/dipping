@@ -8,7 +8,6 @@ export const SearchMain = () => {
     leftDisplay: 'none',
     rightDisplay: 'none',
   };
-  console.log('SearchMain');
 
   return (
     <Box>
