@@ -18,7 +18,7 @@ import java.util.*;
 @RequestMapping("/api/chat")
 public class ChatController {
 
-    private final ChatRepository chatRoomRepository;
+    private final ChatRepository chatRepository;
     private final ChatService chatService;
 
     // 나의 전체 채팅방 목록 조회
@@ -42,21 +42,21 @@ public class ChatController {
     // 채팅방 파괴
     @DeleteMapping("/room/{roomId}")
     public ResponseEntity deleteRoom(@PathVariable String roomId) {
-        chatRoomRepository.deleteChatRoom(roomId);
+        chatRepository.deleteChatRoom(roomId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     // 특정 채팅방 들어갔을때 채팅방 관련 정보를 전달
     @GetMapping("/room/{roomId}")
     public ChatRoom roomInfo(@PathVariable String roomId) {
-        return chatRoomRepository.findRoomById(roomId);
+        return chatRepository.findRoomById(roomId);
     }
 
     // 해당 채팅방에 저장된 최신 메시지 받기
     @GetMapping("/room/message/{roomId}")
     @ResponseBody
     public List<ChatMessage> getMessages(@PathVariable String roomId) {
-        return chatRoomRepository.getMessages(roomId);
+        return chatRepository.getMessages(roomId);
     }
 
 }
