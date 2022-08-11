@@ -76,7 +76,7 @@ public class StompInterceptor implements ChannelInterceptor {
             }
             // 채팅방에 들어온 클라이언트 정보를 roomId와 맵핑해 놓는다.(나중에 특정 세션이 어떤 채팅방에 들어가 있는지 알기 위함)
             chatRoomRepository.setUserEnterInfo(sessionId, ChatUser.builder().sender(name).roomId(roomId).userId(userId).build());
-            chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).profileImgUrl(img).build());
+            //chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).profileImgUrl(img).build());
             log.info("SUBSCRIBED {}, {}", name, roomId);
         } else if (StompCommand.DISCONNECT == accessor.getCommand()) { // Websocket 연결 종료
             // 연결이 종료된 클라이언트 sesssionId로 채팅방 id를 얻는다.
@@ -90,7 +90,7 @@ public class StompInterceptor implements ChannelInterceptor {
             // 채팅방의 인원수를 -1한다.
             chatRoomRepository.minusUserCount(roomId);
             // 클라이언트 퇴장 메시지를 채팅방에 발송한다.(redis publish)
-            chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.QUIT).roomId(roomId).sender(name).build());
+            //chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.QUIT).roomId(roomId).sender(name).build());
             log.info("DISCONNECTED {}, {}", sessionId, roomId);
         }
         return message;

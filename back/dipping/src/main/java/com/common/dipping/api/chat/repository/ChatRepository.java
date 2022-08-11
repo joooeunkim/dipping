@@ -107,12 +107,12 @@ public class ChatRepository {
     }
 
     // 메시지 저장
-    public void saveMessage(String roomId, ChatMessage message) {
+    public ChatMessage saveMessage(String roomId, ChatMessage message) {
         List<ChatMessage> messages = roomMessages.get(CHAT_LIST, roomId);
         if(messages == null) messages = new ArrayList<>();
         messages.add(message);
         roomMessages.put(CHAT_LIST, roomId, messages);
-
+        return message;
     }
 
     // 저장 메시지 보내기

@@ -61,7 +61,7 @@ public class ChatController {
     // 채팅방에 메시지 저장하기
     @PostMapping("/room/message")
     public ResponseEntity saveMessages(@RequestParam String roomId, @RequestBody ChatMessage message){
-        //return chatService.saveMessages(roomId, message);
+        return chatService.saveMessages(roomId, message);
     }
 
     // 해당 채팅방에 저장된 메시지 받기

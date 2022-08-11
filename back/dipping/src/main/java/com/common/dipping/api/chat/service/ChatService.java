@@ -93,18 +93,18 @@ public class ChatService {
     /**
      * 채팅방에 메시지 발송
      */
-    public void sendChatMessage(ChatMessage chatMessage) {
-
-        chatMessage.setUserCount(chatRepository.getUserCount(chatMessage.getRoomId()));
-        if (ChatMessage.MessageType.ENTER.equals(chatMessage.getType())) {
-            chatMessage.setMessage(chatMessage.getSender() + "님이 방에 입장했습니다.");
-            chatMessage.setSender("[알림]");
-        } else if (ChatMessage.MessageType.QUIT.equals(chatMessage.getType())) {
-            chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
-            chatMessage.setSender("[알림]");
-        }
-        redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
-    }
+//    public void sendChatMessage(ChatMessage chatMessage) {
+//
+//        chatMessage.setUserCount(chatRepository.getUserCount(chatMessage.getRoomId()));
+//        if (ChatMessage.MessageType.ENTER.equals(chatMessage.getType())) {
+//            chatMessage.setMessage(chatMessage.getSender() + "님이 방에 입장했습니다.");
+//            chatMessage.setSender("[알림]");
+//        } else if (ChatMessage.MessageType.QUIT.equals(chatMessage.getType())) {
+//            chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
+//            chatMessage.setSender("[알림]");
+//        }
+//        redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
+//    }
 
     //roomName에서 채팅하는 상대방 닉네임 분리
     private String findChatter(String roomName, String username){
@@ -118,7 +118,7 @@ public class ChatService {
     }
 
 
-    public ResponseEntity saveMessages(String roomId, ChatMessage message, UserDetailsImpl userInfo) {
+    public ResponseEntity saveMessages(String roomId, ChatMessage message) {
 
         // 로그인 회원 정보로 대화명 설정
         //message.setSender(nickname);
@@ -128,6 +128,7 @@ public class ChatService {
         // Websocket에 발행된 메시지를 redis로 발행한다(publish). redisTemplate을 통해 바로 ChannelTopic으로 메시지를 발행
         //redisTemplate.convertAndSend(channelTopic.getTopic(), message);
         // 발행한 메시지 저장
-        chatRepository.saveMessage(roomId, message);
+
+        return ResponseEntity.ok().body(chatRepository.saveMessage(roomId, message));
     }
 }

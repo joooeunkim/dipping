@@ -1,6 +1,5 @@
 package com.common.dipping.config;
 
-import com.common.dipping.api.chat.service.RedisSubscriber;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -44,13 +43,13 @@ public class RedisConfig {
         return container;
     }
 
-    /**
-     * 실제 메시지를 처리하는 subscriber 설정 추가
-     */
-    @Bean
-    public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) {
-        return new MessageListenerAdapter(subscriber, "sendMessage");
-    }
+//    /**
+//     * 실제 메시지를 처리하는 subscriber 설정 추가
+//     */
+//    @Bean
+//    public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) {
+//        return new MessageListenerAdapter(subscriber, "sendMessage");
+//    }
 
     /**
      * 어플리케이션에서 사용할 redisTemplate 설정
