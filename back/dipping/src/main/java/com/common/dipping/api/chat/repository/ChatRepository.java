@@ -18,7 +18,7 @@ import java.util.*;
 
 @RequiredArgsConstructor
 @Repository
-public class ChatRoomRepository {
+public class ChatRepository {
 
     private final RedisTemplate redisTemplate;
 

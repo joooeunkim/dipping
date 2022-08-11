@@ -1,14 +1,14 @@
 package com.common.dipping.config;
 
 import com.common.dipping.filter.HeaderFilter;
-//import com.common.dipping.interceptor.JwtTokenInterceptor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+//import com.common.dipping.interceptor.JwtTokenInterceptor;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {

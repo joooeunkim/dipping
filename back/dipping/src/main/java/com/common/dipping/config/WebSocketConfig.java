@@ -28,12 +28,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     }
 
     /**
-     * stomp websocket의 연결 endpoint는 /ws-stomp로 설정
-     * 예상 접속 주소 : ws://localhost:8080/ws-stomp
+     * stomp websocket의 연결 endpoint는 /ws로 설정
+     * 예상 접속 주소 : ws://localhost:8080/ws
      */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws-stomp")
+        registry.addEndpoint("/ws")
                 .setAllowedOriginPatterns("*")
                 .withSockJS();  // sock.js를 통하여 낮은 버전의 브라우저에서도 websocket이 동작할 수 있게
     }

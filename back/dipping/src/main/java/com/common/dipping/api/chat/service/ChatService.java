@@ -1,11 +1,19 @@
 package com.common.dipping.api.chat.service;
 
 import com.common.dipping.api.chat.domain.dto.ChatMessage;
-import com.common.dipping.api.chat.repository.ChatRoomRepository;
+import com.common.dipping.api.chat.domain.dto.ChatRoom;
+import com.common.dipping.api.chat.domain.dto.ChatUserList;
+import com.common.dipping.api.chat.repository.ChatRepository;
+import com.common.dipping.api.user.domain.entity.User;
+import com.common.dipping.api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 채팅 메시지 발송 일원화
@@ -16,7 +24,40 @@ public class ChatService {
 
     private final ChannelTopic channelTopic;
     private final RedisTemplate redisTemplate;
-    private final ChatRoomRepository chatRoomRepository;
+    private final UserRepository userRepository;
+    private final ChatRepository chatRoomRepository;
+
+
+    // 나의 전체 채팅방 목록 조회
+    public List<ChatRoom> findAllRoomOfUser(String username) {
+
+        List<ChatRoom> chatRooms = chatRoomRepository.findAllRoom();
+        chatRooms.stream().forEach(room -> room.setUserCount(chatRoomRepository.getUserCount(room.getRoomId())));
+
+        List<ChatRoom> myChatRooms = new LinkedList<>();
+        for (ChatRoom room: chatRooms) {
+            if(room.getName().contains(username)){
+                myChatRooms.add(room);
+            }
+        }
+        return myChatRooms;
+    }
+
+    // 새로운 채팅을 시작할 수 있는 사람 목록 조회
+    public List<ChatUserList> findAllNewUser(String username) {
+        List<ChatUserList> newUser = new LinkedList<>();
+        List<ChatRoom> myChatRooms = findAllRoomOfUser(username);
+        List<User> allUser = userRepository.findAll();
+        for (User user: allUser) {
+            for(ChatRoom chatRoom: myChatRooms){
+                if(!chatRoom.getName().contains(user.getEmail())){
+                    newUser.add(new ChatUserList(user.getEmail(), user.getNickname(), user.getProfileImgUrl()));
+                    break;
+                }
+            }
+        }
+        return newUser;
+    }
 
     /**
      * destination정보에서 roomId 추출
@@ -44,4 +85,7 @@ public class ChatService {
         }
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
     }
+
+
+
 }

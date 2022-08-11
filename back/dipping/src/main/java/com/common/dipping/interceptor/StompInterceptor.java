@@ -2,7 +2,7 @@ package com.common.dipping.interceptor;
 
 import com.common.dipping.api.chat.domain.dto.ChatMessage;
 import com.common.dipping.api.chat.domain.dto.ChatUser;
-import com.common.dipping.api.chat.repository.ChatRoomRepository;
+import com.common.dipping.api.chat.repository.ChatRepository;
 import com.common.dipping.api.chat.service.ChatService;
 import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.jwt.JwtProvider;
@@ -37,7 +37,7 @@ import java.util.Optional;
 public class StompInterceptor implements ChannelInterceptor {
 
     private final JwtProvider jwtProvider;
-    private final ChatRoomRepository chatRoomRepository;
+    private final ChatRepository chatRoomRepository;
     private final ChatService chatService;
 
     // websocket을 통해 들어온 요청이 처리 되기전 실행된다.
@@ -76,7 +76,7 @@ public class StompInterceptor implements ChannelInterceptor {
             }
             // 채팅방에 들어온 클라이언트 정보를 roomId와 맵핑해 놓는다.(나중에 특정 세션이 어떤 채팅방에 들어가 있는지 알기 위함)
             chatRoomRepository.setUserEnterInfo(sessionId, ChatUser.builder().sender(name).roomId(roomId).userId(userId).build());
-            chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).img(img).build());
+            chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).profileImgUrl(img).build());
             log.info("SUBSCRIBED {}, {}", name, roomId);
         } else if (StompCommand.DISCONNECT == accessor.getCommand()) { // Websocket 연결 종료
             // 연결이 종료된 클라이언트 sesssionId로 채팅방 id를 얻는다.

@@ -1,42 +1,62 @@
 package com.common.dipping.api.chat.controller;
 
 import com.common.dipping.api.chat.domain.dto.ChatMessage;
-import com.common.dipping.api.chat.repository.ChatRoomRepository;
-import com.common.dipping.api.user.domain.entity.User;
-import com.common.dipping.api.user.repository.UserRepository;
-import com.common.dipping.jwt.JwtProvider;
+import com.common.dipping.api.chat.domain.dto.ChatRoom;
+import com.common.dipping.api.chat.repository.ChatRepository;
+import com.common.dipping.api.chat.service.ChatService;
 import com.common.dipping.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
+@RequestMapping("/api/chat")
 public class ChatController {
 
-    private final RedisTemplate<String, Object> redisTemplate;
-    private final ChannelTopic channelTopic;
+    private final ChatRepository chatRoomRepository;
+    private final ChatService chatService;
 
-    private final UserRepository userRepository;
-    private final ChatRoomRepository chatRoomRepository;
-
-    // 메시지 전송
-    @PostMapping("/chat/message")
-    public void message(@RequestBody ChatMessage message) {
-        System.out.println(message.getType());
-        System.out.println(message.getRoomId());
-        System.out.println(message.getSender());
-        System.out.println(message.getReceiver());
-        System.out.println(message.getMessage());
-        System.out.println(message.getProfileImgUrl());
-
-        //메시지 저장
-        chatRoomRepository.saveMessage(message.getRoomId(), message);
+    // 나의 전체 채팅방 목록 조회
+    @GetMapping("/rooms")
+    public ResponseEntity findAllRoomOfUser(@AuthenticationPrincipal UserDetailsImpl userInfo) {
+        return ResponseEntity.ok().body(chatService.findAllRoomOfUser(userInfo.getUsername()));
     }
+
+    //사용자가 새로 채팅을 시작할 수 있는 사람 목록 조회
+    @GetMapping("/new")
+    public ResponseEntity findAllNewUser(@AuthenticationPrincipal UserDetailsImpl userInfo){
+        return ResponseEntity.ok().body(chatService.findAllNewUser(userInfo.getUsername()));
+    }
+
+    // 채팅방 생성
+    @PostMapping("/room")
+    public ChatRoom createRoom(@RequestParam String name) {
+        return chatRoomRepository.createChatRoom(name);
+    }
+
+    // 채팅방 파괴
+    @DeleteMapping("/room/{roomId}")
+    public ResponseEntity deleteRoom(@PathVariable String roomId) {
+        chatRoomRepository.deleteChatRoom(roomId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
+
+    // 특정 채팅방 들어갔을때 채팅방 관련 정보를 전달
+    @GetMapping("/room/{roomId}")
+    public ChatRoom roomInfo(@PathVariable String roomId) {
+        return chatRoomRepository.findRoomById(roomId);
+    }
+
+    // 해당 채팅방에 저장된 최신 메시지 받기
+    @GetMapping("/room/message/{roomId}")
+    @ResponseBody
+    public List<ChatMessage> getMessages(@PathVariable String roomId) {
+        return chatRoomRepository.getMessages(roomId);
+    }
+
 }
