@@ -20,6 +20,7 @@ import {
   GridItem,
 } from '@chakra-ui/react';
 import { ModalNavBar } from '../../components/floatingbar/ModalNavBar';
+import { HomeFeedData, FeedPost } from '../../testdata/HomeFeedData';
 
 export const ProfileMain = () => {
   const props = {
@@ -55,14 +56,18 @@ export const ProfileMain = () => {
                   <Text>11</Text>
                   <Text>게시물</Text>
                 </FormHelperText>
-                <FormHelperText p="2" textAlign="center" fontSize="16px">
-                  <Text>12</Text>
-                  <Text>팔로워</Text>
-                </FormHelperText>
-                <FormHelperText p="2" textAlign="center" fontSize="16px">
-                  <Text>13</Text>
-                  <Text>팔로잉</Text>
-                </FormHelperText>
+                <Link href="/Follow">
+                  <FormHelperText p="2" textAlign="center" fontSize="16px">
+                    <Text>12</Text>
+                    <Text>팔로워</Text>
+                  </FormHelperText>
+                </Link>
+                <Link href="/Follow">
+                  <FormHelperText p="2" textAlign="center" fontSize="16px">
+                    <Text>13</Text>
+                    <Text>팔로잉</Text>
+                  </FormHelperText>
+                </Link>
               </Flex>
               <Button colorScheme="gray.200" variant="outline" height="24px" width="100%">
                 <Link href="/profile/edit" fontSize="16px">
