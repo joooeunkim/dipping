@@ -7,6 +7,8 @@ import com.common.dipping.api.chat.service.ChatService;
 import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +23,9 @@ public class ChatController {
 
     private final ChatRepository chatRepository;
     private final ChatService chatService;
+
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final ChannelTopic channelTopic;
 
     // 나의 전체 채팅방 목록 조회
     @GetMapping("/rooms")
@@ -55,8 +60,8 @@ public class ChatController {
 
     // 채팅방에 메시지 저장하기
     @PostMapping("/room/message")
-    public ResponseEntity saveMessages(@RequestBody ChatMessage message, @AuthenticationPrincipal UserDetailsImpl userInfo){
-        return chatService.saveMessages(message);
+    public ResponseEntity saveMessages(@RequestParam String roomId, @RequestBody ChatMessage message){
+        //return chatService.saveMessages(roomId, message);
     }
 
     // 해당 채팅방에 저장된 메시지 받기

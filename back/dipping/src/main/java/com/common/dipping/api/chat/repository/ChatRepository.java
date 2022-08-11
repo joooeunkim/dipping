@@ -111,34 +111,7 @@ public class ChatRepository {
         List<ChatMessage> messages = roomMessages.get(CHAT_LIST, roomId);
         if(messages == null) messages = new ArrayList<>();
         messages.add(message);
-
-        // 다훈
-        if(messages.size() > 5){ //이 5는 MESSAGE_MAX_LENGTH
-            List<ChatMessage> changeMessages = new ArrayList<>(messages.subList(1, 5)); //이 5는 MESSAGE_MAX_LENGTH
-
-            roomMessages.put(CHAT_LIST, roomId, changeMessages);
-            return;
-        }
         roomMessages.put(CHAT_LIST, roomId, messages);
-
-        //민구
-//        if(messages.size() > SystemConstant.MESSAGE_MAX_LENGTH){
-//            messages = messages.stream().skip(0).limit(21).collect(Collectors.toList());
-//        }
-
-        // 한길
-//        if(messages.size() > SystemConstant.MESSAGE_MAX_LENGTH) {
-//            // 앞에서부터1개식 지우기
-//            for (int i = 1; i < messages.size(); i++) {
-//                messages.set(i-1, messages.get(i));
-//            }
-//            messages.add(message);
-//        }
-//        else {
-//            // 제거쓸거면 번120째 messages.add(message)는 지워야함
-//            messages.add(message);
-//        }
-
 
     }
 
