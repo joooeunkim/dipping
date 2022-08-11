@@ -45,6 +45,16 @@ const iframeReducer = createSlice({
 
       return { ...state, playlistindex: 0 };
     },
+    setDefault(state) {
+      return {
+        ...state,
+        playstate: -1,
+        progress: { time: 0, duration: 60 },
+        playlist: [],
+        playlistindex: -1,
+        postid: -1,
+      };
+    },
   },
 });
 
@@ -56,5 +66,6 @@ export const {
   setPostID,
   setPlayerInited,
   nextPlayListIndex,
+  setDefault,
 } = iframeReducer.actions;
 export default iframeReducer.reducer;
