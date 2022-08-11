@@ -28,7 +28,7 @@ export type FeedPost = {
   tags: string;
   last_modified: any;
   user: User;
-  playlists: Array<Music>;
+  playlist: Array<Music>;
   comments: Array<Comment>;
 };
 
@@ -49,23 +49,23 @@ export const HomeFeedData: Array<FeedPost> = [
       name: 'mocha_oca',
       profile_image: 'https://bit.ly/3A2BqqJ',
     },
-    playlists: [
+    playlist: [
       {
         title: 'Stressed Out',
         artist: '​twenty one pilots',
-        albumart: 'https://i.ytimg.com/vi/Gc4sY98Jn9I/maxresdefault.jpg',
+        albumart: 'https://i.ytimg.com/vi/Gc4sY98Jn9I/hqdefault.jpg',
         id: 'Gc4sY98Jn9I',
       },
       {
         title: 'Welcome To The Black Parade',
         artist: 'My Chemical Romance',
-        albumart: 'https://i.ytimg.com/vi/G-I9csAflBs/maxresdefault.jpg',
+        albumart: 'https://i.ytimg.com/vi/G-I9csAflBs/hqdefault.jpg',
         id: 'G-I9csAflBs',
       },
       {
         title: 'LA Devotee',
         artist: 'Panic! At The Disco',
-        albumart: 'https://i.ytimg.com/vi/RzMITAmJfeg/maxresdefault.jpg',
+        albumart: 'https://i.ytimg.com/vi/RzMITAmJfeg/hqdefault.jpg',
         id: 'RzMITAmJfeg',
       },
       {
@@ -181,7 +181,7 @@ export const HomeFeedData: Array<FeedPost> = [
       name: 'slavv',
       profile_image: 'https://bit.ly/3Qvuqb4',
     },
-    playlists: [
+    playlist: [
       {
         title: 'LA Devotee',
         artist: 'Panic! At The Disco',
@@ -201,10 +201,10 @@ export const HomeFeedData: Array<FeedPost> = [
         id: 'G-I9csAflBs',
       },
       {
-        title: '백색왜성',
-        artist: '넬',
-        albumart: 'https://i.ytimg.com/vi/qRaAvEbKmt0/hqdefault.jpg',
-        id: 'qRaAvEbKmt0',
+        title: 'TOMBOY',
+        artist: '혁오',
+        albumart: 'https://i.ytimg.com/vi/zC8RrOA0spo/hqdefault.jpg',
+        id: 'zC8RrOA0spo',
       },
       {
         title: 'Dead!',

@@ -57,7 +57,7 @@ export const PlaylistPost = (props: any) => {
 
       {/* music player */}
       {/* <PlayerLarge /> */}
-      <PlayerLarge playlists={postfeed.playlists} id={id} />
+      <PlayerLarge playlist={postfeed.playlist} id={id} />
 
       {/* icon set */}
       <Box position="relative" h="30px" w="full" bg="" marginBottom="16px">

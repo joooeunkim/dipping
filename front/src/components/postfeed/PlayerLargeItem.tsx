@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 export const PlayerLargeItem = (props: any) => {
   const borderColor = useColorModeValue('gray.200', 'gray.600');
-  const { artist, title, albumart, selected } = props;
+  const { artist, title, albumart, id, selected } = props;
   return (
     <Box position="relative" left="1vw" w="86vw" h="18vw">
       {selected && (
@@ -18,7 +18,9 @@ export const PlayerLargeItem = (props: any) => {
         marginX="0vw"
         borderRadius="2vw"
         objectFit="cover"
-        src={albumart}
+        src={'https://i.ytimg.com/vi/' + id + '/maxresdefault.jpg'}
+        fallbackSrc={'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg'}
+        alt="why"
       />
       <Box
         position="absolute"

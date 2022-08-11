@@ -6,11 +6,10 @@ import { ProgressBar } from '../ProgressBar';
 import { PlayerLargeItem } from './PlayerLargeItem';
 
 export const PlayerLarge = (props: any) => {
-  const { playlists, id } = props;
+  const { playlist, id } = props;
   const dispatch = useDispatch();
   const playstate = useSelector((state: any) => state.iframeReducer.playstate);
   const playlistindex = useSelector((state: any) => state.iframeReducer.playlistindex);
-  const playlist = useSelector((state: any) => state.iframeReducer.playlist);
   const postid = useSelector((state: any) => state.iframeReducer.postid);
 
   // 앨범 목록 표시
@@ -24,9 +23,10 @@ export const PlayerLarge = (props: any) => {
   const onClickItem = (index: number) => {
     dispatch(setPostID(id));
     setCurrentItem(index);
-    (window as any).player.loadVideoById(playlists[index].id);
+    (window as any).player.loadVideoById(playlist[index].id);
   };
 
+  // 재생-정지
   const PlayPause = () => {
     console.log('playpause');
     if (postid !== id) {
@@ -49,7 +49,7 @@ export const PlayerLarge = (props: any) => {
           boxShadow="0 0 2px gray"
           boxSize="92vw"
           objectFit="cover"
-          src={playlists[currentitem].albumart}
+          src={playlist[currentitem].albumart}
         />
 
         {/* playlist popover */}
@@ -76,7 +76,7 @@ export const PlayerLarge = (props: any) => {
               position="relative"
             >
               <Box w="90vw" h="100%" overflow="auto">
-                {playlists.map((item: any, index: number) => (
+                {playlist.map((item: any, index: number) => (
                   <div
                     key={index}
                     onClick={() => {
@@ -84,7 +84,7 @@ export const PlayerLarge = (props: any) => {
                     }}
                   >
                     <PlayerLargeItem {...item} selected={currentitem == index ? true : false} />
-                    {index != playlists.length - 1 && <Box position="relative" w="full" h="3vw" />}
+                    {index != playlist.length - 1 && <Box position="relative" w="full" h="3vw" />}
                   </div>
                 ))}
               </Box>
@@ -105,7 +105,7 @@ export const PlayerLarge = (props: any) => {
           bg=""
           color="gray.400"
         >
-          {playlists[currentitem].artist}
+          {playlist[currentitem].artist}
         </Box>
         <Box
           position="relative"
@@ -116,7 +116,7 @@ export const PlayerLarge = (props: any) => {
           lineHeight="24px"
           bg=""
         >
-          {playlists[currentitem].title}
+          {playlist[currentitem].title}
         </Box>
 
         <Box
