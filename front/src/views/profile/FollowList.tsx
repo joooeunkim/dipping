@@ -28,7 +28,7 @@ export const FollowList = () => {
       <ModalNavBar {...props} />
       <Container maxW="480px" w="100%" bg="" h="100vh" margin="0 auto">
         <Flex flexDirection="column" alignItems="center" marginTop="16px">
-          <Tabs isFitted margin="0px">
+          <Tabs isFitted margin="0px" width="100%">
             <TabList marginBottom="16px">
               <Tab fontSize="16px">팔로워</Tab>
               <Tab fontSize="16px">팔로잉</Tab>
