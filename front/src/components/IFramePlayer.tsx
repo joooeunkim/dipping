@@ -2,7 +2,14 @@
 import { VisuallyHidden } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setProgress, setPlayState, setPlayerInited, PlayerState } from '../reducers/iframeReducer';
+import {
+  setProgress,
+  setPlayState,
+  setPlayerInited,
+  PlayerState,
+  setPlayListIndex,
+  nextPlayListIndex,
+} from '../reducers/iframeReducer';
 
 export const IFramePlayer = () => {
   console.log('IFramePlayer');
@@ -33,13 +40,14 @@ export const IFramePlayer = () => {
             onStateChange: (event: any) => {
               if (event.data === (window as any).YT.PlayerState.ENDED) {
                 console.log('ENDED');
+                dispatch(setPlayState(PlayerState.PAUSED));
                 dispatch(
                   setProgress({
                     time: (window as any).player.getDuration(),
                     duration: (window as any).player.getDuration(),
                   }),
                 );
-                //다음 음악
+                dispatch(nextPlayListIndex());
               } else if (event.data === (window as any).YT.PlayerState.PLAYING) {
                 console.log('PLAYING');
                 dispatch(setPlayState(PlayerState.PLAYING));
@@ -67,9 +75,11 @@ export const IFramePlayer = () => {
 
   useEffect(() => {
     if (!playerinited) return;
-    const player = (window as any).player;
-    if (player.getPlayerState() == PlayerState.ENDED) {
-      player.loadVideoById({ videoId: playlist[playlistindex] });
+    if (playlistindex >= 0) {
+      console.log('change music:' + playlist[playlistindex].id);
+      console.log(playlistindex + '/' + playlist.length);
+      const player = (window as any).player;
+      player.loadVideoById({ videoId: playlist[playlistindex].id });
     }
   }, [playlistindex, playlist, playerinited]);
 

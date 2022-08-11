@@ -1,7 +1,13 @@
 import { Box, Image, useColorModeValue } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { PlayerState, setPlayState, setPostID } from '../../reducers/iframeReducer';
+import {
+  PlayerState,
+  setPlayList,
+  setPlayListIndex,
+  setPlayState,
+  setPostID,
+} from '../../reducers/iframeReducer';
 import { ProgressBar } from '../ProgressBar';
 import { PlayerLargeItem } from './PlayerLargeItem';
 
@@ -18,12 +24,18 @@ export const PlayerLarge = (props: any) => {
     toggleAlbumVisible(albumvisible ^ 1);
   };
 
+  // 첫 재생시 store에 포스트 정보를 넘김
+  const setIFrameState = (index: number) => {
+    dispatch(setPostID(id));
+    dispatch(setPlayList(playlist));
+    dispatch(setPlayListIndex(index));
+    setCurrentItem(index);
+  };
+
   // 곡 선택
   const [currentitem, setCurrentItem] = useState(0);
   const onClickItem = (index: number) => {
-    dispatch(setPostID(id));
-    setCurrentItem(index);
-    (window as any).player.loadVideoById(playlist[index].id);
+    setIFrameState(index);
   };
 
   // 재생-정지
@@ -40,6 +52,10 @@ export const PlayerLarge = (props: any) => {
     }
   };
 
+  useEffect(() => {
+    if (postid === id) setCurrentItem(playlistindex);
+  }, [playlistindex]);
+
   return (
     <>
       {/* album art */}
@@ -49,7 +65,7 @@ export const PlayerLarge = (props: any) => {
           boxShadow="0 0 2px gray"
           boxSize="92vw"
           objectFit="cover"
-          src={playlist[currentitem].albumart}
+          src={'https://i.ytimg.com/vi/' + playlist[currentitem].id + '/maxresdefault.jpg'}
         />
 
         {/* playlist popover */}

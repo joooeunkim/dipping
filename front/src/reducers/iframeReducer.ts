@@ -38,6 +38,13 @@ const iframeReducer = createSlice({
     setPlayerInited(state, { payload: playerinited }) {
       return { ...state, playerinited };
     },
+    nextPlayListIndex(state) {
+      const index = state.playlistindex;
+      if (index + 1 !== state.playlist.length)
+        return { ...state, playlistindex: state.playlistindex + 1 };
+
+      return { ...state, playlistindex: 0 };
+    },
   },
 });
 
@@ -48,5 +55,6 @@ export const {
   setPlayListIndex,
   setPostID,
   setPlayerInited,
+  nextPlayListIndex,
 } = iframeReducer.actions;
 export default iframeReducer.reducer;
