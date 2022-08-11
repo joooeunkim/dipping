@@ -34,6 +34,39 @@ public class SearchController {
     /*
     {
       "code": "200",
+      "data": [
+        "users": [
+          {
+            "nickname": "ba_2_h",
+            "profileImgUrl": "/profile.png"
+          }
+        ],
+        "boards": [
+            {
+                BoardDto boardDto1
+            },
+            {
+                BoardDto boardDto2
+            }
+        ]
+      ]
+    }
+    */
+
+    @GetMapping("/")
+    public ResponseEntity<?> searchPage(@AuthenticationPrincipal UserDetailsImpl userInfo) {
+        Map<String,Object> result = new HashMap<>();
+        Map<String,Object> userResult = new HashMap<>();
+        List<MiniProfileDto> userList = searchService.searchRecommendedUser(userInfo);
+        result.put("code", 200);
+        userResult.put("users", userList);
+        result.put("data", userResult);
+        return ResponseEntity.ok().body(result);
+    }
+
+    /*
+    {
+      "code": "200",
       "data": {
         "users": [
           {

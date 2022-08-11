@@ -33,4 +33,7 @@ public class Tag extends Common {
 	@OneToMany(mappedBy = "tag", fetch = FetchType.LAZY)
 	private List<PostTag> postTags = new ArrayList<>();
 
+	@OneToMany(mappedBy = "tag", fetch = FetchType.LAZY)
+	private List<InterestTag> interestTags = new ArrayList<>();
+
 }

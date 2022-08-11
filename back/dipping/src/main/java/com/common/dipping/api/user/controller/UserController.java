@@ -41,7 +41,8 @@ public class UserController {
         if(userService.isEmailDuplicated(signUpDto.getEmail())){ //이메일이 이미 존재
             return ResponseEntity.badRequest().body("이미 가입된 회원입니다");
         } else{
-            userService.signUp(signUpDto);
+            User user = userService.signUp(signUpDto);
+            userService.registerIntersetTag(user);
             return ResponseEntity.ok().build();
         }
     }
@@ -109,18 +110,21 @@ public class UserController {
 
 
     @GetMapping(value = "/profile")
-    public ResponseEntity<?> profile(@AuthenticationPrincipal UserDetailsImpl requestUser, @Param("userNickname") String userNickname) {
-        User userinfo = userService.profile(userNickname);
-        if(userinfo == null) {
-            return ResponseEntity.badRequest().build();
-        }
-//      본인 프로필일 시 비공개 상태이더라도 접속 가능
-        if (!userinfo.getOpenUser()) {
-            return ResponseEntity.ok().body("해당 유저는 비공개 상태입니다.");
-        }
+    public ResponseEntity<?> profile(@AuthenticationPrincipal UserDetailsImpl requestUser, @RequestParam(name = "userNickname", required = false) String userNickname) {
         Boolean isMe = false;
-        if (requestUser.getNickname().equals(userNickname)) {
+        User userinfo;
+        if(userNickname != null) {
+            userinfo = userService.profile(userNickname);
+            if (userinfo == null) {
+                return ResponseEntity.badRequest().build();
+            }
+//      본인 프로필일 시 비공개 상태이더라도 접속 가능
+            if (!userinfo.getOpenUser()) {
+                return ResponseEntity.ok().body("해당 유저는 비공개 상태입니다.");
+            }
+        }else {
             isMe = true;
+            userinfo = userService.profile(requestUser.getNickname());
         }
         ProfileDto profileDto = new ProfileDto();
 

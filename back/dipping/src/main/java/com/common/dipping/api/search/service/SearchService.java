@@ -14,14 +14,11 @@ import com.common.dipping.api.user.repository.UserRepository;
 import com.common.dipping.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -29,7 +26,6 @@ import java.util.List;
 @Transactional
 public class SearchService {
 
-    @Autowired
     private final UserRepository userRepository;
     private final SearchRepository searchRepository;
     private final TagRepository tagRepository;
@@ -78,6 +74,69 @@ public class SearchService {
                 .build();
         searchRepository.save(search);
         return boardList;
+    }
+
+    public List<MiniProfileDto> searchRecommendedUser(UserDetailsImpl userDetails) {
+        User userInfo = userRepository.findById(userDetails.getId()).orElse(null);
+        List<User> users = userRepository.findAll();
+        Map<User, Double> result = new HashMap<>();
+        for (User user: users) {
+            if (user.getId() == userInfo.getId()) {continue;}
+            result.put(user, similarity(user.getMusicGenre(), userInfo.getMusicGenre()));
+        }
+        List<User> keySetList = new ArrayList<User>(result.keySet());
+        Collections.sort(keySetList, (o1, o2) -> (result.get(o2).compareTo(result.get(o1))));
+        List<User> userList = keySetList.subList(0, (keySetList.size() > 5) ? 6: keySetList.size());
+        List<MiniProfileDto> miniProfileDtos = new ArrayList<>();
+        for (User user: userList) {
+            MiniProfileDto miniProfileDto = new MiniProfileDto();
+            miniProfileDto.setNickname(user.getNickname());
+            miniProfileDto.setProfileImgUrl(user.getProfileImgUrl());
+            miniProfileDtos.add(miniProfileDto);
+        }
+        return miniProfileDtos;
+    }
+
+    private static double similarity(String s1, String s2) {
+        String longer = s1, shorter = s2;
+
+        if (s1.length() < s2.length()) {
+            longer = s2;
+            shorter = s1;
+        }
+
+        int longerLength = longer.length();
+        if (longerLength == 0) return 1.0;
+        return (longerLength - editDistance(longer, shorter)) / (double) longerLength;
+    }
+    private static int editDistance(String s1, String s2) {
+        s1 = s1.toLowerCase();
+        s2 = s2.toLowerCase();
+        int[] costs = new int[s2.length() + 1];
+
+        for (int i = 0; i <= s1.length(); i++) {
+            int lastValue = i;
+            for (int j = 0; j <= s2.length(); j++) {
+                if (i == 0) {
+                    costs[j] = j;
+                } else {
+                    if (j > 0) {
+                        int newValue = costs[j - 1];
+
+                        if (s1.charAt(i - 1) != s2.charAt(j - 1)) {
+                            newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+                        }
+
+                        costs[j - 1] = lastValue;
+                        lastValue = newValue;
+                    }
+                }
+            }
+
+            if (i > 0) costs[s2.length()] = lastValue;
+        }
+
+        return costs[s2.length()];
     }
 
 }

@@ -94,7 +94,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
             .oauth2Login()
-            .defaultSuccessUrl("/login-success") //oauth2 인증이 성공했을 때, 이동되는 url을 설정.
             .successHandler(authenticationSuccessHandler) //인증 프로세스에 따라 사용자 정의 로직을 실행.
             .userInfoEndpoint()
             .userService(OAuth2UserServiceImpl); //로그인이 성공하면 해당 유저의 정보를 들고 customOAuth2UserService에서 후처리

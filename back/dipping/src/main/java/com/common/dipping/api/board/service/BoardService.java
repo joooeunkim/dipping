@@ -53,9 +53,24 @@ public class BoardService {
                 .user(user).build();
 
         return boardRepository.save(board);
+    }
 
-        // 리턴은 사용자 기준 게시판 중에서 내림차순으로 했을 때 첫번째가 가장 최근에 만들어진
-        // 게시판임으로 boardSeq 조회해서 반환
+	public Board edit(BoardDto boardDto){
+		User user = userRepository.findById(boardDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + boardDto.getUserId()));
+		Board board = boardRepository.findById(boardDto.getId()).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다. id=" + boardDto.getId()));;
+		board.update(boardDto.getContent(),boardDto.isOpenPost(),boardDto.isOpenComment(),boardDto.isAlbumArt());
+		return boardRepository.save(board);
+	}
+
+    public void editSong(List<BoardSongDto> boardSongDto, Board board){
+        boardSongRepository.deleteAllByBoard(board);
+        registerSong(boardSongDto,board);
+    }
+
+    public void editTag(List<PostTagDto> postTagDto, List<UserTagDto> userTagDto, Board board){
+        postTagRepository.deleteAllByBoard(board);
+        userTagRepository.deleteAllByBoard(board);
+        registerTag(postTagDto,userTagDto,board);
     }
 
     public void registerSong(List<BoardSongDto> boardSongDto, Board board) {
@@ -83,9 +98,7 @@ public class BoardService {
                     postTagDto.get(i).setTagId(tag.getId());
                 } else {
                     tag = Tag.builder().content(postTagDto.get(i).getContent()).build();
-                    tagRepository.save(tag);
-                    tag = tagRepository.findByContent(postTagDto.get(i).getContent());
-                    postTagDto.get(i).setTagId(tag.getId());
+                    tag = tagRepository.save(tag);
                 }
                 PostTag postTag = PostTag.builder().tag(tag).board(board).build();
                 postTagRepository.save(postTag);
@@ -117,4 +130,8 @@ public class BoardService {
         return list;
     }
 
+    public boolean deleteBoard(Long boardId) {
+        boardRepository.deleteById(boardId);
+        return boardRepository.existsById(boardId);
+    }
 }
