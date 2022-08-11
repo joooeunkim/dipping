@@ -8,7 +8,7 @@ import {
   setPlayState,
   setPostID,
 } from '../../reducers/iframeReducer';
-import { ProgressBar } from '../ProgressBar';
+import { ProgressBar } from '../musicplayer/ProgressBar';
 import { PlayerLargeItem } from './PlayerLargeItem';
 
 export const PlayerLarge = (props: any) => {

@@ -2,7 +2,12 @@
 import { Box, useColorModeValue } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setProgress, setPlayState, setPlayerInited, PlayerState } from '../reducers/iframeReducer';
+import {
+  setProgress,
+  setPlayState,
+  setPlayerInited,
+  PlayerState,
+} from '../../reducers/iframeReducer';
 
 export const ProgressBar = () => {
   const dispatch = useDispatch();

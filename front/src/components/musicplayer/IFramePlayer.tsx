@@ -9,7 +9,7 @@ import {
   PlayerState,
   setPlayListIndex,
   nextPlayListIndex,
-} from '../reducers/iframeReducer';
+} from '../../reducers/iframeReducer';
 
 export const IFramePlayer = () => {
   console.log('IFramePlayer');
