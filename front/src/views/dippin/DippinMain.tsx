@@ -1,8 +1,6 @@
 import { Box } from '@chakra-ui/react';
+import { DippinItem } from '../../components/dippin/DippinItem';
 import { SearchNavBar } from '../../components/floatingbar/SearchNavBar';
-import { useEffect, useState } from 'react';
-import { setDefault } from '../../reducers/iframeReducer';
-import { useSelector, useDispatch } from 'react-redux';
 
 export const DippinMain = () => {
   const props = {
@@ -13,7 +11,21 @@ export const DippinMain = () => {
   return (
     <Box>
       <SearchNavBar {...props} />
-      DippinMain
+      <DippinItem />
+      <hr />
+      <DippinItem />
+      <hr />
+      <DippinItem />
+      <hr />
+      <DippinItem />
+      <hr />
+      <DippinItem />
+      <hr />
+      <DippinItem />
+      <hr />
+      <DippinItem />
+      <hr />
+      <DippinItem />
     </Box>
   );
 };
