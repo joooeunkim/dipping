@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 
 // 로그인 작업
 export const local = (email: string, password: string, dispatch: any, navigate: any) => {
+  console.log(email, password);
   DefaultAxios.post('/login', {
     email: email,
     password: password,

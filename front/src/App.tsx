@@ -23,6 +23,7 @@ import { SearchDetail } from './views/search/SearchDetail';
 
 import { ProtectedRouteProps } from './ProtectedRoute';
 import { useSelector } from 'react-redux';
+import { OauthRedirect } from './views/users/OauthRedirect';
 
 export const App = () => (
   <ChakraProvider>
@@ -57,6 +58,9 @@ export const App = () => (
       <Route path="/findPassword" element={<FindPassword />} />
       <Route path="/setPassword" element={<SetPassword />} />
       <Route path="/process" element={<RegisterProcessLayout />} />
+
+      {/* 소셜 로그인 리다이렉트 view */}
+      <Route path="/oauth2/redirect" element={<OauthRedirect />} />
     </Routes>
   </ChakraProvider>
 );
