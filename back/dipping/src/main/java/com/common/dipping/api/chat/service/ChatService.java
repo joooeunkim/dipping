@@ -6,15 +6,14 @@ import com.common.dipping.api.chat.domain.dto.ChatUserList;
 import com.common.dipping.api.chat.repository.ChatRepository;
 import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.repository.UserRepository;
-import com.common.dipping.exception.UserNotFoundException;
-import com.common.dipping.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,7 +34,6 @@ public class ChatService {
     public List<ChatRoom> findAllRoomOfUser(String username) {
 
         List<ChatRoom> chatRooms = chatRepository.findAllRoom();
-        chatRooms.stream().forEach(room -> room.setUserCount(chatRepository.getUserCount(room.getRoomId())));
 
         List<ChatRoom> myChatRooms = new LinkedList<>();
         for (ChatRoom room: chatRooms) {
@@ -120,15 +118,8 @@ public class ChatService {
 
     public ResponseEntity saveMessages(String roomId, ChatMessage message) {
 
-        // 로그인 회원 정보로 대화명 설정
-        //message.setSender(nickname);
-        //message.setUserCount(chatRoomRepository.getUserCount(message.getRoomId()));
-        //message.setProfileImgUrl(user.getProfileImgUrl());
-        //message.setUserId(user.getId());
-        // Websocket에 발행된 메시지를 redis로 발행한다(publish). redisTemplate을 통해 바로 ChannelTopic으로 메시지를 발행
-        //redisTemplate.convertAndSend(channelTopic.getTopic(), message);
-        // 발행한 메시지 저장
-
+        LocalDateTime now = LocalDateTime.now();
+        message.setTime(now.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         return ResponseEntity.ok().body(chatRepository.saveMessage(roomId, message));
     }
 }

@@ -5,10 +5,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * REDIS 저장 채팅방 유저 정보
- * key: sessionID
- */
 @Data
 public class ChatUser implements Serializable {
 

@@ -24,8 +24,6 @@ public class ChatController {
     private final ChatRepository chatRepository;
     private final ChatService chatService;
 
-    private final RedisTemplate<String, Object> redisTemplate;
-    private final ChannelTopic channelTopic;
 
     // 나의 전체 채팅방 목록 조회
     @GetMapping("/rooms")
