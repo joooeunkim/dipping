@@ -20,6 +20,7 @@ import { FollowList } from './views/profile/FollowList';
 import { ProfilePost } from './views/profile/ProfilePost';
 
 import { ProtectedRouteProps } from './ProtectedRoute';
+import { useSelector } from 'react-redux';
 
 export const App = () => (
   <ChakraProvider>
@@ -27,7 +28,13 @@ export const App = () => (
       <Route
         path="/"
         element={
-          <ProtectedRoute isAuthenticated={true} authenticationPath="/login" outlet={<Layout />} />
+          <ProtectedRoute
+            isAuthenticated={
+              useSelector((state: any) => state.tokenReducer.accessToken) ? true : false
+            }
+            authenticationPath="/login"
+            outlet={<Layout />}
+          />
         }
       >
         <Route index element={<HomeMain />} />
