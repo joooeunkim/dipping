@@ -98,9 +98,7 @@ public class BoardService {
                     postTagDto.get(i).setTagId(tag.getId());
                 } else {
                     tag = Tag.builder().content(postTagDto.get(i).getContent()).build();
-                    tagRepository.save(tag);
-                    tag = tagRepository.findByContent(postTagDto.get(i).getContent());
-                    postTagDto.get(i).setTagId(tag.getId());
+                    tag = tagRepository.save(tag);
                 }
                 PostTag postTag = PostTag.builder().tag(tag).board(board).build();
                 postTagRepository.save(postTag);
