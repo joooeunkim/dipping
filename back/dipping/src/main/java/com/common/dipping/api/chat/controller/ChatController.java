@@ -4,6 +4,7 @@ import com.common.dipping.api.chat.domain.dto.ChatMessage;
 import com.common.dipping.api.chat.domain.dto.ChatRoom;
 import com.common.dipping.api.chat.repository.ChatRepository;
 import com.common.dipping.api.chat.service.ChatService;
+import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -40,22 +41,28 @@ public class ChatController {
     }
 
     // 채팅방 파괴
-    @DeleteMapping("/room/{roomId}")
-    public ResponseEntity deleteRoom(@PathVariable String roomId) {
+    @DeleteMapping("/room")
+    public ResponseEntity deleteRoom(@RequestParam String roomId) {
         chatRepository.deleteChatRoom(roomId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     // 특정 채팅방 들어갔을때 채팅방 관련 정보를 전달
-    @GetMapping("/room/{roomId}")
-    public ChatRoom roomInfo(@PathVariable String roomId) {
-        return chatRepository.findRoomById(roomId);
+    @GetMapping("/room")
+    public ChatRoom findRoomById(@RequestParam String roomId, @AuthenticationPrincipal UserDetailsImpl userInfo) {
+        return chatService.findRoomById(roomId, userInfo.getUsername());
     }
 
-    // 해당 채팅방에 저장된 최신 메시지 받기
-    @GetMapping("/room/message/{roomId}")
+    // 채팅방에 메시지 저장하기
+    @PostMapping("/room/message")
+    public ResponseEntity saveMessages(@RequestBody ChatMessage message, @AuthenticationPrincipal UserDetailsImpl userInfo){
+        return chatService.saveMessages(message);
+    }
+
+    // 해당 채팅방에 저장된 메시지 받기
+    @GetMapping("/room/message")
     @ResponseBody
-    public List<ChatMessage> getMessages(@PathVariable String roomId) {
+    public List<ChatMessage> getMessages(@RequestParam String roomId) {
         return chatRepository.getMessages(roomId);
     }
 

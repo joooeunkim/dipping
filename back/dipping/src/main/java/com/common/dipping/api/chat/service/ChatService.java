@@ -6,6 +6,7 @@ import com.common.dipping.api.chat.domain.dto.ChatUserList;
 import com.common.dipping.api.chat.repository.ChatRepository;
 import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.repository.UserRepository;
+import com.common.dipping.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -37,6 +38,7 @@ public class ChatService {
         List<ChatRoom> myChatRooms = new LinkedList<>();
         for (ChatRoom room: chatRooms) {
             if(room.getName().contains(username)){
+                room.setChatter(findChatter(room.getName(), username));
                 myChatRooms.add(room);
             }
         }
@@ -47,6 +49,7 @@ public class ChatService {
     public List<ChatUserList> findAllNewUser(String username) {
         List<ChatUserList> newUser = new LinkedList<>();
         List<ChatRoom> myChatRooms = findAllRoomOfUser(username);
+        if(myChatRooms.size()==0) return newUser;
         List<User> allUser = userRepository.findAll();
         for (User user: allUser) {
             boolean isNew = true;
@@ -66,6 +69,13 @@ public class ChatService {
     public ChatRoom createChatRoom(String name) {
         return chatRepository.createChatRoom(name);
     }
+
+    public ChatRoom findRoomById(String roomId, String username) {
+        ChatRoom chatRoom = chatRepository.findRoomById(roomId);
+        chatRoom.setChatter(findChatter(chatRoom.getName(),username));
+        return chatRoom;
+    }
+
 
     /**
      * destination정보에서 roomId 추출
@@ -92,6 +102,17 @@ public class ChatService {
             chatMessage.setSender("[알림]");
         }
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
+    }
+
+    //roomName에서 채팅하는 상대방 닉네임 분리
+    private String findChatter(String roomName, String username){
+        System.out.println("roomName:"+roomName+", username:"+username);
+        String[] names = roomName.split(",");
+        String chatter = (names[0].equals(username))?names[1]:username;
+        System.out.println("chatter:"+chatter);
+        User user = userRepository.findByEmail(chatter).orElse(null);
+        System.out.println(user.getNickname());
+        return user.getNickname();
     }
 
 
