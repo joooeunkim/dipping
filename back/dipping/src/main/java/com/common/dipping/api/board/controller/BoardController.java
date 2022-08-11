@@ -51,13 +51,13 @@ public class BoardController {
     }
 
     @PostMapping
-    public ResponseEntity<?> register(@RequestBody ObjectNode registerObj)
+    public ResponseEntity<?> register(@AuthenticationPrincipal UserDetailsImpl userInfo,@RequestBody ObjectNode registerObj)
             throws JsonProcessingException, IllegalArgumentException {
 
         ObjectMapper mapper = new ObjectMapper();
 
         BoardDto boardDto = mapper.treeToValue(registerObj.get("post"), BoardDto.class);
-
+        boardDto.setUserId(userInfo.getId());
         List<PostTagDto> postTagDto = Arrays
                 .asList(mapper.treeToValue(registerObj.get("post_tag"), PostTagDto[].class));
         List<UserTagDto> userTagDto = Arrays
@@ -224,9 +224,8 @@ public class BoardController {
 
         ObjectMapper mapper = new ObjectMapper();
 
-
         CommentDto commentDto = mapper.treeToValue(registerObj.get("comment"), CommentDto.class);
-        //commentDto.setUserId(userInfo.getId());
+        commentDto.setUserId(userInfo.getId());
 		Long commentId = commentService.registerComment(commentDto);
 
 		if(commentId == 0L){
