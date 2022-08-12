@@ -179,7 +179,6 @@ public class BoardController {
 
         List<Object> posts = new ArrayList<>();
         for (int i = pageNum - 5; i < pageNum; i++) {
-            JSONArray jArray = new JSONArray();
             if ( i < posting.size()) {
                 Map<String,Object> item = new HashMap<>();
                 BoardResponse boardResponse = new BoardResponse(posting.get(i));
@@ -189,12 +188,10 @@ public class BoardController {
                 boardResponse.setMyLike(heartService.isMylikeByBoardId(userInfo.getId(), posting.get(i)));
                 boardResponse.setCommentCount(commentService.getCountByBoardId(posting.get(i)));
                 item.put("item", boardResponse);
-                jArray.add(item);
 
                 List<BoardSong> boardSongs = boardService.getBoardSongAllById(posting.get(i));
                 List<BoardSongDto> boardSongDtos = new ArrayList<>();
                 if (!boardSongs.isEmpty()) {
-                    Map<String,Object> music = new HashMap<>();
                     for (BoardSong boardSong:boardSongs ) {
                         BoardSongDto boardSongDto = new BoardSongDto();
                         boardSongDto.setId(boardSong.getId());
@@ -205,14 +202,12 @@ public class BoardController {
                         boardSongDto.setSongImgUrl(boardSong.getSongImgUrl());
                         boardSongDtos.add(boardSongDto);
                     }
-                    music.put("music", boardSongDtos);
-                    jArray.add(music);
+                    item.put("music", boardSongDtos);
                 }
-
+                posts.add(item);
             } else {
                 break;
             }
-            posts.add(jArray);
         }
         result.put("data", posts);
 
@@ -325,6 +320,17 @@ public class BoardController {
 
         StorageDto storageDto = mapper.treeToValue(registerObj.get("collection"), StorageDto.class);
         storageService.storageBoard(storageDto.getUserId(),storageDto.getBoardId());
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/collection")
+    public ResponseEntity<?> deletecollection(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        StorageDto storageDto = mapper.treeToValue(registerObj.get("collection"), StorageDto.class);
+        storageService.deletStorage(storageDto.getUserId(),storageDto.getBoardId());
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
