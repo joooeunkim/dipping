@@ -14,4 +14,6 @@ public interface InterestTagRepository extends JpaRepository<InterestTag, Long> 
     void deleteAllByUser(User user);
 
     List<InterestTag> findAllByTag(Tag tag);
+
+    List<InterestTag> findAllByUser(User user);
 }
