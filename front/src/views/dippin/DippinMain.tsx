@@ -1,8 +1,9 @@
-import { Box, Input, Image, Flex } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Box, Input, Image, Flex, useDisclosure } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import { DippinItem } from '../../components/dippin/DippinItem';
 import { SearchNavBar } from '../../components/floatingbar/SearchNavBar';
 import axios from 'axios';
+import { AddMusic } from '../../components/AddMusic';
 
 export const DippinMain = () => {
   const props = {
@@ -14,31 +15,21 @@ export const DippinMain = () => {
   const [youtube, setYoutube] = useState([]);
   const [musicbrainz, setMusicbrainz] = useState([]);
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const onKeyInput = (e: any) => {
     if (e.key === 'Enter') {
       setInput(e.target.value);
       const text = e.target.value;
       console.log(text);
-      axios({
-        method: 'get',
-        url: 'https://www.googleapis.com/youtube/v3/search',
-        params: {
-          key: process.env.REACT_APP_YOUTUBE_API_KEY,
-          part: 'snippet',
-          max: 5,
-          type: 'video',
-          q: text + ' audio',
-          fields: 'items(id(videoId),snippet(title,thumbnails(high(url)),channelTitle))',
-        },
-      }).then(res => {
-        setYoutube(res.data.items);
-      });
+
+      getMusicbrainz(text);
     }
   };
 
-  const getMusicbrainz = () => {
+  const getMusicbrainz = (text: string) => {
     setMusicbrainz([]);
-    const [artist, title] = input.split('-');
+    const [artist, title] = text.split('-');
 
     const query = title + ' AND name:' + artist + ' AND type:album';
     console.log(query);
@@ -71,33 +62,6 @@ export const DippinMain = () => {
       <DippinItem />
       <hr />
       <Input placeholder="Basic usage" onKeyDown={onKeyInput} />
-      <Box>
-        {youtube.map((item: any, index: number) => (
-          <Box key={index}>
-            <Box position="relative" w="full" h="96px" bg="" padding="8px">
-              <Flex>
-                <Box h="54px" w="full" lineHeight="18px" fontSize="14px" fontWeight="400">
-                  <Box>id: {item.id.videoId}</Box>
-                  <Box>title: {item.snippet.title}</Box>
-                </Box>
-                <Image
-                  borderRadius="10px"
-                  boxSize="80px"
-                  objectFit="cover"
-                  src={'https://i.ytimg.com/vi/' + item.id.videoId + '/hqdefault.jpg'}
-                  onClick={() => {
-                    (window as any).player.loadVideoById({ videoId: item.id.videoId });
-                  }}
-                />
-              </Flex>
-            </Box>
-            <hr />
-          </Box>
-        ))}
-      </Box>
-      <Box border="1px" onClick={getMusicbrainz}>
-        musicbrainz
-      </Box>
       <Flex>
         {musicbrainz.map((item: any, index: number) => (
           <Box key={index}>
@@ -107,6 +71,10 @@ export const DippinMain = () => {
           </Box>
         ))}
       </Flex>
+      <Box border="1px" onClick={onOpen}>
+        modal
+      </Box>
+      <AddMusic isOpen={isOpen} onClose={onClose} setData={setYoutube} />
     </Box>
   );
 };
