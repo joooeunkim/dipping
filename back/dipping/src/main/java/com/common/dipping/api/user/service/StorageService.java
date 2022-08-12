@@ -54,4 +54,15 @@ public class StorageService {
 
         }
     }
+
+    public void deletStorage(Long userId, Long boardId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + userId));
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다. id=" + boardId));
+
+        StorageId storageId = new StorageId();
+        storageId.setUserId(userId);
+        storageId.setBoardId(boardId);
+
+        storageRepository.deleteById(storageId);
+    }
 }
