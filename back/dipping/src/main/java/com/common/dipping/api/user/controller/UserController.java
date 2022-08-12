@@ -61,6 +61,18 @@ public class UserController {
         ApiResponse.token(response, token);
     }
 
+    @GetMapping(value="/check/email")
+    public boolean checkDuplicatedEmail(@RequestParam final String email){
+        boolean avail = userService.isEmailDuplicated(email);
+        return avail;
+    }
+
+    @GetMapping(value="/check/nickname")
+    public boolean checkDuplicatedNickname(@RequestParam final String nickname){
+        boolean avail = userService.isUserNicknameDuplicated(nickname);
+        return avail;
+    }
+
 
     @PostMapping(value="/findpw/sendEmail")
     public ResponseEntity<?> sendEmailToFindPw(@RequestBody LoginDto loginDto) throws MessagingException {
