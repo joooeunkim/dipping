@@ -1,6 +1,7 @@
 package com.common.dipping.api.user.repository;
 
 import com.common.dipping.api.board.domain.entity.Board;
+import com.common.dipping.api.board.domain.entity.Comment;
 import com.common.dipping.api.user.domain.dto.MiniProfileDto;
 import com.common.dipping.api.user.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,5 +34,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllByNicknameContaining(String keyword);
 
     User findByBoards(Board board);
+
+    User findByComments(Comment comment);
     
 }

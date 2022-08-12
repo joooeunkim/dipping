@@ -3,10 +3,7 @@ package com.common.dipping.api.user.service;
 import com.common.dipping.api.board.domain.dto.PostTagDto;
 import com.common.dipping.api.board.domain.dto.UserTagDto;
 import com.common.dipping.api.board.domain.entity.*;
-import com.common.dipping.api.board.repository.BoardRepository;
-import com.common.dipping.api.board.repository.InterestTagRepository;
-import com.common.dipping.api.board.repository.TagRepository;
-import com.common.dipping.api.board.repository.UserTagRepository;
+import com.common.dipping.api.board.repository.*;
 import com.common.dipping.api.user.domain.dto.MailDto;
 import com.common.dipping.api.user.domain.entity.Code;
 import com.common.dipping.api.user.repository.CodeRepository;
@@ -43,6 +40,7 @@ public class UserService {
     private final TagRepository tagRepository;
     private final InterestTagRepository interestTagRepository;
     private final BoardRepository boardRepository;
+    private final CommentRepository commentRepository;
 
 
     @Transactional
@@ -200,6 +198,17 @@ public class UserService {
         }
 
         User user = userRepository.findByBoards(board);
+        return user;
+
+    }
+
+    public User findByComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElse(null);
+        if (comment == null) {
+            return null;
+        }
+
+        User user = userRepository.findByComments(comment);
         return user;
 
     }

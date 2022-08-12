@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.common.dipping.api.alarm.service.AlarmService;
 import com.common.dipping.api.board.service.HeartService;
+import com.common.dipping.api.search.service.SearchService;
 import com.common.dipping.api.user.repository.StorageRepository;
 import com.common.dipping.api.user.service.StorageService;
 import com.common.dipping.api.user.service.UserService;
@@ -218,6 +219,51 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @GetMapping("/recommend")
+    public ResponseEntity<?> getRecommendBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestParam(name = "pageNum", required = false,defaultValue = "5") int pageNum) {
+        Map<String,Object> result = new HashMap<>();
+        Map<String,Object> data = new HashMap<>();
+
+        HashSet<BoardResponse> boardSet = boardService.RecommednBoard(userInfo.getId());
+        List<BoardResponse> boardList = new ArrayList<>(boardSet);
+        result.put("code", 200);
+
+        List<Object> posts = new ArrayList<>();
+        for (int i = pageNum - 5; i < pageNum; i++) {
+            if (i < boardList.size()) {
+                Map<String,Object> item = new HashMap<>();
+                BoardResponse boardResponse = boardList.get(i);
+                Long num = Long.valueOf(i) + 1;
+                boardResponse.setId(num);
+
+                item.put("item", boardResponse);
+                Board board = boardService.getboardOne(boardResponse.getBoardId());
+                List<BoardSong> boardSongs = boardService.getBoardSongAllById(board);
+                List<BoardSongDto> boardSongDtos = new ArrayList<>();
+                if (!boardSongs.isEmpty()) {
+                    for (BoardSong boardSong:boardSongs ) {
+                        BoardSongDto boardSongDto = new BoardSongDto();
+                        boardSongDto.setId(boardSong.getId());
+                        boardSongDto.setBoardId(boardSong.getBoard().getId());
+                        boardSongDto.setSongTitle(boardSong.getSongTitle());
+                        boardSongDto.setSongSinger(boardSong.getSongSinger());
+                        boardSongDto.setSongUrl(boardSong.getSongUrl());
+                        boardSongDto.setSongImgUrl(boardSong.getSongImgUrl());
+                        boardSongDtos.add(boardSongDto);
+                    }
+                    item.put("music", boardSongDtos);
+                }
+                posts.add(item);
+            } else {
+                break;
+            }
+        }
+        data.put("posts", posts);
+        result.put("data", data);
+
+        return ResponseEntity.ok().body(result);
+    }
+
 	@PostMapping("/comment")
 	public ResponseEntity<?> registerComment(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
 
@@ -232,7 +278,7 @@ public class BoardController {
             alarmService.alarmBySenderIdAndReceiverIdAndAlarmType(userInfo.getId(), receiverId, "Comment");
         } else {
             Long receiverId = commentService.findById(commentDto.getParentId()).getUser().getId();
-            alarmService.alarmBySenderIdAndReceiverIdAndAlarmType(userInfo.getId(), receiverId, "Comment");
+            alarmService.alarmBySenderIdAndReceiverIdAndAlarmType(userInfo.getId(), receiverId, "ReComment");
         }
 
 		if(commentId == 0L){
@@ -287,16 +333,25 @@ public class BoardController {
 
         HeartDto heartDto = mapper.treeToValue(registerObj.get("postLike"), HeartDto.class);
         int result = -1;
+        Long receiverId = 0L;
+        String alarmType = "";
         // 초기값인 경우
         if(heartDto.getBoardId() > 0L){
             result = heartService.setHeartByUserIdAndBoardId(userInfo.getId(),heartDto.getBoardId());
+            receiverId = userService.findByBoard(heartDto.getBoardId()).getId();
+            alarmType = "BoardLike" + heartDto.getBoardId().toString();
         } else if(heartDto.getCommentId() > 0L){
             result = heartService.setHeartByUserIdAndCommentId(userInfo.getId(),heartDto.getCommentId());
+            receiverId = userService.findByComment(heartDto.getCommentId()).getId();
+            alarmType = "CommentLike" + heartDto.getCommentId().toString();
         }else {
             return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
         }
 
         if (result == 1 || result == 0){
+            if (result == 1) {
+                alarmService.alarmBySenderIdAndReceiverIdAndAlarmType(userInfo.getId(), receiverId, alarmType);
+            }
             return new ResponseEntity<Void>(HttpStatus.OK);
         }else {
             return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);

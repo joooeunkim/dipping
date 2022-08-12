@@ -45,29 +45,31 @@ public class AlarmService {
 
     }
 
-    public Alarm alarm(User sender, User receiver, String alarmType) {
-        if (alarmType.equals("follow") && alarmRepository.existsByAlarmTypeAndSenderAndReceiver(alarmType, sender, receiver)) {
+    public Alarm alarmBySenderIdAndReceiverIdAndAlarmType(Long senderId, Long receiverId, String alarmType) {
+        if (senderId == receiverId) {
             return null;
         }
-        String alarmMessage = sender.getNickname() + "님이 팔로우하였습니다.";
 
-        Alarm newAlarm = Alarm.builder()
-                .sender(sender)
-                .receiver(receiver)
-                .alarmType(alarmType)
-                .alarmMessage(alarmMessage)
-                .alarmRead(false)
-                .build();
-        return alarmRepository.save(newAlarm);
-        }
-
-    public Alarm alarmBySenderIdAndReceiverIdAndAlarmType(Long senderId, Long receiverId, String alarmType) {
         User sender = userRepository.findById(senderId).orElse(null);
         User receiver = userRepository.findById(receiverId).orElse(null);
-        if (sender.equals(receiver)) {
+        String alarmMessage;
+
+        if (!alarmType.equals("ReComment") && !alarmType.equals("Comment") && alarmRepository.existsByAlarmTypeAndSenderAndReceiver(alarmType, sender, receiver)) {
             return null;
         }
-        String alarmMessage = sender.getNickname() + "님이 게시글에 댓글을 남겼습니다.";
+
+        if (alarmType.contains("BoardLike")) {
+            alarmMessage = sender.getNickname() + "님이 게시글을 좋아합니다.";
+        } else if (alarmType.contains("CommentLike")) {
+            alarmMessage = sender.getNickname() + "님이 댓글을 좋아합니다.";
+        } else if (alarmType.equals("Comment")){
+            alarmMessage = sender.getNickname() + "님이 게시글에 댓글을 남겼습니다.";
+        } else if (alarmType.equals("ReComment")){
+            alarmMessage = sender.getNickname() + "님이 게시글에 대댓글을 남겼습니다.";
+        } else {
+            alarmMessage = sender.getNickname() + "님이 팔로우하였습니다.";
+        }
+
         Alarm newAlarm = Alarm.builder()
                 .sender(sender)
                 .receiver(receiver)
@@ -75,7 +77,13 @@ public class AlarmService {
                 .alarmMessage(alarmMessage)
                 .alarmRead(false)
                 .build();
+
         return alarmRepository.save(newAlarm);
 
+    }
+
+    public Long CountAlarm(Long userId) {
+        User receiver = userRepository.findById(userId).orElse(null);
+        return alarmRepository.countAllByReceiver(receiver);
     }
 }
