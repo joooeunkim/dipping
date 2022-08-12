@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
 import {
   Input,
-  Image,
+  Image as ChakraImage,
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
-  ModalFooter,
   ModalBody,
-  ModalCloseButton,
   Box,
   Flex,
   InputLeftElement,
@@ -26,36 +23,52 @@ export const AddMusic = ({
   onClose: () => void;
   setData: any;
 }) => {
-  const [input, setInput] = useState('');
   const [youtube, setYoutube] = useState([]);
+  const [lastfm, setLastFm] = useState([]);
   const [timer, setTimer] = useState(0); // 디바운싱 타이머
 
   // 모달이 닫힐 때 실행되는 것들
   const onCloseModal = () => {
     // 목록 비우기(다음에 입력할때를 위해)
     setYoutube([]);
+    setLastFm([]);
     // 음악 정지
     (window as any).player.stopVideo();
     //
   };
 
+  // 고화질 썸네일이 없을 경우 후처리
+  function getMeta(id: string, image: any) {
+    let img = new Image();
+    img.onload = ({ target }) => {
+      console.log('onload:' + (target as any).width + ' ' + (target as any).height);
+      if ((target as any).height < 100)
+        image.src = 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
+    };
+    img.src = image.src;
+  }
+
+  // 디바운스 함수
   const onChangeDebounce = async (e: any) => {
-    if (timer) {
+    if (timer)
       // timer 초기화
       clearTimeout(timer);
-    }
 
+    // 초기화가 없을 경우 800ms 후 api 요청 실행
     const newtimer = setTimeout(() => {
-      console.log('sending api request..');
-      sendApi(e.target.value);
+      if (e.target.value.length < 3) {
+        setYoutube([]);
+        setLastFm([]);
+      } else sendApi(e.target.value);
     }, 800);
 
     setTimer(newtimer as any);
   };
 
-  // 유튜브 api요청
+  // 외부 api요청
   const sendApi = (text: string) => {
-    console.log('with: ' + text);
+    console.log('input:' + text);
+    // 유튜브
     axios({
       method: 'get',
       url: 'https://www.googleapis.com/youtube/v3/search',
@@ -63,13 +76,28 @@ export const AddMusic = ({
         key: process.env.REACT_APP_YOUTUBE_API_KEY,
         part: 'snippet',
         max: 5,
-        type: 'video',
         q: text + ' audio',
         fields: 'items(id(videoId),snippet(title,thumbnails(high(url)),channelTitle))',
       },
     }).then(res => {
       setYoutube(res.data.items);
     });
+
+    // Last.fm
+    axios
+      .get('https://ws.audioscrobbler.com/2.0/', {
+        params: {
+          format: 'json',
+          api_key: process.env.REACT_APP_LASTFM_API_KEY,
+          method: 'track.search',
+          track: text,
+          limit: 1,
+        },
+      })
+      .then(res => {
+        const track = res.data.results.trackmatches.track;
+        setLastFm(track);
+      });
   };
 
   // 특수문자 변환
@@ -81,6 +109,7 @@ export const AddMusic = ({
     return text;
   };
 
+  // 컴포넌트
   return (
     <Modal isOpen={isOpen} onClose={onClose} onCloseComplete={onCloseModal}>
       <ModalOverlay />
@@ -102,6 +131,28 @@ export const AddMusic = ({
         </InputGroup>
 
         <ModalBody padding="0">
+          {lastfm.map((item: any, index: number) => (
+            <Box position="relative" w="full" key={index}>
+              <hr />
+              <Flex
+                w="auto"
+                h="64px"
+                marginY="16px"
+                lineHeight="32px"
+                fontSize="14px"
+                fontWeight="400"
+              >
+                <Box marginX="16px" boxSize="64px" fontWeight="600">
+                  <Box w="full">Artist</Box>
+                  <Box w="full">Title</Box>
+                </Box>
+                <Box>
+                  <Box w="full">{item.artist}</Box>
+                  <Box w="full">{item.name}</Box>
+                </Box>
+              </Flex>
+            </Box>
+          ))}
           {youtube.map((item: any, index: number) => (
             <Box key={index}>
               {index === 0 && (
@@ -111,7 +162,7 @@ export const AddMusic = ({
               )}
               <Box position="relative" w="full" h="64px" bg="" marginY="16px">
                 <Flex w="auto">
-                  <Image
+                  <ChakraImage
                     marginX="16px"
                     borderRadius="10px"
                     boxSize="64px"
@@ -119,6 +170,9 @@ export const AddMusic = ({
                     src={'https://i.ytimg.com/vi/' + item.id.videoId + '/maxresdefault.jpg'}
                     onClick={() => {
                       (window as any).player.loadVideoById({ videoId: item.id.videoId });
+                    }}
+                    onLoad={({ target }) => {
+                      getMeta(item.id.videoId, target);
                     }}
                   />
                   <Center
