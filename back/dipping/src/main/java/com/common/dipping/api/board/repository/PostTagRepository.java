@@ -12,6 +12,8 @@ import java.util.List;
 @Repository
 public interface PostTagRepository extends JpaRepository<PostTag, Long>{
 
+    void deleteAllByBoard(Board board);
+    
     List<PostTag> findAllByTag(Tag tag);
 
 }

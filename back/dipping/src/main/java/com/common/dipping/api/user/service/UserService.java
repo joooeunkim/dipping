@@ -1,5 +1,12 @@
 package com.common.dipping.api.user.service;
 
+import com.common.dipping.api.board.domain.dto.PostTagDto;
+import com.common.dipping.api.board.domain.dto.UserTagDto;
+import com.common.dipping.api.board.domain.entity.*;
+import com.common.dipping.api.board.repository.BoardRepository;
+import com.common.dipping.api.board.repository.InterestTagRepository;
+import com.common.dipping.api.board.repository.TagRepository;
+import com.common.dipping.api.board.repository.UserTagRepository;
 import com.common.dipping.api.user.domain.dto.MailDto;
 import com.common.dipping.api.user.domain.entity.Code;
 import com.common.dipping.api.user.repository.CodeRepository;
@@ -18,6 +25,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -32,6 +40,9 @@ public class UserService {
     private final ApplicationYamlRead applicationYamlRead;
     private final JavaMailSender javaMailSender;
     private final FollowRepository followRepository;
+    private final TagRepository tagRepository;
+    private final InterestTagRepository interestTagRepository;
+    private final BoardRepository boardRepository;
 
 
     @Transactional
@@ -156,6 +167,41 @@ public class UserService {
 
     public Long followerCount(User user) {
         return followRepository.countAllByReceiver(user);
+    }
+
+    public void registerIntersetTag(User user){
+
+        String[] IntersetList;
+        if(!user.getMusicTaste().isEmpty()) {
+            String s = user.getMusicTaste().substring(1);
+            IntersetList = s.split("#");
+        }else {
+            return;
+        }
+        System.out.println(Arrays.toString(IntersetList));
+
+        if (IntersetList.length != 0) {
+            for (int i = 0; i < IntersetList.length; i++) {
+                Tag tag = tagRepository.findByContent(IntersetList[i]);
+                if(tag == null) {
+                    tag = Tag.builder().content(IntersetList[i]).build();
+                    tag = tagRepository.save(tag);;
+                }
+                InterestTag interestTag = InterestTag.builder().tag(tag).user(user).build();
+                interestTagRepository.save(interestTag);
+            }
+        }
+    }
+
+    public User findByBoard(Long boardId) {
+        Board board = boardRepository.findById(boardId).orElse(null);
+        if (board == null) {
+            return null;
+        }
+
+        User user = userRepository.findByBoards(board);
+        return user;
+
     }
 
 }

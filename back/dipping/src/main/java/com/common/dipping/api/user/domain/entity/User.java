@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.common.dipping.api.board.domain.entity.InterestTag;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.common.dipping.api.board.domain.entity.Board;
@@ -79,6 +80,9 @@ public class User extends Common {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<UserTag> userTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<InterestTag> interestTags = new ArrayList<>();
 
     @Column(nullable = true)
     private String profileImgUrl;
