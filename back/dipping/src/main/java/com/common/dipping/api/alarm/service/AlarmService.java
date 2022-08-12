@@ -59,9 +59,23 @@ public class AlarmService {
                 .alarmRead(false)
                 .build();
         return alarmRepository.save(newAlarm);
+        }
 
-
-
+    public Alarm alarmBySenderIdAndReceiverIdAndAlarmType(Long senderId, Long receiverId, String alarmType) {
+        User sender = userRepository.findById(senderId).orElse(null);
+        User receiver = userRepository.findById(receiverId).orElse(null);
+        if (sender.equals(receiver)) {
+            return null;
+        }
+        String alarmMessage = sender.getNickname() + "님이 게시글에 댓글을 남겼습니다.";
+        Alarm newAlarm = Alarm.builder()
+                .sender(sender)
+                .receiver(receiver)
+                .alarmType(alarmType)
+                .alarmMessage(alarmMessage)
+                .alarmRead(false)
+                .build();
+        return alarmRepository.save(newAlarm);
 
     }
 }

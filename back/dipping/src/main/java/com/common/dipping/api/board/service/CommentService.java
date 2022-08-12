@@ -81,4 +81,10 @@ public class CommentService {
 
 		commentRepository.save(comment);
 	}
+
+	public Comment findById (Long parentId){
+		Comment comment = commentRepository.findById(parentId).orElse(null);
+		return comment;
+	}
+
 }
