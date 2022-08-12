@@ -37,7 +37,7 @@ public class FollowController {
             User receiver = userService.profile(followDto.getReceiverNickname());
             User sender = userService.profile(followDto.getSenderNickname());
             String alarmType = "follow";
-            alarmService.alarm(sender, receiver, alarmType);
+            alarmService.alarmBySenderIdAndReceiverIdAndAlarmType(sender.getId(), receiver.getId(), alarmType);
             return ResponseEntity.ok().body("팔로잉");
         }
         else if (id == -2) {return ResponseEntity.ok().body("존재하지 않는 유저입니다.");}

@@ -45,22 +45,6 @@ public class AlarmService {
 
     }
 
-    public Alarm alarm(User sender, User receiver, String alarmType) {
-        if (alarmType.equals("follow") && alarmRepository.existsByAlarmTypeAndSenderAndReceiver(alarmType, sender, receiver)) {
-            return null;
-        }
-        String alarmMessage = sender.getNickname() + "님이 팔로우하였습니다.";
-
-        Alarm newAlarm = Alarm.builder()
-                .sender(sender)
-                .receiver(receiver)
-                .alarmType(alarmType)
-                .alarmMessage(alarmMessage)
-                .alarmRead(false)
-                .build();
-        return alarmRepository.save(newAlarm);
-        }
-
     public Alarm alarmBySenderIdAndReceiverIdAndAlarmType(Long senderId, Long receiverId, String alarmType) {
         if (senderId == receiverId) {
             return null;
@@ -70,7 +54,7 @@ public class AlarmService {
         User receiver = userRepository.findById(receiverId).orElse(null);
         String alarmMessage;
 
-        if (alarmType.contains("Like") && alarmRepository.existsByAlarmTypeAndSenderAndReceiver(alarmType, sender, receiver)) {
+        if (!alarmType.equals("ReComment") && !alarmType.equals("Comment") && alarmRepository.existsByAlarmTypeAndSenderAndReceiver(alarmType, sender, receiver)) {
             return null;
         }
 
@@ -80,8 +64,10 @@ public class AlarmService {
             alarmMessage = sender.getNickname() + "님이 댓글을 좋아합니다.";
         } else if (alarmType.equals("Comment")){
             alarmMessage = sender.getNickname() + "님이 게시글에 댓글을 남겼습니다.";
-        } else {
+        } else if (alarmType.equals("ReComment")){
             alarmMessage = sender.getNickname() + "님이 게시글에 대댓글을 남겼습니다.";
+        } else {
+            alarmMessage = sender.getNickname() + "님이 팔로우하였습니다.";
         }
 
         Alarm newAlarm = Alarm.builder()
