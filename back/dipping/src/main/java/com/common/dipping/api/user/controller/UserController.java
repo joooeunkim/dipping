@@ -63,14 +63,12 @@ public class UserController {
 
     @GetMapping(value="/check/email")
     public boolean checkDuplicatedEmail(@RequestParam final String email){
-        boolean avail = userService.isEmailDuplicated(email);
-        return avail;
+        return userService.isEmailDuplicated(email);
     }
 
     @GetMapping(value="/check/nickname")
     public boolean checkDuplicatedNickname(@RequestParam final String nickname){
-        boolean avail = userService.isUserNicknameDuplicated(nickname);
-        return avail;
+        return userService.isUserNicknameDuplicated(nickname);
     }
 
 
