@@ -7,7 +7,7 @@ export const PlaylistPost = (props: any) => {
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
 
-  const { postfeed } = props;
+  const { postfeed, id } = props;
 
   // 본문 더보기
   const [limit, setLimit] = useState(95);
@@ -57,7 +57,7 @@ export const PlaylistPost = (props: any) => {
 
       {/* music player */}
       {/* <PlayerLarge /> */}
-      <PlayerLarge playlists={postfeed.playlists} />
+      <PlayerLarge playlist={postfeed.playlist} id={id} />
 
       {/* icon set */}
       <Box position="relative" h="30px" w="full" bg="" marginBottom="16px">
