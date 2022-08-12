@@ -1,5 +1,6 @@
 package com.common.dipping.api.dipping.domain.entity;
 
+import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.common.Common;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,10 @@ public class Dipping extends Common {
     private String dippingTitle;
     private String dippingContent;
     private Boolean openDipping;
+
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parentDipping",columnDefinition = "bigint default 0")
