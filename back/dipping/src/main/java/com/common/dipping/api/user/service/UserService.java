@@ -3,6 +3,7 @@ package com.common.dipping.api.user.service;
 import com.common.dipping.api.board.domain.dto.PostTagDto;
 import com.common.dipping.api.board.domain.dto.UserTagDto;
 import com.common.dipping.api.board.domain.entity.*;
+import com.common.dipping.api.board.repository.BoardRepository;
 import com.common.dipping.api.board.repository.InterestTagRepository;
 import com.common.dipping.api.board.repository.TagRepository;
 import com.common.dipping.api.board.repository.UserTagRepository;
@@ -41,6 +42,7 @@ public class UserService {
     private final FollowRepository followRepository;
     private final TagRepository tagRepository;
     private final InterestTagRepository interestTagRepository;
+    private final BoardRepository boardRepository;
 
 
     @Transactional
@@ -189,6 +191,17 @@ public class UserService {
                 interestTagRepository.save(interestTag);
             }
         }
+    }
+
+    public User findByBoard(Long boardId) {
+        Board board = boardRepository.findById(boardId).orElse(null);
+        if (board == null) {
+            return null;
+        }
+
+        User user = userRepository.findByBoards(board);
+        return user;
+
     }
 
 }
