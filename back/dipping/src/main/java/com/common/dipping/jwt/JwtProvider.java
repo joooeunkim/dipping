@@ -28,7 +28,6 @@ public final class JwtProvider {
 
     private final UserRepository userRepository;
     private final UserDetailsService userDetailsService;
-    private final UserRepository userRepository;
 
     // secret key
     @Value("${jwt.secret-key}")
