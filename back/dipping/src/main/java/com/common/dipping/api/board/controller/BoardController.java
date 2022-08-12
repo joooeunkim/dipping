@@ -232,7 +232,7 @@ public class BoardController {
             alarmService.alarmBySenderIdAndReceiverIdAndAlarmType(userInfo.getId(), receiverId, "Comment");
         } else {
             Long receiverId = commentService.findById(commentDto.getParentId()).getUser().getId();
-            alarmService.alarmBySenderIdAndReceiverIdAndAlarmType(userInfo.getId(), receiverId, "Comment");
+            alarmService.alarmBySenderIdAndReceiverIdAndAlarmType(userInfo.getId(), receiverId, "ReComment");
         }
 
 		if(commentId == 0L){

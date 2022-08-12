@@ -78,8 +78,10 @@ public class AlarmService {
             alarmMessage = sender.getNickname() + "님이 게시글을 좋아합니다.";
         } else if (alarmType.contains("CommentLike")) {
             alarmMessage = sender.getNickname() + "님이 댓글을 좋아합니다.";
-        } else {
+        } else if (alarmType.equals("Comment")){
             alarmMessage = sender.getNickname() + "님이 게시글에 댓글을 남겼습니다.";
+        } else {
+            alarmMessage = sender.getNickname() + "님이 게시글에 대댓글을 남겼습니다.";
         }
 
         Alarm newAlarm = Alarm.builder()
@@ -92,5 +94,10 @@ public class AlarmService {
 
         return alarmRepository.save(newAlarm);
 
+    }
+
+    public Long CountAlarm(Long userId) {
+        User receiver = userRepository.findById(userId).orElse(null);
+        return alarmRepository.countAllByReceiver(receiver);
     }
 }
