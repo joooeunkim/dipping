@@ -232,9 +232,11 @@ public class BoardController {
         commentDto.setUserId(userInfo.getId());
 		Long commentId = commentService.registerComment(commentDto);
 
-        Long receiverId = userService.findByBoard(commentDto.getBoardId()).getId();
-		alarmService.alarmBySenderIdAndReceiverIdAndAlarmType(userInfo.getId(), receiverId, "Comment");
-
+		if (commentDto.getParentId() == 0) {
+            Long receiverId = userService.findByBoard(commentDto.getBoardId()).getId();
+            alarmService.alarmBySenderIdAndReceiverIdAndAlarmType(userInfo.getId(), receiverId, "Comment");
+        }
+		
 		if(commentId == 0L){
 			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		}
