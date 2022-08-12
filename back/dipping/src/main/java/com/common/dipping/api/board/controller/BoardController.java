@@ -235,8 +235,11 @@ public class BoardController {
 		if (commentDto.getParentId() == 0) {
             Long receiverId = userService.findByBoard(commentDto.getBoardId()).getId();
             alarmService.alarmBySenderIdAndReceiverIdAndAlarmType(userInfo.getId(), receiverId, "Comment");
+        } else {
+            Long receiverId = commentService.findById(commentDto.getParentId()).getUser().getId();
+            alarmService.alarmBySenderIdAndReceiverIdAndAlarmType(userInfo.getId(), receiverId, "Comment");
         }
-		
+
 		if(commentId == 0L){
 			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		}
