@@ -83,7 +83,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(authenticationEntryPoint) //인증 실패
                 .accessDeniedHandler(accessDeniedHandler) //인가 실패
                 .and().authorizeRequests()
-                .antMatchers("/api/login", "/api/signUp","/api/findpw/*").permitAll() //로그인 및 회원가입 요청은 허용
+                .antMatchers("/api/login", "/api/signUp","/api/findpw/*","/api/check/*").permitAll() //로그인 및 회원가입 요청은 허용
                 .antMatchers("/api/signUp/info").hasRole("GUEST")
                 .antMatchers("/**").permitAll()
                 .antMatchers("/api/**").authenticated() //나머지 요청에 대해서는 인증을 요구

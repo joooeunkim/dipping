@@ -1,15 +1,13 @@
 package com.common.dipping.api.board.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.common.dipping.api.board.domain.dto.*;
 import com.common.dipping.api.user.domain.entity.Follow;
 import org.springframework.stereotype.Service;
 
-import com.common.dipping.api.board.domain.dto.BoardDto;
-import com.common.dipping.api.board.domain.dto.BoardSongDto;
-import com.common.dipping.api.board.domain.dto.PostTagDto;
-import com.common.dipping.api.board.domain.dto.UserTagDto;
 import com.common.dipping.api.board.domain.entity.Board;
 import com.common.dipping.api.board.domain.entity.BoardSong;
 import com.common.dipping.api.board.domain.entity.PostTag;
@@ -122,6 +120,17 @@ public class BoardService {
         // 최근 일주일안에 생성된 포스트만 가져온다.
         LocalDateTime week = LocalDateTime.now();
         List<Board> list = boardRepository.findAllWithUserIdAndCreatedAtAfter(reciveuser.getId(), week.minusDays(7));
+        return list;
+    }
+
+    public List<ProfilePostDto> getAllBoardByUserId(Long userId){
+        List<Board> boardList = boardRepository.findAllWithUserId(userId);
+        List<ProfilePostDto> list = new ArrayList<>();
+        for(Board board: boardList){
+            List<BoardSong> boardSongList = getBoardSongAllById(board);
+            String songImgUrl = boardSongList.get(0).getSongImgUrl();
+            list.add(new ProfilePostDto(board.getId(), songImgUrl));
+        }
         return list;
     }
 
