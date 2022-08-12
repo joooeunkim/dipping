@@ -28,32 +28,57 @@ export const AddMusic = ({
 }) => {
   const [input, setInput] = useState('');
   const [youtube, setYoutube] = useState([]);
+  const [timer, setTimer] = useState(0); // 디바운싱 타이머
 
+  // 모달이 닫힐 때 실행되는 것들
   const onCloseModal = () => {
+    // 목록 비우기(다음에 입력할때를 위해)
     setYoutube([]);
+    // 음악 정지
     (window as any).player.stopVideo();
+    //
   };
 
-  const onKeyInput = (e: any) => {
-    if (e.key === 'Enter') {
-      setInput(e.target.value);
-      const text = e.target.value;
-      console.log(text);
-      axios({
-        method: 'get',
-        url: 'https://www.googleapis.com/youtube/v3/search',
-        params: {
-          key: process.env.REACT_APP_YOUTUBE_API_KEY,
-          part: 'snippet',
-          max: 5,
-          type: 'video',
-          q: text + ' audio',
-          fields: 'items(id(videoId),snippet(title,thumbnails(high(url)),channelTitle))',
-        },
-      }).then(res => {
-        setYoutube(res.data.items);
-      });
+  const onChangeDebounce = async (e: any) => {
+    if (timer) {
+      // timer 초기화
+      clearTimeout(timer);
     }
+
+    const newtimer = setTimeout(() => {
+      console.log('sending api request..');
+      sendApi(e.target.value);
+    }, 800);
+
+    setTimer(newtimer as any);
+  };
+
+  // 유튜브 api요청
+  const sendApi = (text: string) => {
+    console.log('with: ' + text);
+    axios({
+      method: 'get',
+      url: 'https://www.googleapis.com/youtube/v3/search',
+      params: {
+        key: process.env.REACT_APP_YOUTUBE_API_KEY,
+        part: 'snippet',
+        max: 5,
+        type: 'video',
+        q: text + ' audio',
+        fields: 'items(id(videoId),snippet(title,thumbnails(high(url)),channelTitle))',
+      },
+    }).then(res => {
+      setYoutube(res.data.items);
+    });
+  };
+
+  // 특수문자 변환
+  const strProcess = (text: string) => {
+    text = text.replaceAll('&quot;', '"');
+    text = text.replaceAll('&amp;', '&');
+    text = text.replaceAll('&#39;', "'");
+
+    return text;
   };
 
   return (
@@ -71,7 +96,7 @@ export const AddMusic = ({
             fontSize="16px"
             lineHeight="48px"
             placeholder="Basic usage"
-            onKeyDown={onKeyInput}
+            onChange={onChangeDebounce}
             variant="unstyled"
           />
         </InputGroup>
@@ -91,7 +116,7 @@ export const AddMusic = ({
                     borderRadius="10px"
                     boxSize="64px"
                     objectFit="cover"
-                    src={'https://i.ytimg.com/vi/' + item.id.videoId + '/hqdefault.jpg'}
+                    src={'https://i.ytimg.com/vi/' + item.id.videoId + '/maxresdefault.jpg'}
                     onClick={() => {
                       (window as any).player.loadVideoById({ videoId: item.id.videoId });
                     }}
@@ -106,7 +131,7 @@ export const AddMusic = ({
                     overflow="hidden"
                   >
                     {/* <Box>id: {item.id.videoId}</Box> */}
-                    <Box w="full">{item.snippet.title.replaceAll('&quot;', '"')}</Box>
+                    <Box w="full">{strProcess(item.snippet.title)}</Box>
                   </Center>
                 </Flex>
               </Box>
