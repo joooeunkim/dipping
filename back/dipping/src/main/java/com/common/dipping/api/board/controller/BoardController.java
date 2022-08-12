@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.common.dipping.api.alarm.service.AlarmService;
 import com.common.dipping.api.board.service.HeartService;
+import com.common.dipping.api.search.service.SearchService;
 import com.common.dipping.api.user.repository.StorageRepository;
 import com.common.dipping.api.user.service.StorageService;
 import com.common.dipping.api.user.service.UserService;
@@ -216,6 +217,51 @@ public class BoardController {
         result.put("data", posts);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @GetMapping("/recommend")
+    public ResponseEntity<?> getRecommendBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestParam(name = "pageNum", required = false,defaultValue = "5") int pageNum) {
+        Map<String,Object> result = new HashMap<>();
+        Map<String,Object> data = new HashMap<>();
+
+        HashSet<BoardResponse> boardSet = boardService.RecommednBoard(userInfo.getId());
+        List<BoardResponse> boardList = new ArrayList<>(boardSet);
+        result.put("code", 200);
+
+        List<Object> posts = new ArrayList<>();
+        for (int i = pageNum - 5; i < pageNum; i++) {
+            if (i < boardList.size()) {
+                Map<String,Object> item = new HashMap<>();
+                BoardResponse boardResponse = boardList.get(i);
+                Long num = Long.valueOf(i) + 1;
+                boardResponse.setId(num);
+
+                item.put("item", boardResponse);
+                Board board = boardService.getboardOne(boardResponse.getBoardId());
+                List<BoardSong> boardSongs = boardService.getBoardSongAllById(board);
+                List<BoardSongDto> boardSongDtos = new ArrayList<>();
+                if (!boardSongs.isEmpty()) {
+                    for (BoardSong boardSong:boardSongs ) {
+                        BoardSongDto boardSongDto = new BoardSongDto();
+                        boardSongDto.setId(boardSong.getId());
+                        boardSongDto.setBoardId(boardSong.getBoard().getId());
+                        boardSongDto.setSongTitle(boardSong.getSongTitle());
+                        boardSongDto.setSongSinger(boardSong.getSongSinger());
+                        boardSongDto.setSongUrl(boardSong.getSongUrl());
+                        boardSongDto.setSongImgUrl(boardSong.getSongImgUrl());
+                        boardSongDtos.add(boardSongDto);
+                    }
+                    item.put("music", boardSongDtos);
+                }
+                posts.add(item);
+            } else {
+                break;
+            }
+        }
+        data.put("posts", posts);
+        result.put("data", data);
+
+        return ResponseEntity.ok().body(result);
     }
 
 	@PostMapping("/comment")

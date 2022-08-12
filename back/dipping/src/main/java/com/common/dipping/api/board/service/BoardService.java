@@ -2,22 +2,15 @@ package com.common.dipping.api.board.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import com.common.dipping.api.board.domain.dto.*;
+import com.common.dipping.api.board.domain.entity.*;
+import com.common.dipping.api.board.repository.*;
 import com.common.dipping.api.user.domain.entity.Follow;
 import org.springframework.stereotype.Service;
 
-import com.common.dipping.api.board.domain.entity.Board;
-import com.common.dipping.api.board.domain.entity.BoardSong;
-import com.common.dipping.api.board.domain.entity.PostTag;
-import com.common.dipping.api.board.domain.entity.Tag;
-import com.common.dipping.api.board.domain.entity.UserTag;
-import com.common.dipping.api.board.repository.BoardRepository;
-import com.common.dipping.api.board.repository.BoardSongRepository;
-import com.common.dipping.api.board.repository.PostTagRepository;
-import com.common.dipping.api.board.repository.TagRepository;
-import com.common.dipping.api.board.repository.UserTagRepository;
 import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.repository.UserRepository;
 
@@ -33,10 +26,13 @@ public class BoardService {
     private final PostTagRepository postTagRepository;
     private final TagRepository tagRepository;
     private final UserTagRepository userTagRepository;
+    private final InterestTagRepository interestTagRepository;
+    private final HeartService heartService;
+    private final CommentService commentService;
 
     public Board getboardOne(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다. id=" + boardId));
-        ;
+
         return board;
     }
 
@@ -142,5 +138,31 @@ public class BoardService {
     public boolean deleteBoard(Long boardId) {
         boardRepository.deleteById(boardId);
         return boardRepository.existsById(boardId);
+    }
+
+    public HashSet<BoardResponse> RecommednBoard(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + userId));
+        List<InterestTag> interestTags = interestTagRepository.findAllByUser(user);
+        List<Long> tags = new ArrayList<>();
+        for ( InterestTag i: interestTags) {
+            tags.add(i.getTag().getId());
+        }
+        List<PostTag> postTags = postTagRepository.findByTag(tags);
+
+        List<Long> boards = new ArrayList<>();
+        for ( PostTag p: postTags) {
+            boards.add(p.getBoard().getId());
+        }
+        List<Board> boardList = boardRepository.findListById(boards);
+        HashSet<BoardResponse> boardResponses = new HashSet<>();
+
+        for (Board b: boardList) {
+            BoardResponse boardResponse = new BoardResponse(b);
+            boardResponse.setLikeCount(heartService.getCountByBoardId(b));
+            boardResponse.setMyLike(heartService.isMylikeByBoardId(userId, b));
+            boardResponse.setCommentCount(commentService.getCountByBoardId(b));
+            boardResponses.add(boardResponse);
+        }
+        return boardResponses;
     }
 }
