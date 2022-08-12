@@ -13,4 +13,6 @@ public interface DippingRepository extends JpaRepository<Dipping,Long> {
     List<DippingSong> findDippingByDippingId(@Param("dippingId")Long dippingId);
 
     List<Dipping> findAllByParentDipping(Dipping parentDipping);
+
+    List<Dipping> findAllByDippingTitleContaining(String keyword);
 }

@@ -6,6 +6,9 @@ import com.common.dipping.api.board.domain.entity.PostTag;
 import com.common.dipping.api.board.domain.entity.Tag;
 import com.common.dipping.api.board.repository.PostTagRepository;
 import com.common.dipping.api.board.repository.TagRepository;
+import com.common.dipping.api.dipping.domain.dto.DippingResponseDto;
+import com.common.dipping.api.dipping.domain.entity.Dipping;
+import com.common.dipping.api.dipping.repository.DippingRepository;
 import com.common.dipping.api.search.domain.entity.Search;
 import com.common.dipping.api.search.repository.SearchRepository;
 import com.common.dipping.api.user.domain.dto.MiniProfileDto;
@@ -30,14 +33,13 @@ public class SearchService {
     private final SearchRepository searchRepository;
     private final TagRepository tagRepository;
     private final PostTagRepository postTagRepository;
+    private final DippingRepository dippingRepository;
 
     public List<MiniProfileDto> searchUser(String keyword, UserDetailsImpl userDetails) {
         List<User> usersList = userRepository.findAllByNicknameContaining(keyword);
         List<MiniProfileDto> miniProfileDtos = new ArrayList<MiniProfileDto>();
-        for (int i = 0; i < usersList.size(); i++) {
-            MiniProfileDto userInfo = new MiniProfileDto();
-            userInfo.setNickname(usersList.get(i).getNickname());
-            userInfo.setProfileImgUrl(usersList.get(i).getProfileImgUrl());
+        for (User user: usersList) {
+            MiniProfileDto userInfo = new MiniProfileDto(user);
             miniProfileDtos.add(userInfo);
         }
         User user = userRepository.findById(userDetails.getId()).orElse(null);
@@ -76,6 +78,22 @@ public class SearchService {
         return boardList;
     }
 
+    public List<DippingResponseDto> searchDipping(String keyword, UserDetailsImpl userDetails) {
+        List<Dipping> dippingList = dippingRepository.findAllByDippingTitleContaining(keyword);
+        List<DippingResponseDto> dippingResponseDtoList = new ArrayList<>();
+        for (Dipping dipping: dippingList) {
+            DippingResponseDto dippingResponseDto = new DippingResponseDto(dipping);
+            dippingResponseDtoList.add(dippingResponseDto);
+        }
+        User user = userRepository.findById(userDetails.getId()).orElse(null);
+        Search search = Search.builder()
+                .word(keyword)
+                .user(user)
+                .build();
+        searchRepository.save(search);
+        return dippingResponseDtoList;
+    }
+
     public List<MiniProfileDto> searchRecommendedUser(UserDetailsImpl userDetails) {
         User userInfo = userRepository.findById(userDetails.getId()).orElse(null);
         List<User> users = userRepository.findAll();
@@ -89,9 +107,7 @@ public class SearchService {
         List<User> userList = keySetList.subList(0, (keySetList.size() > 5) ? 6: keySetList.size());
         List<MiniProfileDto> miniProfileDtos = new ArrayList<>();
         for (User user: userList) {
-            MiniProfileDto miniProfileDto = new MiniProfileDto();
-            miniProfileDto.setNickname(user.getNickname());
-            miniProfileDto.setProfileImgUrl(user.getProfileImgUrl());
+            MiniProfileDto miniProfileDto = new MiniProfileDto(user);
             miniProfileDtos.add(miniProfileDto);
         }
         return miniProfileDtos;
