@@ -232,7 +232,7 @@ public class BoardController {
             alarmService.alarmBySenderIdAndReceiverIdAndAlarmType(userInfo.getId(), receiverId, "Comment");
         } else {
             Long receiverId = commentService.findById(commentDto.getParentId()).getUser().getId();
-            alarmService.alarmBySenderIdAndReceiverIdAndAlarmType(userInfo.getId(), receiverId, "Comment");
+            alarmService.alarmBySenderIdAndReceiverIdAndAlarmType(userInfo.getId(), receiverId, "ReComment");
         }
 
 		if(commentId == 0L){
@@ -287,16 +287,25 @@ public class BoardController {
 
         HeartDto heartDto = mapper.treeToValue(registerObj.get("postLike"), HeartDto.class);
         int result = -1;
+        Long receiverId = 0L;
+        String alarmType = "";
         // 초기값인 경우
         if(heartDto.getBoardId() > 0L){
             result = heartService.setHeartByUserIdAndBoardId(userInfo.getId(),heartDto.getBoardId());
+            receiverId = userService.findByBoard(heartDto.getBoardId()).getId();
+            alarmType = "BoardLike" + heartDto.getBoardId().toString();
         } else if(heartDto.getCommentId() > 0L){
             result = heartService.setHeartByUserIdAndCommentId(userInfo.getId(),heartDto.getCommentId());
+            receiverId = userService.findByComment(heartDto.getCommentId()).getId();
+            alarmType = "CommentLike" + heartDto.getCommentId().toString();
         }else {
             return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
         }
 
         if (result == 1 || result == 0){
+            if (result == 1) {
+                alarmService.alarmBySenderIdAndReceiverIdAndAlarmType(userInfo.getId(), receiverId, alarmType);
+            }
             return new ResponseEntity<Void>(HttpStatus.OK);
         }else {
             return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
