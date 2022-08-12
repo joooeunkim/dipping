@@ -31,6 +31,7 @@ public class AlarmService {
         List<Alarm> alarmList = alarmRepository.findAllByReceiver(receiver);
         List<AlarmDto> alarmDtoList = new ArrayList<>();
         for (Alarm alarm: alarmList) {
+            alarm.read();
             AlarmDto alarmDto = new AlarmDto();
             alarmDto.setAlarmMessage(alarm.getAlarmMessage());
             alarmDto.setAlarmRead(alarm.getAlarmRead());
@@ -45,7 +46,9 @@ public class AlarmService {
     }
 
     public Alarm alarm(User sender, User receiver, String alarmType) {
-
+        if (alarmType.equals("follow") && alarmRepository.existsByAlarmTypeAndSenderAndReceiver(alarmType, sender, receiver)) {
+            return null;
+        }
         String alarmMessage = sender.getNickname() + "님이 팔로우하였습니다.";
 
         Alarm newAlarm = Alarm.builder()

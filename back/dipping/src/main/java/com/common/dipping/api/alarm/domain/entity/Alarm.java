@@ -31,4 +31,8 @@ public class Alarm extends Common {
     @JoinColumn(name = "receiverId")
     @ManyToOne
     private User receiver;
+
+    public void read() {
+        this.alarmRead = true;
+    }
 }

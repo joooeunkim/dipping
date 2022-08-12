@@ -11,4 +11,6 @@ import java.util.List;
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
     List<Alarm> findAllByReceiver(User receiver);
+
+    Boolean existsByAlarmTypeAndSenderAndReceiver(String alarmType, User sender, User receiver);
 }
