@@ -1,9 +1,12 @@
 package com.common.dipping.api.dipping.domain.dto;
 
 import com.common.dipping.api.dipping.domain.entity.DippingSong;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class DippingSongDto {
 
     private Long songId;

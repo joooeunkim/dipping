@@ -1,5 +1,6 @@
 package com.common.dipping.api.dipping.controller;
 
+import com.common.dipping.api.dipping.domain.dto.DippingDto;
 import com.common.dipping.api.dipping.domain.dto.DippingResponseDto;
 import com.common.dipping.api.dipping.domain.dto.DippingSongDto;
 import com.common.dipping.api.dipping.domain.entity.Dipping;
@@ -18,10 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/dipping")
@@ -94,9 +92,18 @@ public class DippingController {
 
     @PostMapping
     public ResponseEntity<?> registerDipping(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+
+        DippingDto dippingDto = mapper.treeToValue(registerObj.get("dipping"), DippingDto.class);
+        dippingDto.setUserId(userInfo.getId());
+        List<DippingSongDto> dippingSongDto = Arrays.asList(mapper.treeToValue(registerObj.get("playlist"), DippingSongDto[].class));
+
+        Dipping newDipping = dippingService.register(dippingDto);
+        dippingService.registerSong(dippingSongDto, newDipping);
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
+
 
     @DeleteMapping
     public ResponseEntity deleteDipping(@Param("dippingId") Long dippingId){
@@ -105,6 +112,15 @@ public class DippingController {
 
     @PostMapping("/edit")
     public ResponseEntity<?> editDipping(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+
+        DippingDto dippingDto = mapper.treeToValue(registerObj.get("dipping"), DippingDto.class);
+        dippingDto.setUserId(userInfo.getId());
+        List<DippingSongDto> dippingSongDto = Arrays.asList(mapper.treeToValue(registerObj.get("playlist"), DippingSongDto[].class));
+
+        Dipping newDipping = dippingService.edit(dippingDto);
+        dippingService.editSong(dippingSongDto, newDipping);
+
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
