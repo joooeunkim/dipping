@@ -12,6 +12,7 @@ import {
   InputGroup,
   Center,
 } from '@chakra-ui/react';
+import { Music } from '../types/HomeFeedData';
 import axios from 'axios';
 
 export const AddMusic = ({
@@ -23,7 +24,7 @@ export const AddMusic = ({
   onClose: () => void;
   setData: any;
 }) => {
-  const [youtube, setYoutube] = useState([]);
+  const [youtube, setYoutube] = useState<Array<Music>>([]);
   const [lastfm, setLastFm] = useState([]);
   const [timer, setTimer] = useState(0); // 디바운싱 타이머
 
@@ -37,22 +38,44 @@ export const AddMusic = ({
     //
   };
 
-  // 고화질 썸네일이 없을 경우 후처리
-  function getMeta(id: string, image: any) {
+  // 곡 선택
+  const chooseMusic = (index: number) => {
+    setData((data: any) => [
+      ...data,
+      {
+        ...youtube[index],
+        artist: (lastfm[0] as any).artist,
+        title: (lastfm[0] as any).name,
+      } as Music,
+    ]);
+    onClose();
+  };
+
+  // 고화질 썸네일이 없을 경우 전처리
+  const checkMaxRes = (id: string, image: any) => {
     let img = new Image();
-    img.onload = ({ target }) => {
-      console.log('onload:' + (target as any).width + ' ' + (target as any).height);
-      if ((target as any).height < 100)
-        image.src = 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
+    img.onload = () => {
+      if (img.height < 100)
+        setYoutube(data =>
+          data.map(it =>
+            it.id === id
+              ? { ...it, albumart: 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg' }
+              : it,
+          ),
+        );
     };
     img.src = image.src;
-  }
+  };
+
+  // 특수문자 변환
+  const strProcess = (text: string) => {
+    text = text.replaceAll('&quot;', '"').replaceAll('&amp;', '&').replaceAll('&#39;', "'");
+    return text;
+  };
 
   // 디바운스 함수
   const onChangeDebounce = async (e: any) => {
-    if (timer)
-      // timer 초기화
-      clearTimeout(timer);
+    if (timer) clearTimeout(timer); // timer 초기화
 
     // 초기화가 없을 경우 800ms 후 api 요청 실행
     const newtimer = setTimeout(() => {
@@ -61,7 +84,6 @@ export const AddMusic = ({
         setLastFm([]);
       } else sendApi(e.target.value);
     }, 800);
-
     setTimer(newtimer as any);
   };
 
@@ -80,7 +102,14 @@ export const AddMusic = ({
         fields: 'items(id(videoId),snippet(title,thumbnails(high(url)),channelTitle))',
       },
     }).then(res => {
-      setYoutube(res.data.items);
+      const items = res.data.items.map((item: any) => {
+        return {
+          title: strProcess(item.snippet.title),
+          albumart: 'https://i.ytimg.com/vi/' + item.id.videoId + '/maxresdefault.jpg',
+          id: item.id.videoId,
+        } as Music;
+      });
+      setYoutube(items);
     });
 
     // Last.fm
@@ -100,29 +129,19 @@ export const AddMusic = ({
       });
   };
 
-  // 특수문자 변환
-  const strProcess = (text: string) => {
-    text = text.replaceAll('&quot;', '"');
-    text = text.replaceAll('&amp;', '&');
-    text = text.replaceAll('&#39;', "'");
-
-    return text;
-  };
-
   // 컴포넌트
   return (
     <Modal isOpen={isOpen} onClose={onClose} onCloseComplete={onCloseModal}>
       <ModalOverlay />
       <ModalContent borderRadius="10px">
-        <InputGroup h="48px">
+        {/* 검색창 */}
+        <InputGroup h="48px" fontSize="16px">
           <InputLeftElement
             h="48px"
             color="gray.300"
-            fontSize="16px"
             children={<Box className="fa-regular fa-magnifying-glass" />}
           />
           <Input
-            fontSize="16px"
             lineHeight="48px"
             placeholder="Basic usage"
             onChange={onChangeDebounce}
@@ -130,6 +149,7 @@ export const AddMusic = ({
           />
         </InputGroup>
 
+        {/* 음악 제목, 가수(lastfm) */}
         <ModalBody padding="0">
           {lastfm.map((item: any, index: number) => (
             <Box position="relative" w="full" key={index}>
@@ -142,18 +162,20 @@ export const AddMusic = ({
                 fontSize="14px"
                 fontWeight="400"
               >
-                <Box marginX="16px" boxSize="64px" fontWeight="600">
+                <Box marginLeft="24px" w="36px" fontWeight="600">
                   <Box w="full">Artist</Box>
                   <Box w="full">Title</Box>
                 </Box>
-                <Box>
+                <Box marginLeft="12px">
                   <Box w="full">{item.artist}</Box>
                   <Box w="full">{item.name}</Box>
                 </Box>
               </Flex>
             </Box>
           ))}
-          {youtube.map((item: any, index: number) => (
+
+          {/* 유튜브 검색 결과 */}
+          {youtube.map((item: Music, index: number) => (
             <Box key={index}>
               {index === 0 && (
                 <Box h="8px">
@@ -167,12 +189,12 @@ export const AddMusic = ({
                     borderRadius="10px"
                     boxSize="64px"
                     objectFit="cover"
-                    src={'https://i.ytimg.com/vi/' + item.id.videoId + '/maxresdefault.jpg'}
+                    src={item.albumart}
                     onClick={() => {
-                      (window as any).player.loadVideoById({ videoId: item.id.videoId });
+                      (window as any).player.loadVideoById({ videoId: item.id });
                     }}
                     onLoad={({ target }) => {
-                      getMeta(item.id.videoId, target);
+                      checkMaxRes(item.id, target);
                     }}
                   />
                   <Center
@@ -183,9 +205,11 @@ export const AddMusic = ({
                     fontWeight="400"
                     marginRight="16px"
                     overflow="hidden"
+                    onClick={() => {
+                      chooseMusic(index);
+                    }}
                   >
-                    {/* <Box>id: {item.id.videoId}</Box> */}
-                    <Box w="full">{strProcess(item.snippet.title)}</Box>
+                    <Box w="full">{item.title}</Box>
                   </Center>
                 </Flex>
               </Box>

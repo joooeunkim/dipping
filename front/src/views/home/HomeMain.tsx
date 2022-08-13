@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom';
 import { MainNavBar } from '../../components/floatingbar/MainNavBar';
 import { PlaylistPost } from '../../components/postfeed/PlaylistPost';
 import { setDefault } from '../../reducers/iframeReducer';
-import { HomeFeedData, FeedPost } from '../../testdata/HomeFeedData';
+import { HomeFeedData, FeedPost } from '../../types/HomeFeedData';
 
 export const HomeMain = () => {
   const dispatch = useDispatch();
