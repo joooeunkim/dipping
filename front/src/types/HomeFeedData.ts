@@ -34,7 +34,7 @@ export type FeedPost = {
 
 export const HomeFeedData: Array<FeedPost> = [
   {
-    title: 'Track_Emocore',
+    title: 'My Playlist',
     likes: '10.2k',
     article:
       'The Black Parade is the third studio album by American rock band My Chemical Romance. ' +
@@ -53,19 +53,19 @@ export const HomeFeedData: Array<FeedPost> = [
       {
         title: 'Stressed Out',
         artist: '​twenty one pilots',
-        albumart: 'https://i.ytimg.com/vi/Gc4sY98Jn9I/hqdefault.jpg',
+        albumart: 'https://i.ytimg.com/vi/Gc4sY98Jn9I/maxresdefault.jpg',
         id: 'Gc4sY98Jn9I',
       },
       {
         title: 'Welcome To The Black Parade',
         artist: 'My Chemical Romance',
-        albumart: 'https://i.ytimg.com/vi/G-I9csAflBs/hqdefault.jpg',
+        albumart: 'https://i.ytimg.com/vi/G-I9csAflBs/maxresdefault.jpg',
         id: 'G-I9csAflBs',
       },
       {
         title: 'LA Devotee',
         artist: 'Panic! At The Disco',
-        albumart: 'https://i.ytimg.com/vi/RzMITAmJfeg/hqdefault.jpg',
+        albumart: 'https://i.ytimg.com/vi/RzMITAmJfeg/maxresdefault.jpg',
         id: 'RzMITAmJfeg',
       },
       {
@@ -77,7 +77,7 @@ export const HomeFeedData: Array<FeedPost> = [
       {
         title: 'Dead!',
         artist: 'My Chemical Romance',
-        albumart: 'https://i.ytimg.com/vi/H48kOqqaWv0/hqdefault.jpg',
+        albumart: 'https://i.ytimg.com/vi/H48kOqqaWv0/maxresdefault.jpg',
         id: 'H48kOqqaWv0',
       },
     ],
@@ -302,5 +302,38 @@ export const HomeFeedData: Array<FeedPost> = [
         },
       },
     ],
+  },
+  {
+    title: 'No Playlist with very very long title',
+    likes: '10.2k',
+    article: 'no playlist article',
+    tags: '#no_tag?',
+    last_modified: '1일',
+    user: {
+      name: 'mocha_oca',
+      profile_image: 'https://bit.ly/3A2BqqJ',
+    },
+    playlist: [],
+    comments: [],
+  },
+  {
+    title: 'one music playlist with very very long title',
+    likes: '10.2k',
+    article: 'one playlist article',
+    tags: '#no_tag?',
+    last_modified: '1일',
+    user: {
+      name: 'mocha_oca',
+      profile_image: 'https://bit.ly/3A2BqqJ',
+    },
+    playlist: [
+      {
+        title: 'Dead!',
+        artist: 'My Chemical Romance',
+        albumart: 'https://i.ytimg.com/vi/H48kOqqaWv0/maxresdefault.jpg',
+        id: 'H48kOqqaWv0',
+      },
+    ],
+    comments: [],
   },
 ];
