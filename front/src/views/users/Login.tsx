@@ -104,37 +104,43 @@ export const Login = () => {
       </Box>
       <Center w="100%" flexWrap="wrap">
         <Box w="100%" mt="24px">
-          <Button
-            leftIcon={<Image src="/google_logo.png" />}
-            w="100%"
-            bg="white"
-            color="black"
-            _hover={{
-              bg: 'gray.100',
-            }}
-            _active={{
-              bg: 'gray.100',
-            }}
-          >
-            구글로 시작하기
-          </Button>
+          <a href="http://i7b210.p.ssafy.io/oauth2/authorization/google">
+            <Button
+              leftIcon={<Image src="/google_logo.png" />}
+              w="100%"
+              bg="white"
+              color="black"
+              _hover={{
+                bg: 'gray.100',
+              }}
+              _active={{
+                bg: 'gray.100',
+              }}
+            >
+              구글로 시작하기
+            </Button>
+          </a>
         </Box>
+
         <Box w="100%" mt="8px">
-          <Button
-            leftIcon={<Image src="/kakao_logo.png" />}
-            w="100%"
-            bg="#FEE500"
-            color="#392020"
-            _hover={{
-              bg: '#EFD800',
-            }}
-            _active={{
-              bg: '#EFD800',
-            }}
-          >
-            카카오로 시작하기
-          </Button>
+          <a href="http://i7b210.p.ssafy.io/oauth2/authorization/kakao">
+            <Button
+              leftIcon={<Image src="/kakao_logo.png" />}
+              w="100%"
+              bg="#FEE500"
+              color="#392020"
+              _hover={{
+                bg: '#EFD800',
+              }}
+              _active={{
+                bg: '#EFD800',
+              }}
+            >
+              카카오로 시작하기
+            </Button>
+          </a>
         </Box>
+
         <Text mt="4">
           아직 아이디가 없으신가요?{' '}
           <Box display="inline-block" color="cyan.400">

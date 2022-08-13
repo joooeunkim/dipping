@@ -24,6 +24,7 @@ export const SearchNavBar = (props: any) => {
         borderBottom="1px"
         borderColor={color}
         bg={bg}
+        zIndex="sticky"
       >
         <Box position="relative" top="6px" h="36px" w="full" bg="">
           <Flex h="36px">
