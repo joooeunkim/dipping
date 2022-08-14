@@ -10,6 +10,7 @@ const registerReducer = createSlice({
     password: '',
     musicGenre: '',
     musicTaste: '',
+    provider: '',
   },
   reducers: {
     setDupEmail(state, { payload: dupEmail }) {
@@ -33,6 +34,9 @@ const registerReducer = createSlice({
     setMusicTaste(state, { payload: musicTaste }) {
       return { ...state, musicTaste: musicTaste };
     },
+    setProvider(state, { payload: provider }) {
+      return { ...state, provider: provider };
+    },
   },
 });
 
@@ -44,5 +48,6 @@ export const {
   setPassword,
   setMusicGenre,
   setMusicTaste,
+  setProvider,
 } = registerReducer.actions;
 export default registerReducer.reducer;

@@ -4,13 +4,13 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { parseJwt } from '../../api/login/local';
 import { SET_TOKEN } from '../../reducers/Auth';
-import { setEmail } from '../../reducers/registerReducer';
+import { setDupEmail, setEmail, setProvider } from '../../reducers/registerReducer';
 
 export const OauthRedirect = () => {
   let token = useLocation().search.split('=')[1];
   let role = parseJwt(token).roles[0].authority;
   let email = parseJwt(token).sub;
-  console.log(parseJwt(token).sub);
+  console.log(parseJwt(token));
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -18,8 +18,10 @@ export const OauthRedirect = () => {
   useEffect(() => {
     dispatch(SET_TOKEN(token));
 
-    navigate('/process', { state: email });
+    navigate('/process', { state: 'guest' });
     dispatch(setEmail(email));
+    dispatch(setDupEmail(true));
+    // dispatch(setProvider())
 
     // navigate(navigate_url);
   });

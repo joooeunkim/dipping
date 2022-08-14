@@ -11,10 +11,9 @@ import {
   setNickname,
   setPassword,
 } from '../../../reducers/registerReducer';
-import { register } from '../../../serviceWorker';
 // 나중에 소셜이냐 아니냐로 필드 숨기는거 처리해야함.
 
-export const UserInfo = () => {
+export const UserInfo = (props: any) => {
   const [dupleEmail, setDupleEmail] = useState(false);
   const [dupleNickname, setDupleNickname] = useState(false);
   const [checkpassword, setCheckPassword] = useState(false);
@@ -77,10 +76,12 @@ export const UserInfo = () => {
   const dupleNicknameMsg = '사용 가능한 닉네임입니다!';
   const checkPasswordMsg = '비밀번호 확인 완료!';
 
+  console.log(props.socialFlag);
+
   return (
     <Box>
       <Box pr="1" pl="1" position="relative">
-        <Flex>
+        <Flex display={props.socialFlag ? 'none' : 'flex'}>
           <Input
             id="email"
             onChange={changeHandler}
@@ -116,6 +117,7 @@ export const UserInfo = () => {
 
         <Text color="cyan.400">{dupleNickname ? dupleNicknameMsg : ''}</Text>
         <Input
+          display={props.socialFlag ? 'none' : 'flex'}
           id="password"
           variant="flushed"
           focusBorderColor="cyan.400"
@@ -127,6 +129,7 @@ export const UserInfo = () => {
           value={registerState.password || ''}
         />
         <Input
+          display={props.socialFlag ? 'none' : 'flex'}
           variant="flushed"
           focusBorderColor="cyan.400"
           placeholder="비밀번호확인"

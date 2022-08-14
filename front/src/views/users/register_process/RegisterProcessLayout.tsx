@@ -8,10 +8,10 @@ import { registerSubmit } from '../../../api/registerSubmit';
 import { useLocation } from 'react-router-dom';
 
 export const RegisterProcessLayout = () => {
+  const redirectState = useLocation();
   const [flag, setFlag] = useState<string>('step1');
-  const [view, setView] = useState(<UserInfo />);
+  const [view, setView] = useState(<UserInfo socialFlag={redirectState.state} />);
   const [email, setEmail] = useState('');
-  const state = useLocation();
 
   const registerState = useSelector((state: any) => {
     return state.registerReducer;
@@ -22,7 +22,7 @@ export const RegisterProcessLayout = () => {
     setEmail(e.target.value);
   };
 
-  console.log(flag);
+  console.log(redirectState.state);
 
   const onClick = (step: string) => {
     setFlag(step);
@@ -36,7 +36,7 @@ export const RegisterProcessLayout = () => {
       registerSubmit(registerState);
     }
     if (step == 'step1') {
-      setView(<UserInfo />);
+      setView(<UserInfo socialFlag={redirectState.state} />);
     } else if (step == 'step2') {
       if (registerState.dupEmail && registerState.dupNickname) {
         setView(<Genre />);
