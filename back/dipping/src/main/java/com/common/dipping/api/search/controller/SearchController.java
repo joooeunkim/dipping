@@ -3,6 +3,7 @@ package com.common.dipping.api.search.controller;
 
 import com.common.dipping.api.board.domain.dto.BoardDto;
 import com.common.dipping.api.board.domain.entity.Board;
+import com.common.dipping.api.dipping.domain.dto.DippingResponseDto;
 import com.common.dipping.api.search.service.SearchService;
 import com.common.dipping.api.user.domain.dto.MiniProfileDto;
 import com.common.dipping.api.user.domain.entity.User;
@@ -30,6 +31,39 @@ public class SearchController {
 
     @Autowired
     private SearchService searchService;
+
+    /*
+    {
+      "code": "200",
+      "data": [
+        "users": [
+          {
+            "nickname": "ba_2_h",
+            "profileImgUrl": "/profile.png"
+          }
+        ],
+        "boards": [
+            {
+                BoardDto boardDto1
+            },
+            {
+                BoardDto boardDto2
+            }
+        ]
+      ]
+    }
+    */
+
+    @GetMapping("/")
+    public ResponseEntity<?> searchPage(@AuthenticationPrincipal UserDetailsImpl userInfo) {
+        Map<String,Object> result = new HashMap<>();
+        Map<String,Object> userResult = new HashMap<>();
+        List<MiniProfileDto> userList = searchService.searchRecommendedUser(userInfo);
+        result.put("code", 200);
+        userResult.put("users", userList);
+        result.put("data", userResult);
+        return ResponseEntity.ok().body(result);
+    }
 
     /*
     {
@@ -68,5 +102,19 @@ public class SearchController {
         result.put("data", searchResult);
 
         return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/dipping")
+    public ResponseEntity<?> searchDipping(@AuthenticationPrincipal UserDetailsImpl userInfo, @Param("keyword") String keyword) {
+        Map<String,Object> result = new HashMap<>();
+        Map<String,List> searchResult = new HashMap<>();
+
+        List<DippingResponseDto> dippingList = searchService.searchDipping(keyword, userInfo);
+        result.put("code", 200);
+        searchResult.put("dippings", dippingList);
+        result.put("data", searchResult);
+
+        return ResponseEntity.ok().body(result);
+
     }
 }

@@ -1,25 +1,16 @@
 package com.common.dipping.api.board.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
+import com.common.dipping.api.board.domain.dto.*;
+import com.common.dipping.api.board.domain.entity.*;
+import com.common.dipping.api.board.repository.*;
 import com.common.dipping.api.user.domain.entity.Follow;
 import org.springframework.stereotype.Service;
 
-import com.common.dipping.api.board.domain.dto.BoardDto;
-import com.common.dipping.api.board.domain.dto.BoardSongDto;
-import com.common.dipping.api.board.domain.dto.PostTagDto;
-import com.common.dipping.api.board.domain.dto.UserTagDto;
-import com.common.dipping.api.board.domain.entity.Board;
-import com.common.dipping.api.board.domain.entity.BoardSong;
-import com.common.dipping.api.board.domain.entity.PostTag;
-import com.common.dipping.api.board.domain.entity.Tag;
-import com.common.dipping.api.board.domain.entity.UserTag;
-import com.common.dipping.api.board.repository.BoardRepository;
-import com.common.dipping.api.board.repository.BoardSongRepository;
-import com.common.dipping.api.board.repository.PostTagRepository;
-import com.common.dipping.api.board.repository.TagRepository;
-import com.common.dipping.api.board.repository.UserTagRepository;
 import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.repository.UserRepository;
 
@@ -35,10 +26,13 @@ public class BoardService {
     private final PostTagRepository postTagRepository;
     private final TagRepository tagRepository;
     private final UserTagRepository userTagRepository;
+    private final InterestTagRepository interestTagRepository;
+    private final HeartService heartService;
+    private final CommentService commentService;
 
     public Board getboardOne(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다. id=" + boardId));
-        ;
+
         return board;
     }
 
@@ -53,9 +47,24 @@ public class BoardService {
                 .user(user).build();
 
         return boardRepository.save(board);
+    }
 
-        // 리턴은 사용자 기준 게시판 중에서 내림차순으로 했을 때 첫번째가 가장 최근에 만들어진
-        // 게시판임으로 boardSeq 조회해서 반환
+	public Board edit(BoardDto boardDto){
+		User user = userRepository.findById(boardDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + boardDto.getUserId()));
+		Board board = boardRepository.findById(boardDto.getId()).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다. id=" + boardDto.getId()));;
+		board.update(boardDto.getContent(),boardDto.isOpenPost(),boardDto.isOpenComment(),boardDto.isAlbumArt());
+		return boardRepository.save(board);
+	}
+
+    public void editSong(List<BoardSongDto> boardSongDto, Board board){
+        boardSongRepository.deleteAllByBoard(board);
+        registerSong(boardSongDto,board);
+    }
+
+    public void editTag(List<PostTagDto> postTagDto, List<UserTagDto> userTagDto, Board board){
+        postTagRepository.deleteAllByBoard(board);
+        userTagRepository.deleteAllByBoard(board);
+        registerTag(postTagDto,userTagDto,board);
     }
 
     public void registerSong(List<BoardSongDto> boardSongDto, Board board) {
@@ -83,9 +92,7 @@ public class BoardService {
                     postTagDto.get(i).setTagId(tag.getId());
                 } else {
                     tag = Tag.builder().content(postTagDto.get(i).getContent()).build();
-                    tagRepository.save(tag);
-                    tag = tagRepository.findByContent(postTagDto.get(i).getContent());
-                    postTagDto.get(i).setTagId(tag.getId());
+                    tag = tagRepository.save(tag);
                 }
                 PostTag postTag = PostTag.builder().tag(tag).board(board).build();
                 postTagRepository.save(postTag);
@@ -112,9 +119,50 @@ public class BoardService {
         return list;
     }
 
+    public List<ProfilePostDto> getAllBoardByUserId(Long userId){
+        List<Board> boardList = boardRepository.findAllWithUserId(userId);
+        List<ProfilePostDto> list = new ArrayList<>();
+        for(Board board: boardList){
+            List<BoardSong> boardSongList = getBoardSongAllById(board);
+            String songImgUrl = boardSongList.get(0).getSongImgUrl();
+            list.add(new ProfilePostDto(board.getId(), songImgUrl));
+        }
+        return list;
+    }
+
     public List<BoardSong> getBoardSongAllById(Board board) {
         List<BoardSong> list = boardSongRepository.findBoardSongByBoardId(board.getId());
         return list;
     }
 
+    public boolean deleteBoard(Long boardId) {
+        boardRepository.deleteById(boardId);
+        return boardRepository.existsById(boardId);
+    }
+
+    public HashSet<BoardResponse> RecommednBoard(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + userId));
+        List<InterestTag> interestTags = interestTagRepository.findAllByUser(user);
+        List<Long> tags = new ArrayList<>();
+        for ( InterestTag i: interestTags) {
+            tags.add(i.getTag().getId());
+        }
+        List<PostTag> postTags = postTagRepository.findByTag(tags);
+
+        List<Long> boards = new ArrayList<>();
+        for ( PostTag p: postTags) {
+            boards.add(p.getBoard().getId());
+        }
+        List<Board> boardList = boardRepository.findListById(boards);
+        HashSet<BoardResponse> boardResponses = new HashSet<>();
+
+        for (Board b: boardList) {
+            BoardResponse boardResponse = new BoardResponse(b);
+            boardResponse.setLikeCount(heartService.getCountByBoardId(b));
+            boardResponse.setMyLike(heartService.isMylikeByBoardId(userId, b));
+            boardResponse.setCommentCount(commentService.getCountByBoardId(b));
+            boardResponses.add(boardResponse);
+        }
+        return boardResponses;
+    }
 }

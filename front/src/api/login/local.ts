@@ -20,7 +20,6 @@ export const local = (email: string, password: string, dispatch: any, navigate: 
       }
     })
     .catch(err => {
-      console.log(err);
       alert('서버와 연결 실패');
     });
 };

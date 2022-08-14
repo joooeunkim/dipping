@@ -68,4 +68,23 @@ public class CommentService {
 		}
 		return commentDtos;
 	}
+
+	public boolean deleteComment(Long commentId) {
+		commentRepository.deleteById(commentId);
+		commentRepository.deleteByParentId(commentId);
+		return commentRepository.existsById(commentId);
+	}
+	
+	public void editComment(CommentDto commentDto) {
+		Comment comment = commentRepository.findById(commentDto.getCommentId()).orElseThrow(()->new IllegalArgumentException("해당 댓글이 없습니다. id="+commentDto.getCommentId()));
+		comment.Update(commentDto.getContent());
+
+		commentRepository.save(comment);
+	}
+
+	public Comment findById (Long parentId){
+		Comment comment = commentRepository.findById(parentId).orElse(null);
+		return comment;
+	}
+
 }
