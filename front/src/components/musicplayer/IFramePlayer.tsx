@@ -50,6 +50,7 @@ export const IFramePlayer = () => {
                 dispatch(nextPlayListIndex());
               } else if (event.data === (window as any).YT.PlayerState.PLAYING) {
                 console.log('PLAYING');
+                (window as any).player.setVolume(100);
                 dispatch(setPlayState(PlayerState.PLAYING));
                 dispatch(
                   setProgress({
