@@ -1,4 +1,4 @@
-import { Box, useColorModeValue, Image, Avatar } from '@chakra-ui/react';
+import { Box, useColorModeValue, Image, Avatar, Center, Flex, Spacer } from '@chakra-ui/react';
 import { useState } from 'react';
 import { PlayerSmall } from './PlayerSmall';
 
@@ -9,78 +9,46 @@ export const DippinPost = (props: any) => {
   const { dippin, id } = props;
 
   return (
-    <Box position="relative" h="" w="full" borderBottom="1px" borderColor={borderColor} bg="">
+    <Box position="relative" w="full" paddingX="24px" borderBottom="1px" borderColor={borderColor}>
       {/* top bar */}
-      <Box position="relative" h="44px" w="full" bg="">
-        <Box
-          position="absolute"
-          left="4vw"
-          top="10px"
-          fontSize="20px"
+      <Flex position="relative" h="40px" w="auto" marginTop="16px">
+        <Center
+          h="40px"
+          w="full"
+          lineHeight="20px"
+          fontSize="18px"
           fontWeight="600"
-          lineHeight="24px"
-          bg=""
+          overflow="hidden"
         >
-          {dippin.title}
-        </Box>
-        <Box
-          position="absolute"
-          right="4vw"
-          top="6px"
-          fontSize="16px"
-          fontWeight="300"
-          lineHeight="32px"
-          bg=""
-        >
+          <Box w="full">{dippin.title}</Box>
+        </Center>
+        <Box h="40px" w="auto" lineHeight="40px" fontSize="14px" fontWeight="300">
           {dippin.user.name}
-          <Avatar
-            marginLeft="1vw"
-            boxSize="32px"
-            name="mocha_oca"
-            src={dippin.user.profile_image}
-          />
         </Box>
+        &nbsp;
+        <Avatar boxSize="40px" name="mocha_oca" src={dippin.user.profile_image} />
+      </Flex>
+
+      {/* article set */}
+      <Box position="relative" marginY="8px" fontWeight="400" fontSize="14px">
+        {dippin.article}
       </Box>
+
+      {/* icon set */}
+      <Flex position="relative" h="24px" w="full" bg="" marginY="8px" fontSize="24px">
+        <Box className="fa-solid fa-heart" fontSize="24px" color="cyan.400" />
+        <Box lineHeight="24px" marginLeft="8px">
+          {dippin.likes}
+        </Box>
+        <Spacer />
+        <Box className="fa-light fa-eraser" marginLeft="8px" />
+        <Box className="fa-light fa-pencil" marginLeft="8px" />
+        <Box className="fa-light fa-comment-plus" marginLeft="8px" />
+        <Box className="fa-light fa-share-nodes" marginLeft="8px" />
+      </Flex>
 
       {/* music player */}
       <PlayerSmall playlist={dippin.playlist} id={id} />
-
-      {/* icon set */}
-      <Box position="relative" h="30px" w="full" bg="" marginBottom="16px">
-        <Box
-          position="absolute"
-          left="4vw"
-          className="fa-solid fa-heart"
-          fontSize="24px"
-          lineHeight="30px"
-          color="cyan.400"
-        />
-        <Box position="absolute" left="12vw" fontSize="24px" lineHeight="30px">
-          {dippin.likes}
-        </Box>
-        <Box
-          position="absolute"
-          right="12vw"
-          className="fa-regular fa-share-nodes"
-          fontSize="24px"
-          lineHeight="30px"
-        />
-        <Box
-          position="absolute"
-          right="4vw"
-          className="fa-solid fa-bookmark"
-          fontSize="24px"
-          lineHeight="30px"
-          color="cyan.400"
-        />
-      </Box>
-
-      {/* article set */}
-      <Box position="relative" h="" w="full" bg="" marginBottom="16px">
-        <Box position="relative" marginX="4vw" fontWeight="400" fontSize="14px" lineHeight="18px">
-          {dippin.article}
-        </Box>
-      </Box>
     </Box>
   );
 };

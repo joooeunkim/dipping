@@ -44,7 +44,7 @@ export const ProgressBar = () => {
   // }, []);
 
   return (
-    <Box position="relative" h="22px" w="100%" bg="" ref={ref}>
+    <Box position="relative" h="18px" w="100%" bg="" ref={ref}>
       <Box position="absolute" h="6px" w="full" borderRadius="2px" bg={borderColor} />
       <Box
         position="absolute"

@@ -77,6 +77,12 @@ export const HomeFeedData: Array<FeedPost> = [
         id: 'qRaAvEbKmt0',
       },
       {
+        title: 'Confusion And Frustration In Modern Times',
+        artist: 'Sum 41',
+        albumart: 'https://i.ytimg.com/vi/N5KrNotNDio/maxresdefault.jpg',
+        id: 'N5KrNotNDio',
+      },
+      {
         title: 'Dead!',
         artist: 'My Chemical Romance',
         albumart: 'https://i.ytimg.com/vi/H48kOqqaWv0/maxresdefault.jpg',
@@ -332,6 +338,12 @@ export const HomeFeedData: Array<FeedPost> = [
       profile_image: 'https://bit.ly/3A2BqqJ',
     },
     playlist: [
+      {
+        title: 'Confusion And Frustration In Modern Times',
+        artist: 'Sum 41',
+        albumart: 'https://i.ytimg.com/vi/N5KrNotNDio/maxresdefault.jpg',
+        id: 'N5KrNotNDio',
+      },
       {
         title: 'Dead!',
         artist: 'My Chemical Romance',
