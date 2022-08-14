@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { Box, useColorModeValue } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   setProgress,
@@ -15,8 +15,9 @@ export const ProgressBar = () => {
   const borderColor = useColorModeValue('gray.200', 'gray.600');
 
   const progressClickHandler = (event: React.MouseEvent) => {
-    const width = document.body.offsetWidth;
-    const time = ((event.clientX - width * 0.04) / (width * 0.92)) * progress.duration;
+    const width = (ref as any).current.offsetWidth;
+    console.log(event.nativeEvent.offsetX);
+    const time = (event.nativeEvent.offsetX / width) * progress.duration;
     (window as any).player?.seekTo(time);
   };
   useEffect(() => {
@@ -34,18 +35,25 @@ export const ProgressBar = () => {
     };
   }, []);
 
+  // 너비 가져오기
+  const ref = useRef(null);
+  // const [width, setWidth] = useState(0);
+
+  // useEffect(() => {
+  //   setWidth((ref as any).current.offsetWidth);
+  // }, []);
+
   return (
-    <Box position="relative" h="22px" w="92%" bg="">
-      <Box position="absolute" left="4%" h="6px" w="full" borderRadius="2px" bg={borderColor} />
+    <Box position="relative" h="22px" w="100%" bg="" ref={ref}>
+      <Box position="absolute" h="6px" w="full" borderRadius="2px" bg={borderColor} />
       <Box
         position="absolute"
-        left="4%"
         h="6px"
         w={(progress.time / progress.duration) * 100 + '%'}
         borderRadius="2px"
         bgGradient="linear(to-r, blue.400, cyan.200)"
       />
-      <Box position="absolute" left="4%" h="6px" w="full" bg="" onClick={progressClickHandler} />
+      <Box position="absolute" h="6px" w="full" bg="" onClick={progressClickHandler} />
     </Box>
   );
 };
