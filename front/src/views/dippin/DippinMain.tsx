@@ -25,18 +25,20 @@ export const DippinMain = () => {
 
   // 검색어나 모드가 바뀌면 페이지 초기화
   useEffect(() => {
-    console.log('input or mode changed');
+    console.log('DippinMain: input or mode changed');
+    window.scrollTo(0, 0);
+    preventRef.current = true;
+    endRef.current = false;
     setPage(data => 0);
   }, [input, mode]);
 
   // 새 요청 받아서 리스트에 추가
   useEffect(() => {
     if (page === 0) {
-      window.scrollTo(0, 0);
       setDippinList([]);
       return;
     }
-    console.log('call getDippinPage: ' + input + '/' + mode + '/' + page);
+    console.log('DippinMain: call getDippinPage: ' + input + '/' + mode + '/' + page);
     getDippinPage(input, mode, page);
   }, [page]);
 
@@ -56,7 +58,7 @@ export const DippinMain = () => {
         postfeeds[3],
         postfeeds[0],
       ],
-      end: false,
+      end: page > 4 ? true : false,
     };
     // test code end
 
@@ -94,7 +96,7 @@ export const DippinMain = () => {
     if (!endRef.current && entries[0].isIntersecting && preventRef.current) {
       preventRef.current = false; //옵저버 중복 실행 방지
       // 실행하고 싶은 것
-      console.log('call setPage');
+      console.log('DippinMain: call setPage');
       setPage(data => data + 1);
     }
   };
