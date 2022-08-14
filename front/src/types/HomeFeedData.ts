@@ -22,6 +22,7 @@ export type Comment = {
 };
 
 export type FeedPost = {
+  id: number;
   title: string;
   likes: any;
   article: string;
@@ -34,6 +35,7 @@ export type FeedPost = {
 
 export const HomeFeedData: Array<FeedPost> = [
   {
+    id: 1,
     title: 'My Playlist',
     likes: '10.2k',
     article:
@@ -172,6 +174,7 @@ export const HomeFeedData: Array<FeedPost> = [
     ],
   },
   {
+    id: 1,
     title: 'SimpleIsBest',
     likes: '22',
     article: 'no more confusion.',
@@ -304,6 +307,7 @@ export const HomeFeedData: Array<FeedPost> = [
     ],
   },
   {
+    id: 3,
     title: 'No Playlist with very very long title',
     likes: '10.2k',
     article: 'no playlist article',
@@ -317,6 +321,7 @@ export const HomeFeedData: Array<FeedPost> = [
     comments: [],
   },
   {
+    id: 4,
     title: 'one music playlist with very very long title',
     likes: '10.2k',
     article: 'one playlist article',
