@@ -1,16 +1,23 @@
 import { Box, Button, Center, ChakraProvider, Container, Text, Flex } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Genre } from './Genre';
 import { InterestTag } from './InterestTag';
 import { UserInfo } from './UserInfo';
+import { registerSubmit } from '../../../api/registerSubmit';
 
 export const RegisterProcessLayout = () => {
   const [flag, setFlag] = useState<string>('step1');
   const [view, setView] = useState(<UserInfo />);
   const [email, setEmail] = useState('mon2210@naver.com');
 
-  const eventEmail = (_email: any) => {
-    setEmail(_email);
+  const registerState = useSelector((state: any) => {
+    return state.registerReducer;
+  });
+
+  const eventEmail = (e: any) => {
+    console.log(e.target.value);
+    setEmail(e.target.value);
   };
 
   console.log(flag);
@@ -23,10 +30,11 @@ export const RegisterProcessLayout = () => {
     }
     if (step == 'submit') {
       // eslint-disable-next-line no-restricted-globals
-      location.href = '/submit';
+      // location.href = '/login';
+      registerSubmit(registerState);
     }
     if (step == 'step1') {
-      setView(<UserInfo eventEmail={eventEmail} />);
+      setView(<UserInfo />);
     } else if (step == 'step2') {
       setView(<Genre />);
     } else if (step == 'step3') {

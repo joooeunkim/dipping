@@ -1,6 +1,9 @@
 import { Box, Center, Flex, Spacer } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useOutletContext } from 'react-router-dom';
+import { setMusicGenre } from '../../../reducers/registerReducer';
 
 type GenreList = {
   data: Object | null;
@@ -24,21 +27,46 @@ let genreList: genreType = {
   trot: false,
   newage: false,
 };
+
+let genres = [
+  '발라드',
+  '댄스',
+  '랩/힙합',
+  'R&B/Soul',
+  '인디음악',
+  '록/메탈',
+  'POP',
+  'EDM',
+  '재즈',
+  '포크/블루스',
+  '트로트',
+  '뉴에이지',
+];
+
 export const Genre = () => {
+  const dispatch = useDispatch();
+  const registerState = useSelector((state: any) => state.registerReducer);
   const [genre, setGenre] = useState<GenreList>({
     data: genreList,
   });
+  console.log(registerState.musicGenre);
 
   const clickGenre = (e: any) => {
     // console.log(e.target.id);
     genreList[e.target.id] = genreList[e.target.id] ? false : true;
-
     setGenre({
       data: genreList,
     });
-  };
 
-  // console.log(genre.data);
+    let genreValues = Object.values(genreList);
+    let result = '';
+    for (let i = 0; i < genreValues.length; i++) {
+      if (genreValues[i]) {
+        result += '#' + genres[i];
+      }
+    }
+    dispatch(setMusicGenre(result));
+  };
 
   return (
     <Flex flexWrap="wrap" justifyContent="center" mt="8">

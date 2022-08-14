@@ -1,6 +1,5 @@
 import { DefaultAxios } from '../DefaultAxios';
 import { SET_TOKEN } from '../../reducers/Auth';
-import { useDispatch } from 'react-redux';
 
 // 로그인 작업
 export const local = (email: string, password: string, dispatch: any, navigate: any) => {
@@ -20,6 +19,7 @@ export const local = (email: string, password: string, dispatch: any, navigate: 
       }
     })
     .catch(err => {
+      console.log(err);
       alert('서버와 연결 실패');
     });
 };
