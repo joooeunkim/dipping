@@ -116,7 +116,6 @@ export const PlayerSmall = (props: any) => {
           </div>
         ))}
       </Box>
-      <Box h="8px"></Box>
     </>
   );
 };

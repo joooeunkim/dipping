@@ -6,6 +6,7 @@ import { FeedPost, HomeFeedData } from '../../types/HomeFeedData';
 import { DippinPost } from './DippinPost';
 import { useDispatch } from 'react-redux';
 import { setDefault } from '../../reducers/iframeReducer';
+import { DippinPostSmall } from './DippinPostSmall';
 
 export const DippinDetail = ({
   isOpen,
@@ -91,7 +92,7 @@ export const DippinDetail = ({
           <DippinPost dippin={dippin} id={0} />
           {dippinlist.map((item, index) => (
             <div key={index}>
-              <DippinItem dippin={item} />
+              <DippinPostSmall dippin={item} id={index + 1} />
               <hr />
             </div>
           ))}
