@@ -12,9 +12,7 @@ import com.common.dipping.common.ApiResponseType;
 import com.common.dipping.jwt.JwtProvider;
 import com.common.dipping.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,9 +22,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -246,18 +242,17 @@ public class UserController {
 
         // result는 code와 data는 key값이
         Map<String,Object> result = new HashMap<>();
-        Map<String,Object> userResult = new HashMap<>(); // user 라고 명시하기 위한 키값
-        Map<String,Object> boardResult = new HashMap<>(); // post 라고 명시하기 위한 키값
+        Map<String,Object> dataResult = new HashMap<>(); // user 와 post 정보 담기
         result.put("code", 200); // code : 200
-        userResult.put("user", profileDto); // "user" : profileDto
-        boardResult.put("post", profilePostDto);
-        result.put("data", userResult);
+        dataResult.put("user", profileDto); // "user" : profileDto
+        dataResult.put("post", profilePostDto); //"post" : profilePostDto
+        result.put("data", dataResult);
         /*
          *  "data" : {
          *   "user" : {
          *       userEmail,
          *       }
-         *   }
+         *   },
          *   "post" : [
          *      {
          *         boardId,
