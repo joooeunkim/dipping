@@ -1,14 +1,14 @@
-import { DefaultAxios } from '../DefaultAxios';
+import { authAxios } from '../common';
 import { SET_TOKEN } from '../../reducers/Auth';
-import { useDispatch } from 'react-redux';
 
 // 로그인 작업
 export const local = (email: string, password: string, dispatch: any, navigate: any) => {
   console.log(email, password);
-  DefaultAxios.post('/login', {
-    email: email,
-    password: password,
-  })
+  authAxios
+    .post('/login', {
+      email: email,
+      password: password,
+    })
     .then(res => {
       if (res.data.code == 200) {
         // console.log('parse', parseJwt(res.data.result));
@@ -20,6 +20,7 @@ export const local = (email: string, password: string, dispatch: any, navigate: 
       }
     })
     .catch(err => {
+      console.log(err);
       alert('서버와 연결 실패');
     });
 };
