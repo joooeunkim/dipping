@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { parseJwt } from '../../api/login/local';
 import { SET_TOKEN } from '../../reducers/Auth';
+import { setEmail } from '../../reducers/registerReducer';
 
 export const OauthRedirect = () => {
   let token = useLocation().search.split('=')[1];
@@ -18,6 +19,7 @@ export const OauthRedirect = () => {
     dispatch(SET_TOKEN(token));
 
     navigate('/process', { state: email });
+    dispatch(setEmail(email));
 
     // navigate(navigate_url);
   });

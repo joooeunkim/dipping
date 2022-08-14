@@ -3,7 +3,15 @@ import { execFile } from 'child_process';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { setEmail, setNickname, setPassword } from '../../../reducers/registerReducer';
+import { defaultAxios } from '../../../api/common';
+import {
+  setDupEmail,
+  setDupNickname,
+  setEmail,
+  setNickname,
+  setPassword,
+} from '../../../reducers/registerReducer';
+import { register } from '../../../serviceWorker';
 // 나중에 소셜이냐 아니냐로 필드 숨기는거 처리해야함.
 
 export const UserInfo = () => {
@@ -15,9 +23,29 @@ export const UserInfo = () => {
   // console.log(registerState);
   const duplicateHandler = (e: any) => {
     if (e.target.id == 'email') {
-      setDupleEmail(true);
+      defaultAxios.get('/check/email?email=' + registerState.email).then(res => {
+        console.log(res.data);
+        if (res.data) {
+          // 아이디 중복된경우
+          setDupleEmail(false);
+          dispatch(setDupEmail(false));
+        } else {
+          setDupleEmail(true);
+          dispatch(setDupEmail(true));
+        }
+      });
     } else {
-      setDupleNickname(true);
+      defaultAxios.get('/check/nickname?nickname=' + registerState.nickname).then(res => {
+        console.log(res.data);
+        if (res.data) {
+          // 닉네임 중복된경우
+          setDupleNickname(false);
+          dispatch(setDupNickname(false));
+        } else {
+          dispatch(setDupNickname(true));
+          setDupleNickname(true);
+        }
+      });
     }
   };
 

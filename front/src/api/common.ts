@@ -4,7 +4,7 @@ const SERVER_ADDRESS = '/api';
 
 const accessToken = localStorage.getItem('accessToken');
 
-export const DefaultAxios: AxiosInstance = axios.create({
+export const authAxios: AxiosInstance = axios.create({
   baseURL: `${SERVER_ADDRESS}`,
   headers: {
     access_token: 'bearer ' + accessToken || '',
@@ -13,7 +13,11 @@ export const DefaultAxios: AxiosInstance = axios.create({
   },
 });
 
-DefaultAxios.defaults.withCredentials = true;
+authAxios.defaults.withCredentials = true;
+
+export const defaultAxios: AxiosInstance = axios.create({
+  baseURL: `${SERVER_ADDRESS}`,
+});
 
 // 토큰 있는지 체크
 // export const checkToken = async (config: AxiosRequestConfig) => {
