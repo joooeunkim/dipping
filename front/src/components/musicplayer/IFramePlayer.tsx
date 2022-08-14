@@ -47,6 +47,7 @@ export const IFramePlayer = () => {
                     duration: (window as any).player.getDuration(),
                   }),
                 );
+                console.log(playlistindex);
                 dispatch(nextPlayListIndex());
               } else if (event.data === (window as any).YT.PlayerState.PLAYING) {
                 console.log('PLAYING');
