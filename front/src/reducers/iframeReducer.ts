@@ -40,6 +40,7 @@ const iframeReducer = createSlice({
     },
     nextPlayListIndex(state) {
       const index = state.playlistindex;
+      if (index === -1) return state;
       if (index + 1 !== state.playlist.length)
         return { ...state, playlistindex: state.playlistindex + 1 };
 

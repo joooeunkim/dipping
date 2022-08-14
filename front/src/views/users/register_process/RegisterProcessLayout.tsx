@@ -1,34 +1,54 @@
 import { Box, Button, Center, ChakraProvider, Container, Text, Flex } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Genre } from './Genre';
 import { InterestTag } from './InterestTag';
 import { UserInfo } from './UserInfo';
+import { registerSubmit } from '../../../api/registerSubmit';
+import { useLocation } from 'react-router-dom';
 
 export const RegisterProcessLayout = () => {
+  const redirectState = useLocation();
   const [flag, setFlag] = useState<string>('step1');
-  const [view, setView] = useState(<UserInfo />);
-  const [email, setEmail] = useState('mon2210@naver.com');
+  const [view, setView] = useState(<UserInfo socialFlag={redirectState.state} />);
+  const [email, setEmail] = useState('');
 
-  const eventEmail = (_email: any) => {
-    setEmail(_email);
+  const registerState = useSelector((state: any) => {
+    return state.registerReducer;
+  });
+
+  const eventEmail = (e: any) => {
+    console.log(e.target.value);
+    setEmail(e.target.value);
   };
 
-  console.log(flag);
+  console.log(redirectState.state);
 
   const onClick = (step: string) => {
     setFlag(step);
     if (step == 'register') {
       // eslint-disable-next-line no-restricted-globals
-      location.href = '/register';
+      window.location.href = '/register';
     }
     if (step == 'submit') {
       // eslint-disable-next-line no-restricted-globals
-      location.href = '/submit';
+      // location.href = '/login';
+      registerSubmit(registerState);
     }
     if (step == 'step1') {
-      setView(<UserInfo eventEmail={eventEmail} />);
+      setView(<UserInfo socialFlag={redirectState.state} />);
     } else if (step == 'step2') {
-      setView(<Genre />);
+      if (registerState.dupEmail && registerState.dupNickname) {
+        setView(<Genre />);
+      } else {
+        setFlag('step1');
+        if (registerState.dupEmail == false) {
+          alert('이메일 중복확인을 해주세요.');
+        } else if (registerState.dupNickname == false) {
+          alert('닉네임 중복확인을 해주세요.');
+        }
+        console.log(registerState);
+      }
     } else if (step == 'step3') {
       setView(<InterestTag />);
     }

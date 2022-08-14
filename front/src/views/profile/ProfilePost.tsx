@@ -2,7 +2,7 @@ import { Box, Spinner } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
 import { MainNavBar } from '../../components/floatingbar/MainNavBar';
 import { PlaylistPost } from '../../components/postfeed/PlaylistPost';
-import { HomeFeedData, FeedPost } from '../../testdata/HomeFeedData';
+import { HomeFeedData, FeedPost } from '../../types/HomeFeedData';
 
 export const ProfilePost = () => {
   const [posts, setPosts] = useState<FeedPost[]>([]);
