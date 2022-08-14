@@ -106,8 +106,13 @@ public class DippingController {
 
 
     @DeleteMapping
-    public ResponseEntity deleteDipping(@Param("dippingId") Long dippingId){
-        return new ResponseEntity<Void>(HttpStatus.OK);
+    public ResponseEntity deleteDipping(@RequestParam("dippingId") Long dippingId){
+        boolean result = dippingService.deleteDipping(dippingId);
+        if(!result){
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/edit")
