@@ -1,6 +1,7 @@
 import { Box, Spinner } from '@chakra-ui/react';
 import { useRef, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import { MainNavBar } from '../../components/floatingbar/MainNavBar';
 import { PlaylistPost } from '../../components/postfeed/PlaylistPost';
@@ -21,6 +22,14 @@ export const HomeMain = () => {
     observerRef.current = new IntersectionObserver(intersectionObserver); // IntersectionObserver
     boxRef.current && observerRef.current.observe(boxRef.current);
   }, [posts]);
+
+  useEffect(() => {
+    return () => {
+      console.log('clear musicplay');
+      dispatch(setDefault());
+      (window as any).player.pauseVideo();
+    };
+  }, []);
 
   useEffect(() => {
     return () => {

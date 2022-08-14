@@ -24,9 +24,13 @@ public class Comment extends Common {
 
 	@Column(nullable = true, columnDefinition = "bigint default 0")
 	private Long parentId;
+
+	public void Update(String content){
+		this.content = content;
+	}
 	
-//	@ManyToMany(mappedBy = "comments", fetch = FetchType.LAZY)
-//    private List<Like> Likes = new ArrayList<>();
+	@OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
+    private List<Heart> Hearts = new ArrayList<>();
 	
 	// 게시판 연결
 	@ManyToOne
