@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
 import { MainNavBar } from '../../components/floatingbar/MainNavBar';
 import { PlaylistPost } from '../../components/postfeed/PlaylistPost';
-import { HomeFeedData, FeedPost } from '../../testdata/HomeFeedData';
+import { HomeFeedData, FeedPost } from '../../types/HomeFeedData';
 
 export const SearchDetail = () => {
   const [posts, setPosts] = useState<FeedPost[]>([]);
