@@ -89,51 +89,6 @@ export const ProfileMain = () => {
           </FormLabel>
           <Switch size="sm" id="PostHide" />
         </FormControl>
-        <Box mt="2" marginBottom="8px">
-          <Text textAlign="center">'User' 님의 추천 플레이리스트</Text>
-        </Box>
-        <Flex paddingBottom="56px" marginRight="0">
-          <Grid templateColumns="repeat(3, 1fr)" gap={0.5}>
-            <GridItem colSpan={1}>
-              <AspectRatio maxW="120px" ratio={1 / 1}>
-                <Image
-                  src="https://media.istockphoto.com/id/637093118/ko/%EC%82%AC%EC%A7%84/%EC%84%A0%EB%B0%98%EC%97%90-%EB%B9%84%EB%8B%90-%EB%A0%88%EC%BD%94%EB%93%9C.webp?s=612x612&w=is&k=20&c=oB37HTi3HV2u5SIveRMnYDH0ZAmjpKAsa5FIW74eHr8="
-                  boxSize="100%"
-                  alt="PostImg"
-                />
-              </AspectRatio>
-            </GridItem>
-            <GridItem colSpan={2}>
-              <Box marginTop="8px">
-                <Text>제목인듯</Text>
-                <Text marginTop="8px" fontSize="8px">
-                  게시물 내용 대충 어쩌구 적으면 글자수가 이렇게 채워지겠지 그러면 두줄이
-                </Text>
-                <Text marginTop="16px" fontSize="8px" color="gray.500" textAlign="right">
-                  댓글 00개
-                </Text>
-                <Flex fontSize="8px" marginRight="0">
-                  <i className="fa-solid fa-user" />
-                  <Text marginLeft="4px">00명이 좋아합니다</Text>
-                  <Spacer />
-                  <Flex width="40px">
-                    <Box fontSize="8px" rowGap="2" color="cyan.400">
-                      <i className="fa-solid fa-heart" />
-                    </Box>
-                    <Spacer />
-                    <Box fontSize="8px" rowGap="2">
-                      <i className="fa-light fa-share-nodes" />
-                    </Box>
-                    <Spacer />
-                    <Box fontSize="8px" rowGap="2" color="cyan.400">
-                      <i className="fa-solid fa-bookmark" />
-                    </Box>
-                  </Flex>
-                </Flex>
-              </Box>
-            </GridItem>
-          </Grid>
-        </Flex>
         <Tabs isFitted margin="0px">
           <TabList>
             <Tab padding="0">내 게시글</Tab>
