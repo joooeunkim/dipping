@@ -5,7 +5,7 @@ import { BottomTabBar } from '../components/floatingbar/BottomTabBar';
 import { MainNavBar } from '../components/floatingbar/MainNavBar';
 import { ModalNavBar } from '../components/floatingbar/ModalNavBar';
 import { SearchNavBar } from '../components/floatingbar/SearchNavBar';
-import { IFramePlayer } from '../components/IFramePlayer';
+import { IFramePlayer } from '../components/musicplayer/IFramePlayer';
 
 export const Layout = () => (
   <div>

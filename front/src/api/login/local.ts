@@ -1,19 +1,43 @@
-import { DefaultAxios } from '../DefaultAxios';
+import { authAxios } from '../common';
+import { SET_TOKEN } from '../../reducers/Auth';
 
-export const local = (email: string, password: string) => {
+// 로그인 작업
+export const local = (email: string, password: string, dispatch: any, navigate: any) => {
   console.log(email, password);
-  DefaultAxios.post('/login', {
-    email: email,
-    password: password,
-  })
+  authAxios
+    .post('/login', {
+      email: email,
+      password: password,
+    })
     .then(res => {
-      if (res.data.code == '200') {
-        localStorage.setItem('accesstoken', res.data.data);
+      if (res.data.code == 200) {
+        // console.log('parse', parseJwt(res.data.result));
+        dispatch(SET_TOKEN(res.data.result));
+        // eslint-disable-next-line no-restricted-globals
+        navigate('/');
       } else {
         alert('로그인 실패');
       }
     })
     .catch(err => {
+      console.log(err);
       alert('서버와 연결 실패');
     });
+};
+
+// jwt 디코딩하는 함수
+export const parseJwt = (token: any) => {
+  let base64Url = token.split('.')[1];
+  let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  let jsonPayload = decodeURIComponent(
+    window
+      .atob(base64)
+      .split('')
+      .map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join(''),
+  );
+
+  return JSON.parse(jsonPayload);
 };
