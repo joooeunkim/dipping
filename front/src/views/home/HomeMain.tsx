@@ -1,12 +1,14 @@
 import { Box, Spinner } from '@chakra-ui/react';
 import { useRef, useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import { MainNavBar } from '../../components/floatingbar/MainNavBar';
 import { PlaylistPost } from '../../components/postfeed/PlaylistPost';
-import { HomeFeedData, FeedPost } from '../../testdata/HomeFeedData';
+import { setDefault } from '../../reducers/iframeReducer';
+import { HomeFeedData, FeedPost } from '../../types/HomeFeedData';
 
 export const HomeMain = () => {
-  // const posts = [<PlaylistPost />, <PlaylistPost />];
+  const dispatch = useDispatch();
   const [posts, setPosts] = useState<FeedPost[]>([]);
   const postfeeds = HomeFeedData;
 
@@ -15,11 +17,18 @@ export const HomeMain = () => {
   const boxRef = useRef<HTMLDivElement>(null);
 
   // useEffect
-  // console.log('렌더링!');
   useEffect(() => {
     observerRef.current = new IntersectionObserver(intersectionObserver); // IntersectionObserver
     boxRef.current && observerRef.current.observe(boxRef.current);
   }, [posts]);
+
+  useEffect(() => {
+    return () => {
+      console.log('clear musicplay');
+      dispatch(setDefault());
+      (window as any).player.pauseVideo();
+    };
+  }, []);
 
   // function
   const getInfo = async () => {
@@ -48,7 +57,7 @@ export const HomeMain = () => {
     <Box>
       <MainNavBar />
       {posts.map((item, index) => (
-        <PlaylistPost postfeed={postfeeds[0]} key={index} />
+        <PlaylistPost postfeed={postfeeds[index % 2]} id={index} key={index} />
       ))}
       <Box position="relative" w="full" h="300px">
         <Spinner

@@ -1,5 +1,20 @@
-import { Box, Text, Flex, Image, Spacer, useColorModeValue } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Flex,
+  Image,
+  Spacer,
+  useColorModeValue,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+} from '@chakra-ui/react';
 import { ColorModeSwitcher } from '../../ColorModeSwitcher';
+import { AlarmFollow, AlarmActive } from './AlarmContent';
 
 export const MainNavBar = () => {
   const bg = useColorModeValue('white', 'gray.800');
@@ -7,6 +22,8 @@ export const MainNavBar = () => {
   const size = 48;
 
   const title = '';
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Box>
@@ -40,7 +57,21 @@ export const MainNavBar = () => {
               position="relative"
               top={size * 0.1 + 'px'}
               right="8vw"
+              onClick={onOpen}
             />
+            <Modal closeOnOverlayClick={true} isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent width="88%">
+                <ModalHeader textAlign="center">알림</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody pb={6}>
+                  <Text>팔로우 요청</Text>
+                  <AlarmFollow />
+                  <Text>최근 활동</Text>
+                  <AlarmActive />
+                </ModalBody>
+              </ModalContent>
+            </Modal>
             <Box
               className="fa-light fa-comment"
               fontSize={size * 0.5 + 'px'}
