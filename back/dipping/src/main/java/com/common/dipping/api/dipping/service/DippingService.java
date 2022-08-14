@@ -76,7 +76,7 @@ public class DippingService {
 
     public Dipping edit(DippingDto dippingDto) {
         User user = userRepository.findById(dippingDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + dippingDto.getUserId()));
-        Dipping dipping =  dippingRepository.findById(dippingDto.getId()).orElseThrow(() -> new IllegalArgumentException("해당 디핑이 없습니다. id=" + dippingDto.getId()));;
+        Dipping dipping =  dippingRepository.findById(dippingDto.getId()).orElseThrow(() -> new IllegalArgumentException("해당 디핑이 없습니다. id=" + dippingDto.getId()));
         dipping.update(dippingDto.getDippingTitle(),dippingDto.getDippingContent(),dippingDto.getOpenDipping());
         return dippingRepository.save(dipping);
     }
@@ -99,6 +99,16 @@ public class DippingService {
         return dippingSongDtos;
     }
 
+    public boolean deleteDipping(Long dippingId) {
+        Dipping dipping = dippingRepository.findById(dippingId).orElseThrow(() -> new IllegalArgumentException("해당 디핑이 없습니다. id=" + dippingId));
+        List<Dipping> childDipping = getChildByDippingId(dipping);
+        for (Dipping child: childDipping ) {
+            dippingRepository.deleteById(child.getId());
+        }
+        dippingRepository.deleteById(dippingId);
+        return dippingRepository.existsById(dippingId);
+    }
+
     public List<Dipping> getChildByDippingId(Dipping dipping) {
         List<Dipping> dippings = dippingRepository.findAllByParentDipping(dipping);
         return dippings;
@@ -108,5 +118,4 @@ public class DippingService {
         List<Dipping> dippings = dippingRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         return dippings;
     }
-
 }
