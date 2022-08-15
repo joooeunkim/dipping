@@ -147,4 +147,9 @@ public class DippingService {
         }
         return list;
     }
+
+    public List<Dipping> getFollowingDippings(Long id) {
+        List<Dipping> dippings = dippingRepository.findAllWithFollowingUser(id);
+        return dippings;
+    }
 }
