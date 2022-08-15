@@ -1,4 +1,4 @@
-import { Box, Drawer, DrawerBody, DrawerContent } from '@chakra-ui/react';
+import { Box, Drawer, DrawerBody, DrawerContent, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { DippinItem } from './DippinItem';
 import { ModalNavBar } from '../floatingbar/ModalNavBar';
@@ -9,13 +9,13 @@ import { setDefault } from '../../reducers/iframeReducer';
 import { DippinPostSmall } from './DippinPostSmall';
 
 export const DippinDetail = ({
-  isOpen,
-  onClose,
+  isOpenDetail,
+  onCloseDetail,
   dippinid,
   setDippinId,
 }: {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpenDetail: boolean;
+  onCloseDetail: () => void;
   dippinid: number;
   setDippinId: any;
 }) => {
@@ -25,6 +25,9 @@ export const DippinDetail = ({
   const [dippin, setDippin] = useState<FeedPost>();
   const [dippinlist, setDippinList] = useState<Array<FeedPost>>([]);
   const postfeeds = HomeFeedData; // 더미 데이터
+
+  // 구성한 플레이리스트
+  const [customlist, setCustomList] = useState<Array<FeedPost>>([]);
 
   // 닫힐 때 실행되는 것들
   const onCloseDrawer = () => {
@@ -72,8 +75,10 @@ export const DippinDetail = ({
     setDippinList(res.data.comments);
   };
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
-    <Drawer isOpen={isOpen} onClose={onClose} size="md" onCloseComplete={onCloseDrawer}>
+    <Drawer isOpen={isOpenDetail} onClose={onCloseDetail} size="md" onCloseComplete={onCloseDrawer}>
       <DrawerContent>
         <ModalNavBar
           title={'디핑' + dippinid}
@@ -83,7 +88,16 @@ export const DippinDetail = ({
               fontSize="28px"
               lineHeight="36px"
               bg=""
-              onClick={onClose}
+              onClick={onCloseDetail}
+            />
+          }
+          rightElement={
+            <Box
+              className="fa-light fa-list-music"
+              fontSize="20px"
+              lineHeight="36px"
+              bg=""
+              onClick={onOpen}
             />
           }
         />
@@ -97,6 +111,26 @@ export const DippinDetail = ({
             </div>
           ))}
         </DrawerBody>
+        <Drawer isOpen={isOpen} onClose={onClose} size="md">
+          <DrawerContent>
+            <ModalNavBar
+              title="플레이리스트 구성"
+              leftElement={
+                <Box
+                  className="fa-light fa-angle-left"
+                  fontSize="28px"
+                  lineHeight="36px"
+                  bg=""
+                  onClick={onClose}
+                />
+              }
+            />
+            <DrawerBody padding="0">
+              <Box h="48px" w="full" />
+              성공?
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
       </DrawerContent>
     </Drawer>
   );

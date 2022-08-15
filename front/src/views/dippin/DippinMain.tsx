@@ -116,8 +116,8 @@ export const DippinMain = () => {
     <Box>
       <SearchNavBar leftDisplay="none" rightDisplay="none" onKeyInput={onKeyInput} />
       <DippinDetail
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpenDetail={isOpen}
+        onCloseDetail={onClose}
         dippinid={dippinid}
         setDippinId={setDippinId}
       />

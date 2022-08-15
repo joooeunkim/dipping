@@ -85,9 +85,10 @@ export const PlayerSmall = (props: any) => {
           </Box>
           {/* control */}
           <Flex w="full" h="40px" fontSize="28px" lineHeight="28px" alignItems="flex-end">
+            <Spacer />
             <Box
               className={albumvisible ? 'fa-light fa-album' : 'fa-solid fa-album'}
-              marginRight="8px"
+              marginRight="12px"
               onClick={onClickAlbum}
             />
             {postid === id && playstate === PlayerState.PLAYING ? (
@@ -95,8 +96,6 @@ export const PlayerSmall = (props: any) => {
             ) : (
               <Box className="fa-solid fa-play" onClick={PlayPause} />
             )}
-            <Spacer />
-            <Box className="fa-light fa-plus" color="gray.500" />
           </Flex>
         </Box>
       </Flex>
@@ -106,13 +105,14 @@ export const PlayerSmall = (props: any) => {
       <Box w="full" display={albumvisible ? '' : 'none'}>
         {/* playlist item */}
         {playlist.map((item: any, index: number) => (
-          <div
-            key={index}
-            onClick={() => {
-              onClickItem(index);
-            }}
-          >
-            <PlayerSmallItem {...item} selected={currentitem == index ? true : false} />
+          <div key={index}>
+            <PlayerSmallItem
+              {...item}
+              onClickBody={() => {
+                onClickItem(index);
+              }}
+              selected={currentitem == index ? true : false}
+            />
           </div>
         ))}
       </Box>
