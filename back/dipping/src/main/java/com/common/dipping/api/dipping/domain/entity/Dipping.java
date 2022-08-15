@@ -36,7 +36,7 @@ public class Dipping extends Common {
     @JoinColumn(name = "parentDipping",columnDefinition = "bigint default 0")
     private Dipping parentDipping;
 
-    @OneToMany(mappedBy = "parentDipping")
+    @OneToMany(mappedBy = "parentDipping", cascade = {CascadeType.REMOVE})
     private List<Dipping> childDipping;
 
     @OneToMany(mappedBy = "dipping", cascade = {CascadeType.REMOVE})
