@@ -1,5 +1,6 @@
 package com.common.dipping.api.dipping.repository;
 
+import com.common.dipping.api.board.domain.entity.Board;
 import com.common.dipping.api.dipping.domain.entity.Dipping;
 import com.common.dipping.api.dipping.domain.entity.DippingSong;
 import com.common.dipping.api.user.domain.entity.User;
@@ -27,4 +28,7 @@ public interface DippingRepository extends JpaRepository<Dipping,Long> {
     int findChildCountByDippingId(@Param("dippingId") Long dippingId);
 
     List<Dipping> findAllByParentDippingNullAndUserNot(Sort id, User user);
+
+    @Query("select d from Dipping d where d.user.id = :userId")
+    List<Dipping> findAllWithUserId(@Param("userId") Long userId);
 }
