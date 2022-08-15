@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,8 +115,20 @@ public class DippingService {
         return dippings;
     }
 
-    public List<Dipping> getListByDippingId() {
-        List<Dipping> dippings = dippingRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+    public List<Dipping> getListByrecent(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + userId));
+        List<Dipping> dippings = dippingRepository.findAllByParentDippingNullAndUserNot(Sort.by(Sort.Direction.DESC, "id"),user);
         return dippings;
+    }
+
+    public List<Dipping> getTrendDippings() {
+        LocalDateTime week = LocalDateTime.now();
+        List<Dipping> dippings = dippingRepository.findAllWithDippingHeartByCreatedAt(week.minusDays(7));
+        return dippings;
+    }
+
+    public int getCountChild(Dipping dipping){
+        int count = dippingRepository.findChildCountByDippingId(dipping.getId());
+        return count;
     }
 }
