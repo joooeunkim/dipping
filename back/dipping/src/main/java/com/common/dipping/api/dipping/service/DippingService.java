@@ -1,6 +1,7 @@
 package com.common.dipping.api.dipping.service;
 
 
+import com.common.dipping.api.board.domain.dto.ProfilePostDto;
 import com.common.dipping.api.dipping.domain.dto.DippingDto;
 import com.common.dipping.api.dipping.domain.dto.DippingSongDto;
 import com.common.dipping.api.dipping.domain.entity.Dipping;
@@ -117,5 +118,20 @@ public class DippingService {
     public List<Dipping> getListByDippingId() {
         List<Dipping> dippings = dippingRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         return dippings;
+    }
+
+    public List<ProfilePostDto> getAllDippingByUserId(Long id) {
+        List<Dipping> dippingList = dippingRepository.findAllWithUserId(id);
+        List<ProfilePostDto> list = new ArrayList<>();
+        for(Dipping dipping: dippingList){
+            List<DippingSongDto> dippingSongList = getDippingSongAllById(dipping);
+            if(dippingSongList.size()==0){//해당 디핑에 곡이 없는 경우 songImgUrl은 비움(front에서 자체 이미지 삽입)
+                list.add(new ProfilePostDto(dipping.getId(),""));
+            } else{
+                String songImgUrl = dippingSongList.get(0).getSongImgUrl();
+                list.add(new ProfilePostDto(dipping.getId(), songImgUrl));
+            }
+        }
+        return list;
     }
 }
