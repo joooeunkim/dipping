@@ -156,6 +156,8 @@ public class UserService {
         userinfo.profileEdit(profileEditDto.getNickname(), profileEditDto.getProfileImgUrl(), profileEditDto.getMusicTaste(), profileEditDto.getOpenUser(), profileEditDto.getMusicGenre());
 
         userRepository.save(userinfo);
+        interestTagRepository.deleteAllByUser(userinfo);
+        registerIntersetTag(userinfo);
         return true;
     }
 
