@@ -1,7 +1,9 @@
 package com.common.dipping.api.search.service;
 
 import com.common.dipping.api.board.domain.dto.BoardDto;
+import com.common.dipping.api.board.domain.dto.ProfilePostDto;
 import com.common.dipping.api.board.domain.entity.Board;
+import com.common.dipping.api.board.domain.entity.InterestTag;
 import com.common.dipping.api.board.domain.entity.PostTag;
 import com.common.dipping.api.board.domain.entity.Tag;
 import com.common.dipping.api.board.repository.PostTagRepository;
@@ -153,6 +155,19 @@ public class SearchService {
         }
 
         return costs[s2.length()];
+    }
+
+    public List<ProfilePostDto> searchRecommendedBoards(UserDetailsImpl userDetails) {
+        User userInfo = userRepository.findById(userDetails.getId()).orElse(null);
+        List<ProfilePostDto> boards = new ArrayList<>();
+        List<InterestTag>interestTags = userInfo.getInterestTags();
+        for (InterestTag interestTag: interestTags) {
+            List<PostTag> postTags = postTagRepository.findAllByTag(interestTag.getTag());
+            for (PostTag postTag: postTags) {
+                boards.add(new ProfilePostDto(postTag.getBoard()));
+            }
+        }
+        return boards;
     }
 
 }

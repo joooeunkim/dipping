@@ -1,6 +1,7 @@
 package com.common.dipping.api.dipping.service;
 
 
+import com.common.dipping.api.board.domain.dto.ProfilePostDto;
 import com.common.dipping.api.dipping.domain.dto.DippingDto;
 import com.common.dipping.api.dipping.domain.dto.DippingSongDto;
 import com.common.dipping.api.dipping.domain.entity.Dipping;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,8 +116,40 @@ public class DippingService {
         return dippings;
     }
 
-    public List<Dipping> getListByDippingId() {
-        List<Dipping> dippings = dippingRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+    public List<Dipping> getListByrecent(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + userId));
+        List<Dipping> dippings = dippingRepository.findAllByParentDippingNullAndUserNot(Sort.by(Sort.Direction.DESC, "id"),user);
+        return dippings;
+    }
+
+    public List<Dipping> getTrendDippings() {
+        LocalDateTime week = LocalDateTime.now();
+        List<Dipping> dippings = dippingRepository.findAllWithDippingHeartByCreatedAt(week.minusDays(7));
+        return dippings;
+    }
+
+    public int getCountChild(Dipping dipping){
+        int count = dippingRepository.findChildCountByDippingId(dipping.getId());
+        return count;
+    }
+
+    public List<ProfilePostDto> getAllDippingByUserId(Long id) {
+        List<Dipping> dippingList = dippingRepository.findAllWithUserId(id);
+        List<ProfilePostDto> list = new ArrayList<>();
+        for(Dipping dipping: dippingList){
+            List<DippingSongDto> dippingSongList = getDippingSongAllById(dipping);
+            if(dippingSongList.size()==0){//해당 디핑에 곡이 없는 경우 songImgUrl은 비움(front에서 자체 이미지 삽입)
+                list.add(new ProfilePostDto(dipping.getId(),""));
+            } else{
+                String songImgUrl = dippingSongList.get(0).getSongImgUrl();
+                list.add(new ProfilePostDto(dipping.getId(), songImgUrl));
+            }
+        }
+        return list;
+    }
+
+    public List<Dipping> getFollowingDippings(Long id) {
+        List<Dipping> dippings = dippingRepository.findAllWithFollowingUser(id);
         return dippings;
     }
 }
