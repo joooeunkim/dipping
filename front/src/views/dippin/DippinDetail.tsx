@@ -1,26 +1,18 @@
 import { Box, Button, Drawer, DrawerBody, DrawerContent, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { DippinDetailItem } from './DippinDetailItem';
-import { ModalNavBar } from '../floatingbar/ModalNavBar';
+import { DippinDetailItem } from '../../components/dippin/DippinDetailItem';
+import { ModalNavBar } from '../../components/floatingbar/ModalNavBar';
 import { FeedPost, HomeFeedData, Music } from '../../types/HomeFeedData';
-import { DippinPost } from './DippinPost';
+import { DippinPost } from '../../components/dippin/DippinPost';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDefault } from '../../reducers/iframeReducer';
-import { DippinPostSmall } from './DippinPostSmall';
+import { DippinPostSmall } from '../../components/dippin/DippinPostSmall';
 import { popCustomList, setCustomList } from '../../reducers/dippinReducer';
 import { authAxios } from '../../api/common';
+import { useNavigate, useParams } from 'react-router-dom';
 
-export const DippinDetail = ({
-  isOpenDetail,
-  onCloseDetail,
-  dippinid,
-  setDippinId,
-}: {
-  isOpenDetail: boolean;
-  onCloseDetail: () => void;
-  dippinid: number;
-  setDippinId: any;
-}) => {
+export const DippinDetail = () => {
+  const dippinid: number = parseInt(useParams().dippinid as string);
   const dispatch = useDispatch();
 
   // 화면에 표시할 게시물
@@ -37,14 +29,16 @@ export const DippinDetail = ({
   };
 
   // 닫힐 때 실행되는 것들
+  const navigate = useNavigate();
   const onCloseDrawer = () => {
     // 음악 정지
     console.log('clear musicplay');
     dispatch(setDefault());
     (window as any).player.stopVideo();
-    // 초기화
-    setDippinId(0);
-    dispatch(setCustomList([]));
+    // 이전 페이지로
+    navigate(-1);
+    // setDippinId(0);
+    // dispatch(setCustomList([]));
   };
 
   // 첫 렌더링 시 서버에 요청
@@ -116,83 +110,80 @@ export const DippinDetail = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Drawer isOpen={isOpenDetail} onClose={onCloseDetail} size="md" onCloseComplete={onCloseDrawer}>
-      <DrawerContent>
-        <ModalNavBar
-          title="디핑"
-          leftElement={
-            <Box
-              className="fa-light fa-angle-left"
-              fontSize="28px"
-              lineHeight="36px"
-              bg=""
-              onClick={onCloseDetail}
-            />
-          }
-          rightElement={
-            <Box
-              className="fa-light fa-list-music"
-              fontSize="20px"
-              lineHeight="36px"
-              bg=""
-              onClick={onOpen}
-            />
-          }
-        />
-        <DrawerBody padding="0">
-          <Box h="48px" w="full" />
-          {dippin && <DippinPost dippin={dippin} id={0} />}
-          {dippinlist &&
-            dippinlist.map((item, index) => (
+    <Box>
+      <ModalNavBar
+        title="디핑"
+        leftElement={
+          <Box
+            className="fa-light fa-angle-left"
+            fontSize="28px"
+            lineHeight="36px"
+            bg=""
+            onClick={onCloseDrawer}
+          />
+        }
+        rightElement={
+          <Box
+            className="fa-light fa-list-music"
+            fontSize="20px"
+            lineHeight="36px"
+            bg=""
+            onClick={onOpen}
+          />
+        }
+      />
+      <Box padding="0">
+        {dippin && <DippinPost dippin={dippin} id={0} />}
+        {dippinlist &&
+          dippinlist.map((item, index) => (
+            <div key={index}>
+              <DippinPostSmall dippin={item} id={index + 1} />
+              <hr />
+            </div>
+          ))}
+      </Box>
+      <Drawer isOpen={isOpen} onClose={onClose} size="md">
+        <DrawerContent>
+          <ModalNavBar
+            title="플레이리스트 구성"
+            leftElement={
+              <Box
+                className="fa-light fa-angle-left"
+                fontSize="28px"
+                lineHeight="36px"
+                bg=""
+                onClick={onClose}
+              />
+            }
+          />
+          <DrawerBody paddingX="24px">
+            <Box h="48px" w="full" />
+            {customlist.map((item: any, index: number) => (
               <div key={index}>
-                <DippinPostSmall dippin={item} id={index + 1} />
-                <hr />
+                <DippinDetailItem {...item} />
               </div>
             ))}
-        </DrawerBody>
-        <Drawer isOpen={isOpen} onClose={onClose} size="md">
-          <DrawerContent>
-            <ModalNavBar
-              title="플레이리스트 구성"
-              leftElement={
-                <Box
-                  className="fa-light fa-angle-left"
-                  fontSize="28px"
-                  lineHeight="36px"
-                  bg=""
-                  onClick={onClose}
-                />
-              }
-            />
-            <DrawerBody paddingX="24px">
-              <Box h="48px" w="full" />
-              {customlist.map((item: any, index: number) => (
-                <div key={index}>
-                  <DippinDetailItem {...item} />
-                </div>
-              ))}
-              <hr />
-              <Button
-                marginY="16px"
-                borderRadius="30px"
-                w="100%"
-                bg="cyan.400"
-                // size="lg"
-                color="white"
-                _hover={{
-                  bg: 'cyan.500',
-                }}
-                _active={{
-                  bg: 'cyan.500',
-                }}
-                onClick={() => {}}
-              >
-                포스트 작성
-              </Button>
-            </DrawerBody>
-          </DrawerContent>
-        </Drawer>
-      </DrawerContent>
-    </Drawer>
+            <hr />
+            <Button
+              marginY="16px"
+              borderRadius="30px"
+              w="100%"
+              bg="cyan.400"
+              // size="lg"
+              color="white"
+              _hover={{
+                bg: 'cyan.500',
+              }}
+              _active={{
+                bg: 'cyan.500',
+              }}
+              onClick={() => {}}
+            >
+              포스트 작성
+            </Button>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    </Box>
   );
 };

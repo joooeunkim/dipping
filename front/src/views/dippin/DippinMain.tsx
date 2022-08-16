@@ -5,7 +5,7 @@ import { SearchNavBar } from '../../components/floatingbar/SearchNavBar';
 import axios from 'axios';
 import { FeedPost, HomeFeedData, Music } from '../../types/HomeFeedData';
 import { DippinMode } from '../../components/dippin/DippinMode';
-import { DippinDetail } from '../../components/dippin/DippinDetail';
+import { DippinDetail } from './DippinDetail';
 import { authAxios } from '../../api/common';
 import { iteratorSymbol } from 'immer/dist/internal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +16,7 @@ import {
   setInput,
   setPage,
 } from '../../reducers/dippinReducer';
+import { Link } from 'react-router-dom';
 
 export const DippinMain = () => {
   const dispatch = useDispatch();
@@ -127,37 +128,26 @@ export const DippinMain = () => {
   };
   // 무한 스크롤로 업데이트 하기 위한 코드 end
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [dippinid, setDippinId] = useState(0);
-  useEffect(() => {
-    console.log('DippinMain: set dippinid ' + dippinid);
-    if (dippinid > 0) {
-      onOpen();
-    }
-  }, [dippinid]);
+  // const [dippinid, setDippinId] = useState(0);
+  // useEffect(() => {
+  //   console.log('DippinMain: set dippinid ' + dippinid);
+  //   if (dippinid > 0) {
+  //     onOpen();
+  //   }
+  // }, [dippinid]);
 
   return (
     <Box>
       <SearchNavBar leftDisplay="none" rightDisplay="none" onKeyInput={onKeyInput} />
-      <DippinDetail
-        isOpenDetail={isOpen}
-        onCloseDetail={onClose}
-        dippinid={dippinid}
-        setDippinId={setDippinId}
-      />
       <DippinMode />
       {dippinlist.length > 0 ? (
         dippinlist.map((item, index) => (
-          <div
-            key={index}
-            onClick={() => {
-              setDippinId(item.id);
-            }}
-          >
+          <Link key={index} to={'/dippin/' + item.id}>
             <DippinMainItem dippin={item} />
             <hr />
-          </div>
+          </Link>
         ))
       ) : (
         <Box textAlign="center">{!load && '컨텐츠가 없습니다.'}</Box>
