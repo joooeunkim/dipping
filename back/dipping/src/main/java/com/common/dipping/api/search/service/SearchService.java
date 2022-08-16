@@ -102,9 +102,10 @@ public class SearchService {
         Map<User, Double> result = new HashMap<>();
         for (User user: users) {
             if (user.getId() == userInfo.getId()) {continue;}
-            result.put(user, similarity(user.getMusicGenre(), userInfo.getMusicGenre()));
+//            result.put(user, similarity(user.getMusicGenre(), userInfo.getMusicGenre()));
+            result.put(user, recommendScore(userInfo.getMusicGenre(),user.getMusicGenre()));
         }
-        List<User> keySetList = new ArrayList<User>(result.keySet());
+        List<User> keySetList = new ArrayList<>(result.keySet());
         Collections.sort(keySetList, (o1, o2) -> (result.get(o2).compareTo(result.get(o1))));
         List<User> userList = keySetList.subList(0, (keySetList.size() > 5) ? 6: keySetList.size());
         List<MiniProfileDto> miniProfileDtos = new ArrayList<>();
@@ -115,6 +116,17 @@ public class SearchService {
         return miniProfileDtos;
     }
 
+    private static double recommendScore(String s1, String s2) {
+        List<String> user1Genre = Arrays.asList(s1.substring(1).split("#"));
+        List<String> user2Genre = Arrays.asList(s2.substring(1).split("#"));
+        int score = 0;
+        for (String genre : user1Genre) {
+            if (user2Genre.contains(genre)) {
+                score++;
+            }
+        }
+        return score/Math.max(user1Genre.size(), user2Genre.size());
+    }
     private static double similarity(String s1, String s2) {
         String longer = s1, shorter = s2;
 
@@ -164,6 +176,7 @@ public class SearchService {
         for (InterestTag interestTag: interestTags) {
             List<PostTag> postTags = postTagRepository.findAllByTag(interestTag.getTag());
             for (PostTag postTag: postTags) {
+                if(postTag.getBoard().getUser() == userInfo) {continue;}
                 boards.add(new ProfilePostDto(postTag.getBoard()));
             }
         }
