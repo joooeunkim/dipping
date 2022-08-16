@@ -93,6 +93,7 @@ public class SearchService {
         List<User> users = userRepository.findAll();
         Map<User, Double> result = new HashMap<>();
         for (User user: users) {
+            if (user.getMusicGenre() == null) {continue;}
             if (user.getId() == userInfo.getId()) {continue;}
 //            result.put(user, similarity(user.getMusicGenre(), userInfo.getMusicGenre()));
             result.put(user, recommendScore(userInfo.getMusicGenre(),user.getMusicGenre()));
