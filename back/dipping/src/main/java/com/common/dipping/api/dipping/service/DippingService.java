@@ -118,17 +118,32 @@ public class DippingService {
         return dippings;
     }
 
-    public List<Dipping> getListByrecent(Long userId,int pagenum) {
+    public List<Dipping> getListByrecent(Long userId,int pagenum,String search) {
+        int offset = (pagenum-1) * 10;
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + userId));
         Pageable pageable = PageRequest.of(pagenum-1,10, Sort.by(Sort.Direction.DESC, "id"));
-        List<Dipping> dippings = dippingRepository.findAllWithPaginationByParentDippingNullAndUserNot(user,pageable);
+        List<Dipping> dippings = new ArrayList<>();
+        if(search.isEmpty()){
+            dippings = dippingRepository.findAllWithPaginationByParentDippingNullAndUserNot(user,pageable);
+        }else if(!search.isEmpty()){
+            String s = search.replace(" ", "|");
+            dippings = dippingRepository.findAllWithPaginationByParentDippingNullAndUserNotDippingTitleDippingContent(user.getId(),offset,s,s);
+        }
+
         return dippings;
     }
 
-    public List<Dipping> getTrendDippings(int pagenum) {
+    public List<Dipping> getTrendDippings(int pagenum,String search) {
         int offset = (pagenum-1) * 10;
         LocalDateTime week = LocalDateTime.now();
-        List<Dipping> dippings = dippingRepository.findAllWithDippingHeartByCreatedAt(week.minusDays(7),offset);
+        List<Dipping> dippings = new ArrayList<>();
+        if(search.isEmpty()){
+            dippings = dippingRepository.findAllWithDippingHeartByCreatedAt(week.minusDays(7),offset);
+        }else if(!search.isEmpty()) {
+            String s = search.replace(" ", "|");
+            dippings = dippingRepository.findAllWithDippingHeartByCreatedAtDippingTitleDippingContent(week.minusDays(7),offset,s,s);
+        }
+
         return dippings;
     }
 
@@ -152,9 +167,16 @@ public class DippingService {
         return list;
     }
 
-    public List<Dipping> getFollowingDippings(Long id,int pagenum) {
+    public List<Dipping> getFollowingDippings(Long id,int pagenum,String search) {
         int offset = (pagenum-1) * 10;
-        List<Dipping> dippings = dippingRepository.findAllWithFollowingUser(id,offset);
+        List<Dipping> dippings = new ArrayList<>();
+        if(search.isEmpty()){
+            dippings = dippingRepository.findAllWithFollowingUser(id,offset);
+        }else if(!search.isEmpty()) {
+            String s = search.replace(" ", "|");
+            dippings = dippingRepository.findAllWithFollowingUserDippingTitleDippingContent(id,offset,s,s);
+        }
+
         return dippings;
     }
 }
