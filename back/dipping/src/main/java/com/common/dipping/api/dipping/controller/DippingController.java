@@ -33,7 +33,7 @@ public class DippingController {
     public ResponseEntity<?> getDippingListOrDippingOne(@AuthenticationPrincipal UserDetailsImpl userInfo,
                                                         @RequestParam(name = "dippingId", required = false) Long dippingId,
                                                         @RequestParam(name = "sort", required = false) String sort,
-                                                        @RequestParam(name = "pageNum", required = false,defaultValue = "5") int pageNum){
+                                                        @RequestParam(name = "pageNum", required = false,defaultValue = "1") int pageNum){
         Map<String, Object> result = new HashMap<String, Object>();
         Map<String, Object> data = new HashMap<String, Object>();
         Map<String, Object> Main = new HashMap<String, Object>();
@@ -73,13 +73,13 @@ public class DippingController {
             List<Dipping> dippings = new ArrayList<>();
             switch (sort){
                 case "recent":
-                    dippings = dippingService.getListByrecent(userInfo.getId());
+                    dippings = dippingService.getListByrecent(userInfo.getId(),pageNum);
                     break;
                 case "trend":
-                    dippings = dippingService.getTrendDippings();
+                    dippings = dippingService.getTrendDippings(pageNum);
                     break;
                 case "following":
-                    dippings = dippingService.getFollowingDippings(userInfo.getId());
+                    dippings = dippingService.getFollowingDippings(userInfo.getId(),pageNum);
                     break;
             }
             if(!dippings.isEmpty()){

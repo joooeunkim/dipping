@@ -12,6 +12,8 @@ import com.common.dipping.api.dipping.repository.DippingSongRepository;
 import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -116,15 +118,17 @@ public class DippingService {
         return dippings;
     }
 
-    public List<Dipping> getListByrecent(Long userId) {
+    public List<Dipping> getListByrecent(Long userId,int pagenum) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + userId));
-        List<Dipping> dippings = dippingRepository.findAllByParentDippingNullAndUserNot(Sort.by(Sort.Direction.DESC, "id"),user);
+        Pageable pageable = PageRequest.of(pagenum-1,10, Sort.by(Sort.Direction.DESC, "id"));
+        List<Dipping> dippings = dippingRepository.findAllWithPaginationByParentDippingNullAndUserNot(user,pageable);
         return dippings;
     }
 
-    public List<Dipping> getTrendDippings() {
+    public List<Dipping> getTrendDippings(int pagenum) {
+        int offset = (pagenum-1) * 10;
         LocalDateTime week = LocalDateTime.now();
-        List<Dipping> dippings = dippingRepository.findAllWithDippingHeartByCreatedAt(week.minusDays(7));
+        List<Dipping> dippings = dippingRepository.findAllWithDippingHeartByCreatedAt(week.minusDays(7),offset);
         return dippings;
     }
 
@@ -148,8 +152,9 @@ public class DippingService {
         return list;
     }
 
-    public List<Dipping> getFollowingDippings(Long id) {
-        List<Dipping> dippings = dippingRepository.findAllWithFollowingUser(id);
+    public List<Dipping> getFollowingDippings(Long id,int pagenum) {
+        int offset = (pagenum-1) * 10;
+        List<Dipping> dippings = dippingRepository.findAllWithFollowingUser(id,offset);
         return dippings;
     }
 }
