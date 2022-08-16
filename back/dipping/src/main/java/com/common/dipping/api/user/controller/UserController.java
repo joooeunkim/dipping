@@ -213,16 +213,14 @@ public class UserController {
             Resource res = resourceLoader.getResource("classpath:static/upload");
             String canonicalPath = res.getFile().getCanonicalPath();
             System.out.println("file upload canonical path : "+ canonicalPath);
-            String today = new SimpleDateFormat("yyMMdd").format(new Date());
-            String saveFolder = canonicalPath + File.separator + today;
-            File folder = new File(saveFolder);
+            File folder = new File(canonicalPath);
             if (!folder.exists()){
                 folder.mkdirs();
             }
             String originalFileName = file.getOriginalFilename();
             String saveFileName = "untitled";
             if (!originalFileName.isEmpty()) {
-                saveFileName = System.nanoTime() + originalFileName.substring(originalFileName.lastIndexOf('.'));
+                saveFileName = userinfo.getUsername() + originalFileName.substring(originalFileName.lastIndexOf('.'));
                 System.out.println("원본 파일 이름 : "+file.getOriginalFilename()+", 실제 저장 파일 이름 : "+ saveFileName);
                 file.transferTo(new File(folder, saveFileName));
             }
