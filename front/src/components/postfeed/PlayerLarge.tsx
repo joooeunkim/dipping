@@ -171,10 +171,12 @@ export const PlayerLarge = (props: any) => {
 
       {/* progress bar */}
       {postid === id ? (
-        <ProgressBar />
+        <Box position="relative" left="4%" h="22px" w="92%" bg="">
+          <ProgressBar />
+        </Box>
       ) : (
-        <Box position="relative" h="22px" w="full" bg="">
-          <Box position="absolute" left="4vw" h="6px" w="92%" borderRadius="2px" bg="gray.400" />
+        <Box position="relative" left="4%" h="22px" w="92%" bg="">
+          <hr />
         </Box>
       )}
     </>
