@@ -40,14 +40,25 @@ export const AddMusic = ({
 
   // 곡 선택
   const chooseMusic = (index: number) => {
-    setData((data: any) => [
-      ...data,
-      {
-        ...youtube[index],
-        artist: (lastfm[0] as any).artist,
-        title: (lastfm[0] as any).name,
-      } as Music,
-    ]);
+    console.log(index);
+    console.log(youtube[index]);
+    console.log((lastfm[0] as any).artist);
+    console.log((lastfm[0] as any).name);
+
+    setData({
+      ...youtube[index],
+      artist: (lastfm[0] as any).artist,
+      title: (lastfm[0] as any).name,
+    });
+
+    // setData((data: any) => [
+    //   ...data,
+    //   {
+    //     ...youtube[index],
+    //     artist: (lastfm[0] as any).artist,
+    //     title: (lastfm[0] as any).name,
+    //   } as Music,
+    // ]);
     onClose();
   };
 

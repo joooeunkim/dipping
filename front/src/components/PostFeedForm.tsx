@@ -16,74 +16,72 @@ import {
   Textarea,
   Switch,
   Stack,
+  CloseButton,
 } from '@chakra-ui/react';
 import { SetStateAction, useState } from 'react';
+import { writePostFeed } from '../api/write';
+import { AddMusic } from './AddMusic';
 import { CyanButton } from './CyanButton';
 
 //글 작성 폼에서 보여주는 음악 리스트 변수
 let selectedMusicList: any[] = [];
 
-// 검색어 입력시 하단에 나오는 검색결과 목록 아이템 컴포넌트
-export const MusicItem = (props: any) => {
-  // 게시물에 포함할 음악 아이템 추가 이벤트 핸들러
-  const itemClickEventHandler = (setMusicState: any) => {
-    selectedMusicList.push(props);
-    setMusicState(selectedMusicList);
-    console.log('click', selectedMusicList);
-  };
-
-  const onClose = props.onClose; // modal close hook
-  const setMusicState = props.setMusicState;
-
-  return (
-    <ListItem
-      onClick={() => {
-        itemClickEventHandler(setMusicState);
-        onClose();
-      }}
-    >
-      <Flex pt="2" pb="2">
-        <Image src="/logo192.png" w="12" h="12" mr="1" />
-        <Box>
-          <Text>{props.title}</Text>
-          <Text>{props.artist}</Text>
-        </Box>
-      </Flex>
-    </ListItem>
-  );
-};
-
 // 입력 폼 컴포넌트
 export const PostFeedForm = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [displayState, setDisplayState] = useState<string>('none');
-  const [musicState, setMusicState] = useState<any[]>(selectedMusicList);
+  const [musicList, setMusicList] = useState<any[]>([]);
 
-  // youtube 검색 api로 불러온 데이터 저장할 변수
-  const musicList = [
-    {
-      imgUrl: 'imgUrl',
-      title: '야생화',
-      artist: '박효신',
-    },
-    {
-      imgUrl: 'imgUrl',
-      title: '추억은 사랑을 닮아',
-      artist: '박효신',
-    },
-    {
-      imgUrl: 'imgUrl',
-      title: '1991년 찬바람이 불던 밤',
-      artist: '박효신',
-    },
-  ];
+  const [openPost, setOpenPost] = useState(false);
+  const [openComment, setOpenComment] = useState(false);
+  const [mixAlbumArt, setmixAlbumArt] = useState(false);
 
-  const inputChangeEventHandler = (e: any) => {
-    if (e.target.value.length < 2) {
-      setDisplayState('none');
-    } else {
-      setDisplayState('block');
+  const setData = (data: any) => {
+    console.log('hi', data);
+    selectedMusicList = [...musicList, refactorData(data)];
+    setMusicList(selectedMusicList);
+    console.log('musiclist', musicList);
+  };
+
+  const refactorData = (data: any) => {
+    return {
+      songTitle: data.title,
+      songSinger: data.artist,
+      songUrl: data.id,
+      songImgUrl: data.albumart,
+    };
+  };
+
+  const newPost = (e: any) => {
+    let content = document.getElementById('content') as HTMLInputElement | null;
+    let tag = document.getElementById('tag') as HTMLInputElement | null;
+    let userTag = document.getElementById('user_tag') as HTMLInputElement | null;
+    let data = {
+      post: {
+        content: content?.value,
+        openPost: openPost,
+        openComment: openComment,
+        mixAlbumArt: mixAlbumArt,
+      },
+      post_tag: createTag(tag),
+      user_tag: createTag(userTag),
+      play_list: musicList,
+    };
+
+    console.log(data);
+    writePostFeed(data);
+  };
+
+  const createTag = (tag: any) => {
+    let tagArray = tag?.value.replaceAll(' ', '').split('#');
+    let tagObjectArry = [];
+    for (let i = 0; i < tagArray.length; ++i) {
+      if (tagArray[i] != '' && tagArray[i]) {
+        tagObjectArry.push({
+          content: tagArray[i],
+        });
+      }
     }
+    return tagObjectArry;
   };
 
   return (
@@ -91,16 +89,22 @@ export const PostFeedForm = () => {
       {/* form 메인부분 */}
       <Box overflowY="scroll" h="40">
         {/* 선택한 음악 리스트 표시하는 부분 */}
-        {selectedMusicList.length != 0 ? (
-          selectedMusicList.map((data, index) => (
-            <Flex key={index}>
-              <Image src="/logo192.png" w="12" h="12" />
-              <Box>
-                {data.title}
-                {data.artist}
-              </Box>
-            </Flex>
-          ))
+        {musicList.length != 0 ? (
+          musicList.map((music, index) => {
+            console.log(music);
+            return (
+              <Flex key={index} mb="2">
+                <Image src={music.songImgUrl} w="12" h="12" borderRadius="lg" />
+                <Box pl="2" pt="1" w="100%">
+                  <Text fontSize="sm" color="gray.500">
+                    {music.songSinger}
+                  </Text>
+                  <Text lineHeight="4">{music.songTitle}</Text>
+                </Box>
+                <CloseButton mt="2" />
+              </Flex>
+            );
+          })
         ) : (
           <Center mt="10" color="gray.500">
             등록된 음악이 없습니다.
@@ -122,31 +126,33 @@ export const PostFeedForm = () => {
         </Button>
       </Center>
 
-      <Textarea rows={10} variant="unstyled" placeholder="본문 내용" />
-      <Input mb="2" variant="flushed" placeholder="태그" />
-      <Input mb="2" variant="flushed" placeholder="사용자 태그" />
+      <Textarea id="content" rows={10} variant="unstyled" placeholder="본문 내용" />
+      <Input id="tag" mb="2" variant="flushed" placeholder="태그" />
+      <Input id="user_tag" mb="2" variant="flushed" placeholder="사용자 태그" />
       <Box w="70%" m="32px auto">
         <Flex justifyContent="space-between" mb="4">
           팔로워에게만 공개
-          <Switch size="md" />
+          <Switch onChange={() => setOpenPost(!openPost)} />
         </Flex>
         <Flex justifyContent="space-between" mb="4">
           댓글 잠금
-          <Switch />
+          <Switch onChange={() => setOpenComment(!openComment)} />
         </Flex>
-        <Flex justifyContent="space-between">
+        <Flex justifyContent="space-between" onChange={() => setmixAlbumArt(!mixAlbumArt)}>
           앨범아트 믹스
           <Switch />
         </Flex>
       </Box>
-
-      <CyanButton title="작성" />
+      <Box onClick={newPost}>
+        <CyanButton title="작성" />
+      </Box>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalBody>
-            <Flex>
+            <AddMusic isOpen={isOpen} onClose={onClose} setData={setData} />
+            {/* <Flex>
               <Text fontSize="xl" pt="2" mr="1" color="gray.500">
                 <i className="fa-regular fa-search"></i>
               </Text>
@@ -173,7 +179,7 @@ export const PostFeedForm = () => {
                   />
                 ))}
               </List>
-            </Box>
+            </Box> */}
           </ModalBody>
         </ModalContent>
       </Modal>
