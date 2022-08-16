@@ -155,7 +155,7 @@ public class BoardController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<?> getfollowingBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestParam(name = "pageNum", required = false,defaultValue = "5") int pageNum) {
+    public ResponseEntity<?> getfollowingBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestParam(name = "pageNum", required = false,defaultValue = "1") int pageNum) {
 
         Map<String, Object> result = new HashMap<String, Object>();
         // 해당 유저의 팔로우 유저들을 찾아와서 포스트 검색하여 Id 내림차순으로 정렬
@@ -183,7 +183,8 @@ public class BoardController {
         Collections.sort(posting, new boardIdCompare());
 
         List<Object> posts = new ArrayList<>();
-        for (int i = pageNum - 5; i < pageNum; i++) {
+        int page = pageNum * 10;
+        for (int i = page - 10; i < page; i++) {
             if ( i < posting.size()) {
                 Map<String,Object> item = new HashMap<>();
                 BoardResponse boardResponse = new BoardResponse(posting.get(i));
@@ -220,7 +221,7 @@ public class BoardController {
     }
 
     @GetMapping("/recommend")
-    public ResponseEntity<?> getRecommendBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestParam(name = "pageNum", required = false,defaultValue = "5") int pageNum) {
+    public ResponseEntity<?> getRecommendBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestParam(name = "pageNum", required = false,defaultValue = "1") int pageNum) {
         Map<String,Object> result = new HashMap<>();
         Map<String,Object> data = new HashMap<>();
 
@@ -229,7 +230,8 @@ public class BoardController {
         result.put("code", 200);
 
         List<Object> posts = new ArrayList<>();
-        for (int i = pageNum - 5; i < pageNum; i++) {
+        int page = pageNum * 10;
+        for (int i = page - 10; i < page; i++) {
             if (i < boardList.size()) {
                 Map<String,Object> item = new HashMap<>();
                 BoardResponse boardResponse = boardList.get(i);
