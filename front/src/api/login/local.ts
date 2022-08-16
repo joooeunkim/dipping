@@ -14,6 +14,7 @@ export const local = (email: string, password: string, dispatch: any, navigate: 
         // console.log('parse', parseJwt(res.data.result));
         dispatch(SET_TOKEN(res.data.result));
         // eslint-disable-next-line no-restricted-globals
+        localStorage.setItem('accessToken', res.data.result);
         navigate('/');
       } else {
         alert('로그인 실패');

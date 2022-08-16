@@ -7,7 +7,7 @@ const accessToken = localStorage.getItem('accessToken');
 export const authAxios: AxiosInstance = axios.create({
   baseURL: `${SERVER_ADDRESS}`,
   headers: {
-    access_token: 'bearer ' + accessToken || '',
+    Authorization: 'Bearer ' + accessToken || '',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
   },
