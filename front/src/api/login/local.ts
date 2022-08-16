@@ -11,6 +11,7 @@ export const local = (email: string, password: string, dispatch: any, navigate: 
     })
     .then(res => {
       if (res.data.code == 200) {
+        localStorage.setItem('accessToken', res.data.result);
         // console.log('parse', parseJwt(res.data.result));
         dispatch(SET_TOKEN(res.data.result));
         // eslint-disable-next-line no-restricted-globals

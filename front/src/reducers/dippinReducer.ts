@@ -12,11 +12,15 @@ const dippinReducer = createSlice({
     },
     popCustomList(state, { payload: id }) {
       const targetidx = state.customlist.findIndex(e => e.id === id);
-
-      return { ...state, customlist: [...state.customlist.splice(targetidx, 1)] };
+      const list = state.customlist.slice();
+      list.splice(targetidx, 1);
+      return { ...state, customlist: [...list] };
+    },
+    setCustomList(state, { payload: list }) {
+      return { ...state, customlist: [...list] };
     },
   },
 });
 
-export const { pushCustomList, popCustomList } = dippinReducer.actions;
+export const { pushCustomList, popCustomList, setCustomList } = dippinReducer.actions;
 export default dippinReducer.reducer;

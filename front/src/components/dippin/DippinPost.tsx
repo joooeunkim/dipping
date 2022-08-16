@@ -7,7 +7,6 @@ export const DippinPost = (props: any) => {
   const borderColor = useColorModeValue('gray.200', 'gray.600');
 
   const { dippin, id } = props;
-
   return (
     <Box position="relative" w="full" paddingX="24px" borderBottom="1px" borderColor={borderColor}>
       {/* top bar */}
@@ -22,7 +21,15 @@ export const DippinPost = (props: any) => {
         >
           <Box w="full">{dippin.title}</Box>
         </Center>
-        <Box marginX="4px" h="40px" w="auto" lineHeight="40px" fontSize="14px" fontWeight="300">
+        <Box
+          marginX="6px"
+          h="40px"
+          w="auto"
+          lineHeight="40px"
+          fontSize="14px"
+          fontWeight="300"
+          whiteSpace="nowrap"
+        >
           {dippin.user.name}
         </Box>
         <Avatar boxSize="40px" name="mocha_oca" src={dippin.user.profile_image} />
@@ -49,7 +56,7 @@ export const DippinPost = (props: any) => {
       {/* music player */}
       {dippin.playlist.length > 0 && <PlayerSmall playlist={dippin.playlist} id={id} />}
 
-      <Box h="16px"></Box>
+      <Box h="16px" />
     </Box>
   );
 };

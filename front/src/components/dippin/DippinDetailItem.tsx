@@ -11,7 +11,7 @@ export const DippinDetailItem = (props: any) => {
   const dispatch = useDispatch();
 
   return (
-    <Box position="relative" h="64px" w="100%">
+    <Box position="relative" h="64px" w="100%" marginY="8px">
       <Flex position="relative" h="64px">
         <Flex h="64px" w="full">
           <Image
@@ -31,14 +31,14 @@ export const DippinDetailItem = (props: any) => {
             </Box>
           </Box>
         </Flex>
-        <Box
+        {/* <Box
           margin="20px 4px"
           boxSize="24px"
           fontSize="24px"
           className="fa-light fa-close"
           onClick={() => dispatch(popCustomList(id))}
           color="gray.500"
-        />
+        /> */}
       </Flex>
     </Box>
   );
