@@ -1,13 +1,18 @@
 import { Avatar, Box, Flex, Image } from '@chakra-ui/react';
 import { FeedPost } from '../../types/HomeFeedData';
 
-export const DippinItem = (props: any) => {
+export const DippinMainItem = (props: any) => {
   const { dippin }: { dippin: FeedPost } = props;
 
   return (
     <Box position="relative" w="full" bg="" padding="8px">
       <Flex>
-        <Avatar position="relative" boxSize="40px" name="mocha_oca" src="" />
+        <Avatar
+          position="relative"
+          boxSize="40px"
+          name="mocha_oca"
+          src={dippin.user.profile_image}
+        />
         <Box position="relative" marginX="8px" w="full">
           <Flex lineHeight="18px" h="18px">
             <Box fontSize="15px" fontWeight="600" overflow="hidden" h="18px" w="auto">

@@ -1,12 +1,11 @@
 import { Box, Input, Image, Flex, useDisclosure, Center, Spacer, Spinner } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
-import { DippinItem } from '../../components/dippin/DippinItem';
+import { DippinMainItem } from '../../components/dippin/DippinMainItem';
 import { SearchNavBar } from '../../components/floatingbar/SearchNavBar';
 import axios from 'axios';
-import { AddMusic } from '../../components/AddMusic';
 import { FeedPost, HomeFeedData, Music } from '../../types/HomeFeedData';
 import { DippinMode } from '../../components/dippin/DippinMode';
-import { time } from 'console';
+import { DippinDetail } from '../../components/dippin/DippinDetail';
 
 export const DippinMain = () => {
   // 요청에 쓰일 파라미터들
@@ -85,6 +84,7 @@ export const DippinMain = () => {
 
   useEffect(() => {
     // 옵저버 생성
+    console.log('create observer');
     const observer = new IntersectionObserver(obs, { threshold: 0.5 }); // IntersectionObserver
     if (obsRef.current) observer.observe(obsRef.current);
     return () => {
@@ -102,13 +102,34 @@ export const DippinMain = () => {
   };
   // 무한 스크롤로 업데이트 하기 위한 코드 end
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [dippinid, setDippinId] = useState(0);
+  useEffect(() => {
+    console.log('DippinMain: set dippinid ' + dippinid);
+    if (dippinid > 0) {
+      onOpen();
+    }
+  }, [dippinid]);
+
   return (
     <Box>
       <SearchNavBar leftDisplay="none" rightDisplay="none" onKeyInput={onKeyInput} />
+      <DippinDetail
+        isOpenDetail={isOpen}
+        onCloseDetail={onClose}
+        dippinid={dippinid}
+        setDippinId={setDippinId}
+      />
       <DippinMode mode={mode} setMode={setMode} />
       {dippinlist.map((item, index) => (
-        <div key={index}>
-          <DippinItem dippin={item} />
+        <div
+          key={index}
+          onClick={() => {
+            setDippinId(item.id);
+          }}
+        >
+          <DippinMainItem dippin={item} />
           <hr />
         </div>
       ))}
