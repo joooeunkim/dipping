@@ -32,7 +32,8 @@ public class DippingController {
     @GetMapping
     public ResponseEntity<?> getDippingListOrDippingOne(@AuthenticationPrincipal UserDetailsImpl userInfo,
                                                         @RequestParam(name = "dippingId", required = false) Long dippingId,
-                                                        @RequestParam(name = "sort", required = false) String sort){
+                                                        @RequestParam(name = "sort", required = false) String sort,
+                                                        @RequestParam(name = "pageNum", required = false,defaultValue = "5") int pageNum){
         Map<String, Object> result = new HashMap<String, Object>();
         Map<String, Object> data = new HashMap<String, Object>();
         Map<String, Object> Main = new HashMap<String, Object>();
@@ -55,7 +56,6 @@ public class DippingController {
             Main.put("music", dippingSongDtos);
             data.put("Main",Main);
 
-
             if(!ChildDippings.isEmpty()){
                 for (Dipping d: ChildDippings) {
                     Map<String, Object> temp = new HashMap<String, Object>();
@@ -69,32 +69,26 @@ public class DippingController {
                 data.put("comment",comment);
             }
         }
-        else if(sort.equals("recent")){
-            result.put("code", 200);
-            List<Dipping> dippings = dippingService.getListByrecent(userInfo.getId());
+        else if(sort != null){
+            List<Dipping> dippings = new ArrayList<>();
+            switch (sort){
+                case "recent":
+                    dippings = dippingService.getListByrecent(userInfo.getId());
+                    break;
+                case "trend":
+                    dippings = dippingService.getTrendDippings();
+                    break;
+                case "following":
+                    dippings = dippingService.getFollowingDippings(userInfo.getId());
+                    break;
+            }
             if(!dippings.isEmpty()){
+                result.put("code", 200);
                 for (Dipping d: dippings) {
                     Map<String, Object> temp = new HashMap<String, Object>();
                     DippingResponseDto dip = new DippingResponseDto(d);
                     dip.LikeAndChild(dippingHeartService.isMylikeByDippingId(userInfo.getId(),d)
                             ,dippingHeartService.getCountByDippingId(d),dippingService.getCountChild(d));;
-                    List<DippingSongDto> dipSong = dippingService.getDippingSongAllById(d);
-                    temp.put("item", dip);
-                    temp.put("music", dipSong);
-                    comment.add(temp);
-                }
-                data.put("posts",comment);
-            }
-        }
-        else if(sort.equals("trend")){
-            result.put("code", 200);
-            List<Dipping> dippings = dippingService.getTrendDippings();
-            if(!dippings.isEmpty()){
-                for (Dipping d: dippings) {
-                    Map<String, Object> temp = new HashMap<String, Object>();
-                    DippingResponseDto dip = new DippingResponseDto(d);
-                    dip.LikeAndChild(dippingHeartService.isMylikeByDippingId(userInfo.getId(),d)
-                            ,dippingHeartService.getCountByDippingId(d),dippingService.getCountChild(d));
                     List<DippingSongDto> dipSong = dippingService.getDippingSongAllById(d);
                     temp.put("item", dip);
                     temp.put("music", dipSong);
@@ -109,6 +103,8 @@ public class DippingController {
 
         if(!data.isEmpty()){
             result.put("data",data);
+        }else {
+            result.put("code",201);
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(result);

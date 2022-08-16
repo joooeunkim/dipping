@@ -31,4 +31,8 @@ public interface DippingRepository extends JpaRepository<Dipping,Long> {
 
     @Query("select d from Dipping d where d.user.id = :userId")
     List<Dipping> findAllWithUserId(@Param("userId") Long userId);
+
+    @Query(nativeQuery = true, value = "select d.* from dipping as d join (select receiver from follow where sender = :userId) f " +
+            "on d.user_id = f.receiver where d.parent_dipping is null order by created_at DESC")
+    List<Dipping> findAllWithFollowingUser(@Param("userId") Long userId);
 }
