@@ -83,6 +83,7 @@ public final class JwtProvider {
         User user = userRepository.findByEmail(claims.getSubject()).orElseThrow(UserNotFoundException::new);
         claims.put("id", user.getId());
         claims.put("nickname", user.getNickname());
+        claims.put("provider", user.getProvider());
         claims.put("roles", authentication.getAuthorities());
         Date now = new Date();
         return Jwts.builder()

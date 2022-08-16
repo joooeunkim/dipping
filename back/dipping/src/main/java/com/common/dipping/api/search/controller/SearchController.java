@@ -2,6 +2,7 @@ package com.common.dipping.api.search.controller;
 
 
 import com.common.dipping.api.board.domain.dto.BoardDto;
+import com.common.dipping.api.board.domain.dto.ProfilePostDto;
 import com.common.dipping.api.board.domain.entity.Board;
 import com.common.dipping.api.dipping.domain.dto.DippingResponseDto;
 import com.common.dipping.api.search.service.SearchService;
@@ -57,11 +58,13 @@ public class SearchController {
     @GetMapping("/")
     public ResponseEntity<?> searchPage(@AuthenticationPrincipal UserDetailsImpl userInfo) {
         Map<String,Object> result = new HashMap<>();
-        Map<String,Object> userResult = new HashMap<>();
+        Map<String,Object> data = new HashMap<>();
         List<MiniProfileDto> userList = searchService.searchRecommendedUser(userInfo);
+        List<ProfilePostDto> boardList = searchService.searchRecommendedBoards(userInfo);
         result.put("code", 200);
-        userResult.put("users", userList);
-        result.put("data", userResult);
+        data.put("users", userList);
+        data.put("boards", boardList);
+        result.put("data", data);
         return ResponseEntity.ok().body(result);
     }
 
