@@ -83,6 +83,7 @@ export const DippinDetail = ({
       }),
       tags: '',
       comments: [],
+      myLike: data.Main.item.myLike,
     };
 
     const comment: FeedPost[] = data.comment?.map((e: any) => {
@@ -104,7 +105,7 @@ export const DippinDetail = ({
             id: el.songUrl,
           };
         }),
-        commentCount: e.item.childCount,
+        myLike: e.item.myLike,
       };
     });
     console.log(main);
