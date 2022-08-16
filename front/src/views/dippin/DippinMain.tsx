@@ -6,6 +6,8 @@ import axios from 'axios';
 import { FeedPost, HomeFeedData, Music } from '../../types/HomeFeedData';
 import { DippinMode } from '../../components/dippin/DippinMode';
 import { DippinDetail } from '../../components/dippin/DippinDetail';
+import { authAxios } from '../../api/common';
+import { iteratorSymbol } from 'immer/dist/internal';
 
 export const DippinMain = () => {
   // 요청에 쓰일 파라미터들
@@ -26,53 +28,68 @@ export const DippinMain = () => {
   useEffect(() => {
     console.log('DippinMain: input or mode changed');
     window.scrollTo(0, 0);
-    preventRef.current = true;
     endRef.current = false;
     setPage(data => 0);
+    setDippinList([]);
+    getDippinPage(input, mode, 0);
+    //setPage(data => data + 1);
+    // const observer = new IntersectionObserver(obs, { threshold: 0.5 });
+    // if (obsRef.current) observer.observe(obsRef.current);
   }, [input, mode]);
 
   // 새 요청 받아서 리스트에 추가
   useEffect(() => {
     if (page === 0) {
-      setDippinList([]);
       return;
     }
-    console.log('DippinMain: call getDippinPage: ' + input + '/' + mode + '/' + page);
     getDippinPage(input, mode, page);
   }, [page]);
 
   // 백엔드에 요청
   const getDippinPage = async (query: string, mode: string, page: number) => {
     setLoad(true); //로딩 시작
-
-    // test code start
-    const res = {
-      data: [
-        postfeeds[mode === 'recent' ? 0 : 1],
-        postfeeds[mode === 'trend' ? 3 : 0],
-        postfeeds[2],
-        postfeeds[2],
-        postfeeds[2],
-        postfeeds[2],
-        postfeeds[3],
-        postfeeds[0],
-      ],
-      end: page > 4 ? true : false,
-    };
-    // test code end
-
-    // const res = await axios.get('url', {
-    //   params: {
-    //     page: page,
-    //     mode: mode,
-    //   },
-    // });
+    console.log('DippinMain: call getDippinPage: ' + query + '/' + mode + '/' + page);
+    const res: any = await authAxios.get('/dipping', {
+      params: {
+        sort: mode,
+        pageNum: page,
+      },
+    });
 
     if (res.data) {
-      if (res.end) endRef.current = true; //마지막 페이지일 경우
-      setDippinList(data => [...data, ...res.data]);
+      if (res.data.code === 201) {
+        console.log('없음');
+        endRef.current = true; //마지막 페이지일 경우
+      } else {
+        const posts = res.data.data.posts;
+        const list: FeedPost[] = posts.map((e: any) => {
+          return {
+            id: e.item.dippingId,
+            title: e.item.dippingTitle,
+            likes: e.item.likeCount,
+            article: e.item.dippingContent,
+            last_modified: e.item.updatedAt,
+            user: {
+              name: e.item.nickname,
+              profile_image: e.item.userId,
+            },
+            playlist: e.music.map((el: any) => {
+              return {
+                title: el.songTitle,
+                artist: el.songSinger,
+                albumart: el.songImgUrl,
+                id: el.songUrl,
+              };
+            }),
+            commentCount: e.item.childCount,
+          };
+        });
+
+        setDippinList(data => [...data, ...list]);
+      }
       preventRef.current = true;
     }
+    console.log('요청 완료');
     setLoad(false); //로딩 종료
   };
 
@@ -122,17 +139,21 @@ export const DippinMain = () => {
         setDippinId={setDippinId}
       />
       <DippinMode mode={mode} setMode={setMode} />
-      {dippinlist.map((item, index) => (
-        <div
-          key={index}
-          onClick={() => {
-            setDippinId(item.id);
-          }}
-        >
-          <DippinMainItem dippin={item} />
-          <hr />
-        </div>
-      ))}
+      {dippinlist.length > 0 ? (
+        dippinlist.map((item, index) => (
+          <div
+            key={index}
+            onClick={() => {
+              setDippinId(item.id);
+            }}
+          >
+            <DippinMainItem dippin={item} />
+            <hr />
+          </div>
+        ))
+      ) : (
+        <Box textAlign="center">{!load && '컨텐츠가 없습니다.'}</Box>
+      )}
       {load && (
         <Box position="relative" w="full" h="100px">
           <Spinner

@@ -1,4 +1,4 @@
-import { Box, Drawer, DrawerBody, DrawerContent, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Drawer, DrawerBody, DrawerContent, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { DippinDetailItem } from './DippinDetailItem';
 import { ModalNavBar } from '../floatingbar/ModalNavBar';
@@ -7,7 +7,8 @@ import { DippinPost } from './DippinPost';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDefault } from '../../reducers/iframeReducer';
 import { DippinPostSmall } from './DippinPostSmall';
-import { popCustomList } from '../../reducers/dippinReducer';
+import { popCustomList, setCustomList } from '../../reducers/dippinReducer';
+import { authAxios } from '../../api/common';
 
 export const DippinDetail = ({
   isOpenDetail,
@@ -43,6 +44,7 @@ export const DippinDetail = ({
     (window as any).player.stopVideo();
     // 초기화
     setDippinId(0);
+    dispatch(setCustomList([]));
   };
 
   // 첫 렌더링 시 서버에 요청
@@ -54,31 +56,60 @@ export const DippinDetail = ({
 
   // 백엔드에 요청
   const getDippinDetail = async (id: number) => {
-    // test code start
-    const res = {
-      data: {
-        main: postfeeds[id - 1],
-        comments: [
-          postfeeds[id % 4],
-          postfeeds[(id + 1) % 4],
-          postfeeds[(id + 2) % 4],
-          postfeeds[(id + 3) % 4],
-          postfeeds[(id + 4) % 4],
-          postfeeds[(id + 5) % 4],
-          postfeeds[(id + 6) % 4],
-        ],
+    const res: any = await authAxios.get('/dipping', {
+      params: {
+        dippingId: id,
       },
+    });
+
+    const data = res.data.data;
+    const main: FeedPost = {
+      id: data.Main.item.dippingId,
+      title: data.Main.item.dippingTitle,
+      likes: data.Main.item.likeCount,
+      article: data.Main.item.dippingContent,
+      last_modified: data.Main.item.updatedAt,
+      user: {
+        name: data.Main.item.nickname,
+        profile_image: data.Main.item.userId,
+      },
+      playlist: data.Main.music.map((el: any) => {
+        return {
+          title: el.songTitle,
+          artist: el.songSinger,
+          albumart: el.songImgUrl,
+          id: el.songUrl,
+        };
+      }),
+      tags: '',
+      comments: [],
     };
-    // test code end
 
-    // const res = await axios.get('url', {
-    //   params: {
-    //     id:id
-    //   },
-    // });
-
-    setDippin(res.data.main);
-    setDippinList(res.data.comments);
+    const comment: FeedPost[] = data.comment?.map((e: any) => {
+      return {
+        id: e.item.dippingId,
+        title: e.item.dippingTitle,
+        likes: e.item.likeCount,
+        article: e.item.dippingContent,
+        last_modified: e.item.updatedAt,
+        user: {
+          name: e.item.nickname,
+          profile_image: e.item.userId,
+        },
+        playlist: e.music.map((el: any) => {
+          return {
+            title: el.songTitle,
+            artist: el.songSinger,
+            albumart: el.songImgUrl,
+            id: el.songUrl,
+          };
+        }),
+        commentCount: e.item.childCount,
+      };
+    });
+    console.log(main);
+    setDippin(main);
+    setDippinList(comment);
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -109,13 +140,14 @@ export const DippinDetail = ({
         />
         <DrawerBody padding="0">
           <Box h="48px" w="full" />
-          <DippinPost dippin={dippin} id={0} />
-          {dippinlist.map((item, index) => (
-            <div key={index}>
-              <DippinPostSmall dippin={item} id={index + 1} />
-              <hr />
-            </div>
-          ))}
+          {dippin && <DippinPost dippin={dippin} id={0} />}
+          {dippinlist &&
+            dippinlist.map((item, index) => (
+              <div key={index}>
+                <DippinPostSmall dippin={item} id={index + 1} />
+                <hr />
+              </div>
+            ))}
         </DrawerBody>
         <Drawer isOpen={isOpen} onClose={onClose} size="md">
           <DrawerContent>
@@ -131,13 +163,31 @@ export const DippinDetail = ({
                 />
               }
             />
-            <DrawerBody padding="0">
+            <DrawerBody paddingX="24px">
               <Box h="48px" w="full" />
               {customlist.map((item: any, index: number) => (
                 <div key={index}>
                   <DippinDetailItem {...item} />
                 </div>
               ))}
+              <hr />
+              <Button
+                marginY="16px"
+                borderRadius="30px"
+                w="100%"
+                bg="cyan.400"
+                // size="lg"
+                color="white"
+                _hover={{
+                  bg: 'cyan.500',
+                }}
+                _active={{
+                  bg: 'cyan.500',
+                }}
+                onClick={() => {}}
+              >
+                포스트 작성
+              </Button>
             </DrawerBody>
           </DrawerContent>
         </Drawer>

@@ -22,7 +22,15 @@ export const DippinPostSmall = (props: any) => {
         >
           <Box w="full">{dippin.title}</Box>
         </Center>
-        <Box marginX="4px" h="36px" w="auto" lineHeight="36px" fontSize="12px" fontWeight="300">
+        <Box
+          marginX="4px"
+          h="36px"
+          w="auto"
+          lineHeight="36px"
+          fontSize="12px"
+          fontWeight="300"
+          whiteSpace="nowrap"
+        >
           {dippin.user.name}
         </Box>
         <Avatar boxSize="36px" name="mocha_oca" src={dippin.user.profile_image} />
