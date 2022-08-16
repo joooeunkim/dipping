@@ -35,6 +35,7 @@ export const Login = () => {
 
   const enterLogin = (e: any) => {
     if (e.code === 'Enter') {
+      console.log('enter');
       local(email, password, dispatch, navigate);
     }
   };
