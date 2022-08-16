@@ -31,14 +31,6 @@ export const HomeMain = () => {
     };
   }, []);
 
-  useEffect(() => {
-    return () => {
-      console.log('clear musicplay');
-      dispatch(setDefault());
-      (window as any).player.pauseVideo();
-    };
-  }, []);
-
   // function
   const getInfo = async () => {
     // const res = await axios.get('http://localhost:8080/rest/getInfo'); // 서버에서 데이터 가져오기
