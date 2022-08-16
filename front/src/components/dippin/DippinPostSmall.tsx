@@ -2,37 +2,38 @@ import { Box, useColorModeValue, Image, Avatar, Center, Flex, Spacer } from '@ch
 import { useState } from 'react';
 import { PlayerSmall } from './PlayerSmall';
 
-export const DippinPost = (props: any) => {
+export const DippinPostSmall = (props: any) => {
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
 
   const { dippin, id } = props;
+
   return (
     <Box position="relative" w="full" paddingX="24px" borderBottom="1px" borderColor={borderColor}>
       {/* top bar */}
-      <Flex position="relative" h="40px" w="auto" marginTop="16px">
+      <Flex position="relative" h="36px" w="auto" marginTop="8px">
         <Center
-          h="40px"
+          h="36px"
           w="full"
-          lineHeight="20px"
-          fontSize="18px"
+          lineHeight="16px"
+          fontSize="16px"
           fontWeight="600"
           overflow="hidden"
         >
           <Box w="full">{dippin.title}</Box>
         </Center>
         <Box
-          marginX="6px"
-          h="40px"
+          marginX="4px"
+          h="36px"
           w="auto"
-          lineHeight="40px"
-          fontSize="14px"
+          lineHeight="36px"
+          fontSize="12px"
           fontWeight="300"
           whiteSpace="nowrap"
         >
           {dippin.user.name}
         </Box>
-        <Avatar boxSize="40px" name="mocha_oca" src={dippin.user.profile_image} />
+        <Avatar boxSize="36px" name="mocha_oca" src={dippin.user.profile_image} />
       </Flex>
 
       {/* article set */}
@@ -42,15 +43,13 @@ export const DippinPost = (props: any) => {
 
       {/* icon set */}
       <Flex position="relative" h="24px" w="full" bg="" marginY="8px" fontSize="24px">
-        <Box className="fa-solid fa-heart" fontSize="24px" color="cyan.400" />
-        <Box lineHeight="24px" marginLeft="8px">
+        <Box className="fa-solid fa-heart" color="cyan.400" />
+        <Box lineHeight="20px" fontSize="20px" marginLeft="8px">
           {dippin.likes}
         </Box>
         <Spacer />
-        <Box className="fa-light fa-eraser" marginLeft="8px" />
-        <Box className="fa-light fa-pencil" marginLeft="8px" />
-        <Box className="fa-light fa-comment-plus" marginLeft="8px" />
-        <Box className="fa-light fa-share-nodes" marginLeft="8px" />
+        <Box fontSize="20px" className="fa-light fa-eraser" marginLeft="8px" />
+        <Box fontSize="20px" className="fa-light fa-pencil" marginLeft="8px" />
       </Flex>
 
       {/* music player */}

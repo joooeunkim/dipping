@@ -22,6 +22,7 @@ export type Comment = {
 };
 
 export type FeedPost = {
+  id: number;
   title: string;
   likes: any;
   article: string;
@@ -34,6 +35,7 @@ export type FeedPost = {
 
 export const HomeFeedData: Array<FeedPost> = [
   {
+    id: 1,
     title: 'My Playlist',
     likes: '10.2k',
     article:
@@ -73,6 +75,12 @@ export const HomeFeedData: Array<FeedPost> = [
         artist: '넬',
         albumart: 'https://i.ytimg.com/vi/qRaAvEbKmt0/hqdefault.jpg',
         id: 'qRaAvEbKmt0',
+      },
+      {
+        title: 'Confusion And Frustration In Modern Times',
+        artist: 'Sum 41',
+        albumart: 'https://i.ytimg.com/vi/N5KrNotNDio/maxresdefault.jpg',
+        id: 'N5KrNotNDio',
       },
       {
         title: 'Dead!',
@@ -172,6 +180,7 @@ export const HomeFeedData: Array<FeedPost> = [
     ],
   },
   {
+    id: 1,
     title: 'SimpleIsBest',
     likes: '22',
     article: 'no more confusion.',
@@ -304,6 +313,7 @@ export const HomeFeedData: Array<FeedPost> = [
     ],
   },
   {
+    id: 3,
     title: 'No Playlist with very very long title',
     likes: '10.2k',
     article: 'no playlist article',
@@ -317,6 +327,7 @@ export const HomeFeedData: Array<FeedPost> = [
     comments: [],
   },
   {
+    id: 4,
     title: 'one music playlist with very very long title',
     likes: '10.2k',
     article: 'one playlist article',
@@ -327,6 +338,12 @@ export const HomeFeedData: Array<FeedPost> = [
       profile_image: 'https://bit.ly/3A2BqqJ',
     },
     playlist: [
+      {
+        title: 'Confusion And Frustration In Modern Times',
+        artist: 'Sum 41',
+        albumart: 'https://i.ytimg.com/vi/N5KrNotNDio/maxresdefault.jpg',
+        id: 'N5KrNotNDio',
+      },
       {
         title: 'Dead!',
         artist: 'My Chemical Romance',

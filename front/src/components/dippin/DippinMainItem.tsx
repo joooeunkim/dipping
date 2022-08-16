@@ -1,24 +1,37 @@
 import { Avatar, Box, Flex, Image } from '@chakra-ui/react';
 import { FeedPost } from '../../types/HomeFeedData';
 
-export const DippinItem = (props: any) => {
+export const DippinMainItem = (props: any) => {
   const { dippin }: { dippin: FeedPost } = props;
 
   return (
     <Box position="relative" w="full" bg="" padding="8px">
       <Flex>
-        <Avatar position="relative" boxSize="40px" name="mocha_oca" src="" />
+        <Avatar
+          position="relative"
+          boxSize="40px"
+          name="mocha_oca"
+          // src={dippin.user.profile_image}
+        />
         <Box position="relative" marginX="8px" w="full">
           <Flex lineHeight="18px" h="18px">
-            <Box fontSize="15px" fontWeight="600" overflow="hidden" h="18px" w="auto">
+            <Box fontSize="15px" fontWeight="600" h="18px" w="auto" overflow="hidden">
               {dippin.title}
             </Box>
-            &nbsp;
-            <Box fontSize="14px" fontWeight="400" color="gray.400">
+            <Box
+              marginX="4px"
+              fontSize="14px"
+              fontWeight="400"
+              color="gray.400"
+              h="18px"
+              w="auto"
+              whiteSpace="nowrap"
+            >
               {dippin.user.name}
             </Box>
           </Flex>
           <Box
+            position="relative"
             marginY="4px"
             h="54px"
             lineHeight="18px"
@@ -35,7 +48,7 @@ export const DippinItem = (props: any) => {
             </Box>
             <Box w="20px" className="fa-regular fa-comment" fontSize="14px" lineHeight="16px" />
             <Box w="64px" fontSize="14px" lineHeight="16px">
-              {dippin.comments.length}
+              {(dippin as any).commentCount}
             </Box>
           </Flex>
         </Box>
