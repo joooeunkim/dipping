@@ -32,10 +32,10 @@ public interface DippingRepository extends JpaRepository<Dipping,Long> {
     @Query("select count(d) from Dipping d where d.parentDipping.id = :dippingId ")
     int findChildCountByDippingId(@Param("dippingId") Long dippingId);
 
-    List<Dipping> findAllWithPaginationByParentDippingNullAndUserNot(User user, Pageable pageable);
+    List<Dipping> findAllWithPaginationByParentDippingNull(Pageable pageable);
 
-    @Query(nativeQuery = true, value = "select d.* from dipping as d where d.parent_dipping is null AND d.user_id != :userId AND (d.dipping_title REGEXP :dippingTitle OR d.dipping_content REGEXP :dippingContent ) order by created_at DESC limit 10 offset :page")
-    List<Dipping> findAllWithPaginationByParentDippingNullAndUserNotDippingTitleDippingContent(@Param("userId") Long userId,@Param("page") int page, @Param("dippingTitle") String dippingTitle,@Param("dippingContent") String dippingContent);
+    @Query(nativeQuery = true, value = "select d.* from dipping as d where d.parent_dipping is null AND (d.dipping_title REGEXP :dippingTitle OR d.dipping_content REGEXP :dippingContent ) order by created_at DESC limit 10 offset :page")
+    List<Dipping> findAllWithPaginationByParentDippingNullAndDippingTitleDippingContent(@Param("page") int page, @Param("dippingTitle") String dippingTitle,@Param("dippingContent") String dippingContent);
 
     @Query("select d from Dipping d where d.user.id = :userId")
     List<Dipping> findAllWithUserId(@Param("userId") Long userId);

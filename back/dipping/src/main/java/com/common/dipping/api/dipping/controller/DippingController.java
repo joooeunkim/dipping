@@ -12,6 +12,11 @@ import com.common.dipping.security.UserDetailsImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
@@ -29,6 +34,10 @@ public class DippingController {
     private final DippingService dippingService;
     private final DippingHeartService dippingHeartService;
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "단일 조회 성공", content = @Content(schema = @Schema(implementation = Map.class ))),
+            @ApiResponse(responseCode = "200", description = "목록 조회 성공", content = @Content(schema = @Schema(implementation = Map.class))) })
+    @Operation(summary = "디핑 조회", description = "dippingId 입력시 단일 조회, sort에는 recent,trend,following 입력하여 조회")
     @GetMapping
     public ResponseEntity<?> getDippingListOrDippingOne(@AuthenticationPrincipal UserDetailsImpl userInfo,
                                                         @RequestParam(name = "dippingId", required = false) Long dippingId,
@@ -151,6 +160,8 @@ public class DippingController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+
+    @Operation(summary = "디핑 좋아요/좋아요취소", description = "dippingId 입력받아 좋아요 체크 없으면 좋아요, 있으면 좋아요 취소")
     @PostMapping("/like")
     public ResponseEntity<?> dippingLikeUnLike(@AuthenticationPrincipal UserDetailsImpl userInfo,@RequestBody ObjectNode likeObj) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -169,6 +180,9 @@ public class DippingController {
         }
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "좋아요 목록 조회 성공", content = @Content(schema = @Schema(implementation = DippingHeartDto.class ))) })
+    @Operation(summary = "디핑 좋아요 목록", description = "dippingId 입력시 해당 디핑의 좋아요를 누른 유저 목록 ")
     @GetMapping("/like")
     public ResponseEntity<?> getDippingLikeList(@Param("dippingId") Long dippingId){
         List<DippingHeartDto> dippingHeartDtos = dippingHeartService.getListByDippingId(dippingId);
