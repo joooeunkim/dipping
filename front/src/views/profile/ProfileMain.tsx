@@ -4,11 +4,6 @@ import {
   Flex,
   Text,
   Box,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
   Button,
   FormControl,
   FormLabel,
@@ -16,12 +11,12 @@ import {
   Link,
   FormHelperText,
   Spacer,
-  Grid,
-  GridItem,
-  AspectRatio,
+  useControllableProp,
+  useControllableState,
 } from '@chakra-ui/react';
 import { ModalNavBar } from '../../components/floatingbar/ModalNavBar';
-import { HomeFeed, DippinFeed, UserShort } from '../../components/FeedUserShort';
+import { FeedAll } from '../../components/FeedUserShort';
+import { useState } from 'react';
 
 export const ProfileMain = () => {
   const props = {
@@ -31,6 +26,11 @@ export const ProfileMain = () => {
     ),
     rightElement: <Box className="fa-light fa-bars" lineHeight="36px" fontSize="24px" bg="" />,
   };
+  const [show, setShow] = useState(false);
+  const [internalShow, setInternalShow] = useControllableState({
+    onChange: setShow,
+  });
+  const onClick = () => setInternalShow((currentShow: any) => !currentShow);
 
   return (
     <Box>
@@ -84,30 +84,26 @@ export const ProfileMain = () => {
           </Text>
         </Flex>
         <FormControl display="flex" alignItems="center" justifyContent="right">
-          <FormLabel htmlFor="email-alerts" mb="0" fontSize="8px">
-            <i className="fa-thin fa-lock">게시글숨기기</i>
-          </FormLabel>
-          <Switch size="sm" id="PostHide" />
+          <Button
+            w="25%"
+            height="24px"
+            bg="cyan.400"
+            // size="lg"
+            color="white"
+            _hover={{
+              bg: 'cyan.500',
+            }}
+            _active={{
+              bg: 'cyan.500',
+            }}
+            onClick={onClick}
+          >
+            <FormLabel htmlFor="email-alerts" mb="0" fontSize="10px" textAlign="end">
+              <i className="fa-thin fa-lock"> 게시글숨기기</i>
+            </FormLabel>
+          </Button>
         </FormControl>
-        <Tabs isFitted margin="0px">
-          <TabList>
-            <Tab padding="0">내 게시글</Tab>
-            <Tab padding="0">내 디핑 게시글</Tab>
-            <Tab padding="0">북마크 게시글</Tab>
-          </TabList>
-
-          <TabPanels>
-            <TabPanel paddingLeft="0" paddingRight="0">
-              <HomeFeed />
-            </TabPanel>
-            <TabPanel paddingLeft="0" paddingRight="0">
-              <DippinFeed />
-            </TabPanel>
-            <TabPanel paddingLeft="0" paddingRight="0">
-              <UserShort />
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
+        <Box marginTop="32px">{show ? <FeedAll /> : null}</Box>
       </Container>
     </Box>
   );
