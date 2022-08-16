@@ -59,15 +59,7 @@ public class SearchService {
         for (int i = 0; i < tagList.size(); i++) {
             List<PostTag> postTags = postTagRepository.findAllByTag(tagList.get(i));
             for (PostTag postTag:postTags){
-                BoardDto board = new BoardDto();
-                board.setId(postTag.getBoard().getId());
-                board.setAlbumArt(postTag.getBoard().isAlbumArt());
-                board.setContent(postTag.getBoard().getContent());
-                board.setCreatedAt(postTag.getBoard().getCreatedAt().format(DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss")));
-                board.setUpdatedAt(postTag.getBoard().getUpdatedAt().format(DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss")));
-                board.setOpenComment(postTag.getBoard().isOpenComment());
-                board.setOpenPost(postTag.getBoard().isOpenPost());
-                board.setUserId(postTag.getBoard().getUser().getId());
+                BoardDto board = new BoardDto(postTag.getBoard());
                 boardList.add(board);
             }
         }
