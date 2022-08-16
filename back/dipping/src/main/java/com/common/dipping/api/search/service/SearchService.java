@@ -101,10 +101,11 @@ public class SearchService {
         List<User> users = userRepository.findAll();
         Map<User, Double> result = new HashMap<>();
         for (User user: users) {
+            if (user.getMusicGenre() == null) {continue;}
             if (user.getId() == userInfo.getId()) {continue;}
-            result.put(user, similarity(user.getMusicGenre(), userInfo.getMusicGenre()));
+            result.put(user, recommendScore(userInfo.getMusicGenre(),user.getMusicGenre()));
         }
-        List<User> keySetList = new ArrayList<User>(result.keySet());
+        List<User> keySetList = new ArrayList<>(result.keySet());
         Collections.sort(keySetList, (o1, o2) -> (result.get(o2).compareTo(result.get(o1))));
         List<User> userList = keySetList.subList(0, (keySetList.size() > 5) ? 6: keySetList.size());
         List<MiniProfileDto> miniProfileDtos = new ArrayList<>();
@@ -115,46 +116,16 @@ public class SearchService {
         return miniProfileDtos;
     }
 
-    private static double similarity(String s1, String s2) {
-        String longer = s1, shorter = s2;
-
-        if (s1.length() < s2.length()) {
-            longer = s2;
-            shorter = s1;
-        }
-
-        int longerLength = longer.length();
-        if (longerLength == 0) return 1.0;
-        return (longerLength - editDistance(longer, shorter)) / (double) longerLength;
-    }
-    private static int editDistance(String s1, String s2) {
-        s1 = s1.toLowerCase();
-        s2 = s2.toLowerCase();
-        int[] costs = new int[s2.length() + 1];
-
-        for (int i = 0; i <= s1.length(); i++) {
-            int lastValue = i;
-            for (int j = 0; j <= s2.length(); j++) {
-                if (i == 0) {
-                    costs[j] = j;
-                } else {
-                    if (j > 0) {
-                        int newValue = costs[j - 1];
-
-                        if (s1.charAt(i - 1) != s2.charAt(j - 1)) {
-                            newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
-                        }
-
-                        costs[j - 1] = lastValue;
-                        lastValue = newValue;
-                    }
-                }
+    private static double recommendScore(String s1, String s2) {
+        List<String> user1Genre = Arrays.asList(s1.substring(1).split("#"));
+        List<String> user2Genre = Arrays.asList(s2.substring(1).split("#"));
+        int score = 0;
+        for (String genre : user1Genre) {
+            if (user2Genre.contains(genre)) {
+                score++;
             }
-
-            if (i > 0) costs[s2.length()] = lastValue;
         }
-
-        return costs[s2.length()];
+        return score/Math.max(user1Genre.size(), user2Genre.size());
     }
 
     public List<ProfilePostDto> searchRecommendedBoards(UserDetailsImpl userDetails) {
@@ -164,6 +135,7 @@ public class SearchService {
         for (InterestTag interestTag: interestTags) {
             List<PostTag> postTags = postTagRepository.findAllByTag(interestTag.getTag());
             for (PostTag postTag: postTags) {
+                if(postTag.getBoard().getUser() == userInfo) {continue;}
                 boards.add(new ProfilePostDto(postTag.getBoard()));
             }
         }
