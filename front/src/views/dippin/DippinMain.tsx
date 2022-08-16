@@ -1,6 +1,6 @@
 import { Box, Input, Image, Flex, useDisclosure, Center, Spacer, Spinner } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
-import { DippinItem } from '../../components/dippin/DippinItem';
+import { DippinMainItem } from '../../components/dippin/DippinMainItem';
 import { SearchNavBar } from '../../components/floatingbar/SearchNavBar';
 import axios from 'axios';
 import { FeedPost, HomeFeedData, Music } from '../../types/HomeFeedData';
@@ -129,7 +129,7 @@ export const DippinMain = () => {
             setDippinId(item.id);
           }}
         >
-          <DippinItem dippin={item} />
+          <DippinMainItem dippin={item} />
           <hr />
         </div>
       ))}

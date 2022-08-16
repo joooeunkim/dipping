@@ -86,16 +86,17 @@ export const PlayerSmall = (props: any) => {
           {/* control */}
           <Flex w="full" h="40px" fontSize="28px" lineHeight="28px" alignItems="flex-end">
             <Spacer />
-            <Box
-              className={albumvisible ? 'fa-light fa-album' : 'fa-solid fa-album'}
-              marginRight="12px"
-              onClick={onClickAlbum}
-            />
+
             {postid === id && playstate === PlayerState.PLAYING ? (
               <Box className="fa-solid fa-pause" onClick={PlayPause} />
             ) : (
               <Box className="fa-solid fa-play" onClick={PlayPause} />
             )}
+            <Box
+              className={albumvisible ? 'fa-light fa-album' : 'fa-solid fa-album'}
+              marginLeft="12px"
+              onClick={onClickAlbum}
+            />
           </Flex>
         </Box>
       </Flex>

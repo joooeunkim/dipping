@@ -1,7 +1,7 @@
 import { Avatar, Box, Flex, Image } from '@chakra-ui/react';
 import { FeedPost } from '../../types/HomeFeedData';
 
-export const DippinItem = (props: any) => {
+export const DippinMainItem = (props: any) => {
   const { dippin }: { dippin: FeedPost } = props;
 
   return (

@@ -1,12 +1,13 @@
 import { Box, Drawer, DrawerBody, DrawerContent, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { DippinItem } from './DippinItem';
+import { DippinDetailItem } from './DippinDetailItem';
 import { ModalNavBar } from '../floatingbar/ModalNavBar';
-import { FeedPost, HomeFeedData } from '../../types/HomeFeedData';
+import { FeedPost, HomeFeedData, Music } from '../../types/HomeFeedData';
 import { DippinPost } from './DippinPost';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setDefault } from '../../reducers/iframeReducer';
 import { DippinPostSmall } from './DippinPostSmall';
+import { popCustomList } from '../../reducers/dippinReducer';
 
 export const DippinDetail = ({
   isOpenDetail,
@@ -27,7 +28,12 @@ export const DippinDetail = ({
   const postfeeds = HomeFeedData; // 더미 데이터
 
   // 구성한 플레이리스트
-  const [customlist, setCustomList] = useState<Array<FeedPost>>([]);
+  const customlist = useSelector((state: any) => state.dippinReducer.customlist);
+
+  // 플레이리스트에서 제거
+  const removeFromList = (id: string) => {
+    dispatch(popCustomList(id));
+  };
 
   // 닫힐 때 실행되는 것들
   const onCloseDrawer = () => {
@@ -81,7 +87,7 @@ export const DippinDetail = ({
     <Drawer isOpen={isOpenDetail} onClose={onCloseDetail} size="md" onCloseComplete={onCloseDrawer}>
       <DrawerContent>
         <ModalNavBar
-          title={'디핑' + dippinid}
+          title="디핑"
           leftElement={
             <Box
               className="fa-light fa-angle-left"
@@ -127,7 +133,11 @@ export const DippinDetail = ({
             />
             <DrawerBody padding="0">
               <Box h="48px" w="full" />
-              성공?
+              {customlist.map((item: any, index: number) => (
+                <div key={index}>
+                  <DippinDetailItem {...item} />
+                </div>
+              ))}
             </DrawerBody>
           </DrawerContent>
         </Drawer>
