@@ -98,7 +98,7 @@ export const ProfileMain = () => {
             }}
             onClick={onClick}
           >
-            <FormLabel htmlFor="email-alerts" mb="0" fontSize="10px" textAlign="end">
+            <FormLabel htmlFor="email-alerts" mb="0" fontSize="10px">
               <i className="fa-thin fa-lock"> 게시글숨기기</i>
             </FormLabel>
           </Button>

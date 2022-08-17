@@ -1,16 +1,14 @@
 import { Container, Flex, Image, Box, Text, Input, Spacer, Link, Button } from '@chakra-ui/react';
 import { ModalNavBar } from '../../components/floatingbar/ModalNavBar';
-import { SetStateAction, useState } from 'react';
+import React, { SetStateAction, useState } from 'react';
 import { Tag } from '../../components/Tag';
-import React from 'react';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
+import { authAxios } from '../../api/common';
 
 export const ProfileEdit = () => {
   const props = {
     title: '프로필 수정',
-    leftElement: (
-      <Image src="/logo_icon.png" alt="logo" objectFit="contain" h="32px" margin="2px" />
-    ),
+    leftElement: <Box className="fa-light fa-angle-left" lineHeight="36px" fontSize="24px" bg="" />,
     rightElement: <Box className="fa-light fa-bars" lineHeight="36px" fontSize="24px" bg="" />,
   };
   const createTag = (e: any) => {
@@ -64,27 +62,26 @@ export const ProfileEdit = () => {
                 isDragging,
                 dragProps,
               }) => (
-                // write your building UI
                 <Box className="upload__image-wrapper">
                   <button
                     style={isDragging ? { color: 'red' } : undefined}
                     onClick={onImageUpload}
                     {...dragProps}
                   >
-                    이미지 등록
+                    프로필 이미지 등록
                   </button>
                   {imageList.map((image, index) => (
                     <Box key={index} className="image-item">
                       <Image
                         src={image.dataURL}
                         borderRadius="full"
-                        boxSize="88px"
+                        boxSize="96px"
                         alt="ProfileImg"
                         marginBottom="16px"
                       />
                       <Box className="image-item__btn-wrapper">
                         <Button
-                          width="88px"
+                          width="96px"
                           height="32px"
                           bg="cyan.400"
                           // size="lg"
