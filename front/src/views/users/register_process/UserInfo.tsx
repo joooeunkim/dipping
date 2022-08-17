@@ -76,7 +76,7 @@ export const UserInfo = (props: any) => {
   const dupleNicknameMsg = '사용 가능한 닉네임입니다!';
   const checkPasswordMsg = '비밀번호 확인 완료!';
 
-  console.log(props.socialFlag);
+  // console.log(props.socialFlag);
 
   return (
     <Box>

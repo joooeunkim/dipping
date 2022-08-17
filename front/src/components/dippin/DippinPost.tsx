@@ -91,7 +91,13 @@ export const DippinPost = (props: any) => {
           {likecount}
         </Box>
         <Spacer />
-        <Box className="fa-light fa-eraser" marginLeft="8px" />
+        <Box
+          className="fa-light fa-eraser"
+          marginLeft="8px"
+          onClick={() => {
+            alert('erase');
+          }}
+        />
         <Box className="fa-light fa-comment-plus" marginLeft="8px" onClick={onOpen} />
         <Box className="fa-light fa-share-nodes" marginLeft="8px" />
       </Flex>

@@ -120,7 +120,12 @@ export const DippinForm = (props: any) => {
           <Switch onChange={() => setOpenPost(!openPost)} />
         </Flex>
       </Box>
-      <Box onClick={newDippin}>
+      <Box
+        onClick={e => {
+          newDippin(e);
+          window.location.href = parent ? `/dippin/${parent}` : '/dippin';
+        }}
+      >
         <CyanButton title="작성" />
       </Box>
 
