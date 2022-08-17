@@ -80,6 +80,8 @@ export const PostComment = (props: any) => {
         .then(res => {
           e.target.value = '';
           getComments(commentinfo.id);
+          let content = document.getElementById('drawerBody') as HTMLInputElement | null;
+          content?.scrollTo(0, 0);
         })
         .catch(err => console.log(err));
     }
@@ -87,7 +89,16 @@ export const PostComment = (props: any) => {
 
   return (
     commentinfo && (
-      <Drawer trapFocus={false} placement="right" onClose={onClose} size="full" isOpen={isOpen}>
+      <Drawer
+        trapFocus={false}
+        placement="right"
+        onClose={onClose}
+        size="full"
+        isOpen={isOpen}
+        onCloseComplete={() => {
+          setComments([]);
+        }}
+      >
         <DrawerContent maxW="400px" h="full" padding="0">
           <ModalNavBar
             title="댓글"
@@ -101,7 +112,7 @@ export const PostComment = (props: any) => {
               />
             }
           />
-          <DrawerBody padding="0">
+          <DrawerBody padding="0" id="drawerBody">
             <Box h="48px" w="full" />
 
             <Box w="full" marginY="8px" bg="">
@@ -130,6 +141,7 @@ export const PostComment = (props: any) => {
             {comments.map((item: any, index: number) => (
               <PostCommentItem {...item} key={index} />
             ))}
+            <Box h="56px" />
           </DrawerBody>
           {/* input area */}
           <Box
