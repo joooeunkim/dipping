@@ -95,7 +95,11 @@ export const DippinPost = (props: any) => {
           className="fa-light fa-eraser"
           marginLeft="8px"
           onClick={() => {
-            alert('erase');
+            if (window.confirm('정말 삭제하시겠습니까?')) {
+              console.log('삭제');
+              authAxios.delete('/dipping?dippingId=' + dippin.id);
+              window.location.href = '/dippin';
+            }
           }}
         />
         <Box className="fa-light fa-comment-plus" marginLeft="8px" onClick={onOpen} />
