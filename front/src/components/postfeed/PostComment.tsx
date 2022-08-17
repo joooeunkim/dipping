@@ -28,6 +28,7 @@ export const PostComment = (props: any) => {
   const bg = useColorModeValue('white', 'gray.800');
   const color = useColorModeValue('gray.200', 'gray.600');
 
+  // 댓글 불러오기 파트
   const { commentinfo, onClose, isOpen } = props;
   const [comments, setComments] = useState<Array<Comment>>([]);
 
@@ -50,7 +51,7 @@ export const PostComment = (props: any) => {
     const data = res.data.data.comment;
     const main: Comment[] = data.map((e: any) => {
       return {
-        user: { name: 'name', profile_image: 'profile_image' } as User,
+        user: { name: e.nickname, profile_image: 'profile_image' } as User,
         comment: {
           content: e.content,
           last_modified: e.updatedAt,
@@ -61,6 +62,27 @@ export const PostComment = (props: any) => {
     });
     console.log(main);
     setComments(main);
+  };
+
+  // 댓글 작성 파트
+  // 검색 창 입력
+  const onKeyInput = (e: any) => {
+    if (e.key === 'Enter') {
+      const input = e.target.value;
+      authAxios
+        .post('/board/comment', {
+          comment: {
+            boardId: commentinfo.id,
+            content: input,
+            parentId: 0,
+          },
+        })
+        .then(res => {
+          e.target.value = '';
+          getComments(commentinfo.id);
+        })
+        .catch(err => console.log(err));
+    }
   };
 
   return (
@@ -145,7 +167,8 @@ export const PostComment = (props: any) => {
                       h="32px"
                       variant="flushed"
                       type="text"
-                      placeholder="검색어를 입력하세요."
+                      placeholder="댓글을 입력하세요."
+                      onKeyDown={onKeyInput}
                     />
                   </InputGroup>
                 </Box>

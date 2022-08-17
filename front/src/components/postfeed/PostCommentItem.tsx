@@ -18,7 +18,8 @@ export const PostCommentItem = (props: any) => {
   return (
     <Box w="full" marginY="8px" bg="">
       <Box
-        marginLeft={comment.parent ? '48px' : '16px'}
+        // marginLeft={comment.parent ? '48px' : '16px'}
+        marginLeft="16px"
         marginRight="16px"
         fontSize="14px"
         lineHeight="18px"
@@ -35,9 +36,9 @@ export const PostCommentItem = (props: any) => {
             <Box fontSize="12px" color="gray.500" marginY="8px">
               <Box display="inline">{comment.last_modified.substr(0, 10)}</Box>
               &nbsp;&nbsp;
-              <Box display="inline" fontWeight="600">
+              {/* <Box display="inline" fontWeight="600">
                 답글
-              </Box>
+              </Box> */}
             </Box>
           </Box>
         </Flex>
