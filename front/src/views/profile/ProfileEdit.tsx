@@ -1,26 +1,15 @@
-import {
-  Container,
-  Flex,
-  Image,
-  Box,
-  Text,
-  Input,
-  Spacer,
-  FormControl,
-  FormLabel,
-  Select,
-  Link,
-} from '@chakra-ui/react';
+import { Container, Flex, Image, Box, Text, Input, Spacer, Link, Button } from '@chakra-ui/react';
 import { ModalNavBar } from '../../components/floatingbar/ModalNavBar';
-import { SetStateAction, useState } from 'react';
+import React, { SetStateAction, useState } from 'react';
 import { Tag } from '../../components/Tag';
+import ImageUploading, { ImageListType } from 'react-images-uploading';
+import { authAxios } from '../../api/common';
+import axios from 'axios';
 
 export const ProfileEdit = () => {
   const props = {
     title: '프로필 수정',
-    leftElement: (
-      <Image src="/logo_icon.png" alt="logo" objectFit="contain" h="32px" margin="2px" />
-    ),
+    leftElement: <Box className="fa-light fa-angle-left" lineHeight="36px" fontSize="24px" bg="" />,
     rightElement: <Box className="fa-light fa-bars" lineHeight="36px" fontSize="24px" bg="" />,
   };
   const createTag = (e: any) => {
@@ -48,6 +37,27 @@ export const ProfileEdit = () => {
 
     setTags(_tags);
   };
+  const [images, setImages] = React.useState([]);
+  const maxNumber = 69;
+
+  const onChange = async (imageList: ImageListType, addUpdateIndex: number[] | undefined) => {
+    console.log(imageList, addUpdateIndex);
+    setImages(imageList as never[]);
+    const res: any = await authAxios.get('/profile/', {
+      params: {
+        profileImgUrl: addUpdateIndex,
+      },
+    });
+    console.log(res);
+
+    // axios({
+    //   method: 'post',
+    //   url: 'http://localhost:3000/api/profile/',
+    //   data: addUpdateIndex,
+    // }).then(({ data }) => {
+    //   console.log('Succesfully uploaded: ', JSON.stringify(data));
+    // });
+  };
 
   const [tags, setTags] = useState<SetStateAction<any>>([]);
 
@@ -57,15 +67,56 @@ export const ProfileEdit = () => {
       <Container maxW="480px" w="100%" bg="" h="100vh" margin="0 auto">
         <Flex flexDirection="column" alignItems="center" marginTop="40px" marginBottom="40px">
           <Box>
-            <Image
-              src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-              borderRadius="full"
-              htmlWidth="88px"
-              htmlHeight="88px"
-              alt="ProfileImg"
-              marginBottom="16px"
-            />
-            <Text>사진 바꾸기</Text>
+            <ImageUploading multiple value={images} onChange={onChange} maxNumber={maxNumber}>
+              {({
+                imageList,
+                onImageUpload,
+                onImageRemoveAll,
+                onImageUpdate,
+                onImageRemove,
+                isDragging,
+                dragProps,
+              }) => (
+                <Box className="upload__image-wrapper">
+                  <button
+                    style={isDragging ? { color: 'red' } : undefined}
+                    onClick={onImageUpload}
+                    {...dragProps}
+                  >
+                    프로필 이미지 등록
+                  </button>
+                  {imageList.map((image, index) => (
+                    <Box key={index} className="image-item">
+                      <Image
+                        src={image.dataURL}
+                        borderRadius="full"
+                        boxSize="96px"
+                        alt="ProfileImg"
+                        marginBottom="16px"
+                      />
+                      <Box className="image-item__btn-wrapper">
+                        <Button
+                          width="96px"
+                          height="32px"
+                          bg="cyan.400"
+                          // size="lg"
+                          color="white"
+                          _hover={{
+                            bg: 'cyan.500',
+                          }}
+                          _active={{
+                            bg: 'cyan.500',
+                          }}
+                          onClick={() => onImageUpdate(index)}
+                        >
+                          이미지 변경
+                        </Button>
+                      </Box>
+                    </Box>
+                  ))}
+                </Box>
+              )}
+            </ImageUploading>
           </Box>
         </Flex>
         <Flex>
@@ -93,15 +144,6 @@ export const ProfileEdit = () => {
               ))
             : ''}
         </Box>
-        <Flex marginBottom="56px">
-          <FormControl>
-            <FormLabel marginBottom="8px">추천 리스트</FormLabel>
-            <Select height="32px" placeholder="선택된 리스트">
-              <option>1번 리스트</option>
-              <option>2번 리스트</option>
-            </Select>
-          </FormControl>
-        </Flex>
         <Flex>
           <Link href="edit/person">개인정보 변경</Link>
         </Flex>
