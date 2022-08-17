@@ -72,12 +72,12 @@ export const PlaylistPost = (props: any) => {
         <Box position="absolute" left="12vw" fontSize="24px" lineHeight="30px">
           {postfeed.likes}
         </Box>
-        <PostComment
+        {/* <PostComment
           user={postfeed.user}
           article={postfeed.article}
           last_modified={postfeed.last_modified}
           comments={postfeed.comments}
-        />
+        /> */}
         <Box
           position="absolute"
           right="12vw"
