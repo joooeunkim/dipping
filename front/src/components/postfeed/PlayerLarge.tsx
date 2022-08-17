@@ -110,7 +110,7 @@ export const PlayerLarge = (props: any) => {
       </Box>
 
       {/* song info */}
-      <Box position="relative" h="48px" w="full" bg="" textAlign="center" marginY="4px">
+      <Box position="relative" h="48px" w="full" bg="" textAlign="center" marginY="8px">
         <Box
           position="relative"
           left="0vw"
@@ -127,7 +127,7 @@ export const PlayerLarge = (props: any) => {
           position="relative"
           left="0vw"
           top="4px"
-          fontSize="18px"
+          fontSize="16px"
           fontWeight="500"
           lineHeight="24px"
           bg=""
