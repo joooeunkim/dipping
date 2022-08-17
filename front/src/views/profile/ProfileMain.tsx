@@ -11,26 +11,41 @@ import {
   Link,
   FormHelperText,
   Spacer,
-  useControllableProp,
   useControllableState,
+  Avatar,
 } from '@chakra-ui/react';
 import { ModalNavBar } from '../../components/floatingbar/ModalNavBar';
 import { FeedAll } from '../../components/FeedUserShort';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { authAxios } from '../../api/common';
+import { useLocation } from 'react-router-dom';
 
 export const ProfileMain = () => {
+  const [profile, setProfile] = useState<any>();
+  const location = useLocation();
+  const search = location.search.split('=')[1];
+  console.log(search);
+  useEffect(() => {
+    authAxios.get(search ? '/profiles/?userNickname=' + search : '/profiles').then((res: any) => {
+      setProfile(res.data.data.user);
+      console.log(res);
+    });
+  }, []);
+
   const props = {
     title: '프로필',
     leftElement: (
       <Image src="/logo_icon.png" alt="logo" objectFit="contain" h="32px" margin="2px" />
     ),
-    rightElement: <Box className="fa-light fa-bars" lineHeight="36px" fontSize="24px" bg="" />,
+    rightElement: (
+      <Box
+        className="fa-light fa-arrow-right-from-bracket"
+        lineHeight="36px"
+        fontSize="24px"
+        bg=""
+      />
+    ),
   };
-  const [show, setShow] = useState(false);
-  const [internalShow, setInternalShow] = useControllableState({
-    onChange: setShow,
-  });
-  const onClick = () => setInternalShow((currentShow: any) => !currentShow);
 
   return (
     <Box>
@@ -39,33 +54,27 @@ export const ProfileMain = () => {
         <FormControl marginTop="16px" marginBottom="16px">
           <Flex marginRight="0px" paddingLeft="24px">
             <Box>
-              <Image
-                src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                borderRadius="full"
-                htmlWidth="88px"
-                htmlHeight="88px"
-                alt="ProfileImg"
-              />
+              <Avatar w="20" h="20" name={profile?.nickname} src={profile?.profileImgUrl} />
               <Text textAlign="center" fontSize="16px">
-                nick
+                {profile?.nickname}
               </Text>
             </Box>
             <Spacer />
             <Box w="200px">
               <Flex height="72px">
                 <FormHelperText p="2" textAlign="center" fontSize="16px">
-                  <Text>11</Text>
+                  <Text>{profile?.boardCount}</Text>
                   <Text>게시물</Text>
                 </FormHelperText>
                 <Link href="/Follow">
                   <FormHelperText p="2" textAlign="center" fontSize="16px">
-                    <Text>12</Text>
+                    <Text>{profile?.followerCount}</Text>
                     <Text>팔로워</Text>
                   </FormHelperText>
                 </Link>
                 <Link href="/Follow">
                   <FormHelperText p="2" textAlign="center" fontSize="16px">
-                    <Text>13</Text>
+                    <Text>{profile?.followingCount}</Text>
                     <Text>팔로잉</Text>
                   </FormHelperText>
                 </Link>
@@ -80,30 +89,12 @@ export const ProfileMain = () => {
         </FormControl>
         <Flex marginLeft="24px" marginBottom="32px">
           <Text fontSize="16px" color="gray.500">
-            #힙 #신나는 #코딩중
+            {profile?.musicTaste}
           </Text>
         </Flex>
-        <FormControl display="flex" alignItems="center" justifyContent="right">
-          <Button
-            w="25%"
-            height="24px"
-            bg="cyan.400"
-            // size="lg"
-            color="white"
-            _hover={{
-              bg: 'cyan.500',
-            }}
-            _active={{
-              bg: 'cyan.500',
-            }}
-            onClick={onClick}
-          >
-            <FormLabel htmlFor="email-alerts" mb="0" fontSize="10px">
-              <i className="fa-thin fa-lock"> 게시글숨기기</i>
-            </FormLabel>
-          </Button>
-        </FormControl>
-        <Box marginTop="32px">{show ? <FeedAll /> : null}</Box>
+        <Box marginTop="32px">
+          <FeedAll />
+        </Box>
       </Container>
     </Box>
   );
