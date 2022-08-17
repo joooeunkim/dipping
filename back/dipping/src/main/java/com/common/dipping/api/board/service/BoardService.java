@@ -119,6 +119,11 @@ public class BoardService {
         return list;
     }
 
+    public List<Board> getAllBoardsByUserId(Long userId) {
+        List<Board> boardList = boardRepository.findAllByUserId(userId);
+        return boardList;
+    }
+
     public List<ProfilePostDto> getAllBoardByUserId(Long userId){
         List<Board> boardList = boardRepository.findAllByUserId(userId);
         List<ProfilePostDto> list = new ArrayList<>();
