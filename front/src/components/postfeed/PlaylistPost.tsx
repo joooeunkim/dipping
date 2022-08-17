@@ -91,12 +91,14 @@ export const PlaylistPost = (props: any) => {
         <Box position="absolute" left="12vw" fontSize="24px" lineHeight="30px">
           {postfeed.likes}
         </Box>
-        {/* <PostComment
-          user={postfeed.user}
-          article={postfeed.article}
-          id={postfeed.id}
-          last_modified={postfeed.last_modified}
-        /> */}
+        <Box
+          position="absolute"
+          right="20vw"
+          className="fa-regular fa-comment"
+          fontSize="24px"
+          lineHeight="30px"
+          // onClick={'onOpen'}
+        />
         <Box
           position="absolute"
           right="12vw"

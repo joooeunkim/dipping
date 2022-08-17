@@ -1,4 +1,4 @@
-import { Box, Spinner } from '@chakra-ui/react';
+import { Box, Spinner, useDisclosure } from '@chakra-ui/react';
 import { useRef, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
@@ -12,7 +12,7 @@ export const HomeMain = () => {
   const dispatch = useDispatch();
 
   // 요청에 쓰일 파라미터
-  const [page, setPage] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
   const [mode, setMode] = useState<string>('user');
   // 화면에 표시할 리스트
   const [followposts, setFollowPosts] = useState<FeedPost[]>([]);
@@ -28,9 +28,6 @@ export const HomeMain = () => {
 
   // 새 요청 받아서 리스트에 추가
   useEffect(() => {
-    if (page === 0) {
-      return;
-    }
     getMainPage(mode, page);
   }, [page]);
 
@@ -50,7 +47,8 @@ export const HomeMain = () => {
         console.log('없음');
         if (mode === 'user') {
           setMode('recommend');
-          setPage(0);
+          console.log('setmode recommend');
+          setPage(1);
         } else if (mode === 'recommend') {
           endRef.current = true;
         }
@@ -61,8 +59,8 @@ export const HomeMain = () => {
             id: e.item.boardId,
             likes: e.item.likeCount,
             article: e.item.content,
-            // 태그어딨어~~~
-            // last_modified: e.item.updatedAt,
+            tags: '#' + e.tag.join(' #'),
+            last_modified: e.item.updatedAt,
             user: {
               name: e.item.nickname,
               profile_image: e.item.userId,
@@ -120,13 +118,18 @@ export const HomeMain = () => {
   };
   // 무한 스크롤로 업데이트 하기 위한 코드 end
 
+  // 댓글 drawer 제어
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Box>
       <MainNavBar />
       {followposts.length > 0 ? (
         followposts.map((item, index) => <PlaylistPost postfeed={item} id={index} key={index} />)
       ) : (
-        <Box textAlign="center">{!load && '팔로잉 포스트가 없습니다.'}</Box>
+        <Box paddingY="24px" textAlign="center" bg="rgba(222,222,222,0.1)">
+          {!load && '팔로잉 포스트가 없습니다.'}
+        </Box>
       )}
       {mode === 'recommend' && (
         <Box

@@ -125,12 +125,14 @@ export const PlayerLarge = (props: any) => {
         </Box>
         <Box
           position="relative"
-          left="0vw"
+          left="10%"
           top="4px"
           fontSize="16px"
           fontWeight="500"
           lineHeight="24px"
-          bg=""
+          w="80%"
+          h="24px"
+          overflow="hidden"
         >
           {playlist[currentitem].title}
         </Box>
