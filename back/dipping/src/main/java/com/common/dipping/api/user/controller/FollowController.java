@@ -7,6 +7,7 @@ import com.common.dipping.api.user.domain.dto.FollowingListDto;
 import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.service.FollowService;
 import com.common.dipping.api.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ public class FollowController {
     private final AlarmService alarmService;
     private final UserService userService;
 
+    @Operation(summary = "팔로우/취소 요청", description = "요청된 userId에 팔로우 요청, 이미 팔로우 중이라면 팔로우 취소")
     @PostMapping("/follow")
     public ResponseEntity<String> followUser(@RequestBody FollowDto followDto) {
         // 본인에게 보내는 팔로잉 차단
@@ -49,6 +51,7 @@ public class FollowController {
 //        Long id = followService.getFollowIdByFromEmailToEmail(followDto.getFromUser(), followDto.getToUser());
 //        followService.unFollow(id);
 //    }
+    @Operation(summary = "팔로잉/팔로우 목록 ", description = "닉네임으로 해당 유저의 팔로워 목록, 해당 유저의 팔로잉 목록 반환")
     @GetMapping("/follow")
     public ResponseEntity<?> followList(@Param("nickname") String nickname) {
         Map<String,Object> result = new HashMap<>();

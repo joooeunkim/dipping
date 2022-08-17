@@ -7,6 +7,7 @@ import com.common.dipping.api.alarm.service.AlarmService;
 import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.repository.UserRepository;
 import com.common.dipping.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,6 +26,7 @@ public class AlarmController {
 
     private final AlarmService alarmService;
 
+    @Operation(summary = "알람 목록", description = "사용자의 알람 목록을 반환")
     @GetMapping()
     public ResponseEntity<?> AlarmList(@AuthenticationPrincipal UserDetailsImpl requestUser) {
 
