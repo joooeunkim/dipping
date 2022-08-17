@@ -162,7 +162,7 @@ export const AddMusic = ({
           />
           <Input
             lineHeight="48px"
-            placeholder="Basic usage"
+            placeholder="노래제목 검색"
             onChange={onChangeDebounce}
             variant="unstyled"
           />

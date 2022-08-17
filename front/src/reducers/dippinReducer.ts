@@ -4,9 +4,31 @@ import { Music } from '../types/HomeFeedData';
 const dippinReducer = createSlice({
   name: 'dippinReducer',
   initialState: {
+    input: '',
+    mode: 'recent',
+    page: 0,
+    dippinlist: new Array<Music>(),
     customlist: new Array<Music>(),
   },
   reducers: {
+    setInput(state, { payload: input }) {
+      return { ...state, input: input };
+    },
+    setMode(state, { payload: mode }) {
+      return { ...state, mode: mode };
+    },
+    setPage(state, { payload: page }) {
+      return { ...state, page: page };
+    },
+    addPage(state) {
+      return { ...state, page: state.page + 1 };
+    },
+    pushDippinList(state, { payload: newpage }) {
+      return { ...state, dippinlist: [...state.dippinlist, ...newpage] };
+    },
+    setDippinList(state, { payload: newlist }) {
+      return { ...state, dippinlist: [...newlist] };
+    },
     pushCustomList(state, { payload: music }) {
       return { ...state, customlist: [...state.customlist, music] };
     },
@@ -22,5 +44,15 @@ const dippinReducer = createSlice({
   },
 });
 
-export const { pushCustomList, popCustomList, setCustomList } = dippinReducer.actions;
+export const {
+  setInput,
+  setMode,
+  setPage,
+  addPage,
+  pushDippinList,
+  setDippinList,
+  pushCustomList,
+  popCustomList,
+  setCustomList,
+} = dippinReducer.actions;
 export default dippinReducer.reducer;

@@ -24,76 +24,29 @@ export const PlaylistPost = (props: any) => {
   return (
     <Box position="relative" h="" w="full" borderBottom="1px" borderColor={borderColor} bg="">
       {/* top bar */}
-      <Box position="relative" h="44px" w="full" bg="">
+      <Box marginY="4px" position="relative" h="44px" w="full" bg="">
         <Box
           position="absolute"
           left="4vw"
-          top="10px"
-          fontSize="20px"
-          fontWeight="600"
-          lineHeight="24px"
-          bg=""
-        >
-          {postfeed.title}
-        </Box>
-        <Box
-          position="absolute"
-          right="4vw"
           top="6px"
           fontSize="16px"
           fontWeight="300"
           lineHeight="32px"
           bg=""
         >
-          {postfeed.user.name}
           <Avatar
-            marginLeft="1vw"
+            marginRight="1vw"
             boxSize="32px"
             name="mocha_oca"
             src={postfeed.user.profile_image}
           />
+          {postfeed.user.name}
         </Box>
       </Box>
 
       {/* music player */}
       {/* <PlayerLarge /> */}
       <PlayerLarge playlist={postfeed.playlist} id={id} />
-
-      {/* icon set */}
-      <Box position="relative" h="30px" w="full" bg="" marginBottom="16px">
-        <Box
-          position="absolute"
-          left="4vw"
-          className="fa-solid fa-heart"
-          fontSize="24px"
-          lineHeight="30px"
-          color="cyan.400"
-        />
-        <Box position="absolute" left="12vw" fontSize="24px" lineHeight="30px">
-          {postfeed.likes}
-        </Box>
-        <PostComment
-          user={postfeed.user}
-          article={postfeed.article}
-          last_modified={postfeed.last_modified}
-          comments={postfeed.comments}
-        />
-        <Box
-          position="absolute"
-          right="12vw"
-          className="fa-regular fa-share-nodes"
-          fontSize="24px"
-          lineHeight="30px"
-        />
-        <Box
-          position="absolute"
-          right="4vw"
-          className="fa-solid fa-bookmark"
-          fontSize="24px"
-          lineHeight="30px"
-          color="cyan.400"
-        />
-      </Box>
 
       {/* article set */}
       <Box position="relative" h="" w="full" bg="" marginBottom="16px">
@@ -123,6 +76,42 @@ export const PlaylistPost = (props: any) => {
         >
           {postfeed.tags}
         </Box>
+      </Box>
+
+      {/* icon set */}
+      <Box position="relative" h="30px" w="full" bg="" marginBottom="16px">
+        <Box
+          position="absolute"
+          left="4vw"
+          className="fa-solid fa-heart"
+          fontSize="24px"
+          lineHeight="30px"
+          color="cyan.400"
+        />
+        <Box position="absolute" left="12vw" fontSize="24px" lineHeight="30px">
+          {postfeed.likes}
+        </Box>
+        {/* <PostComment
+          user={postfeed.user}
+          article={postfeed.article}
+          id={postfeed.id}
+          last_modified={postfeed.last_modified}
+        /> */}
+        <Box
+          position="absolute"
+          right="12vw"
+          className="fa-regular fa-share-nodes"
+          fontSize="24px"
+          lineHeight="30px"
+        />
+        <Box
+          position="absolute"
+          right="4vw"
+          className="fa-solid fa-bookmark"
+          fontSize="24px"
+          lineHeight="30px"
+          color="cyan.400"
+        />
       </Box>
     </Box>
   );

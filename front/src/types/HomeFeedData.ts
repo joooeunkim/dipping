@@ -31,6 +31,7 @@ export type FeedPost = {
   user: User;
   playlist: Array<Music>;
   comments: Array<Comment>;
+  myLike?: boolean;
 };
 
 export const HomeFeedData: Array<FeedPost> = [
