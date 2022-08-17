@@ -76,12 +76,12 @@ export const UserInfo = (props: any) => {
   const dupleNicknameMsg = '사용 가능한 닉네임입니다!';
   const checkPasswordMsg = '비밀번호 확인 완료!';
 
-  // console.log(props.socialFlag);
+  console.log('token', props.token);
 
   return (
     <Box>
       <Box pr="1" pl="1" position="relative">
-        <Flex display={props.socialFlag ? 'none' : 'flex'}>
+        <Flex display={props.token ? 'none' : 'flex'}>
           <Input
             id="email"
             onChange={changeHandler}
@@ -117,7 +117,7 @@ export const UserInfo = (props: any) => {
 
         <Text color="cyan.400">{dupleNickname ? dupleNicknameMsg : ''}</Text>
         <Input
-          display={props.socialFlag ? 'none' : 'flex'}
+          display={props.token ? 'none' : 'flex'}
           id="password"
           variant="flushed"
           focusBorderColor="cyan.400"
@@ -129,7 +129,7 @@ export const UserInfo = (props: any) => {
           value={registerState.password || ''}
         />
         <Input
-          display={props.socialFlag ? 'none' : 'flex'}
+          display={props.token ? 'none' : 'flex'}
           variant="flushed"
           focusBorderColor="cyan.400"
           placeholder="비밀번호확인"
