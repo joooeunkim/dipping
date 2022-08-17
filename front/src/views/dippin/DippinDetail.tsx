@@ -10,6 +10,7 @@ import { DippinPostSmall } from '../../components/dippin/DippinPostSmall';
 import { popCustomList, setCustomList } from '../../reducers/dippinReducer';
 import { authAxios } from '../../api/common';
 import { useNavigate, useParams } from 'react-router-dom';
+import { PostFeedForm } from '../../components/PostFeedForm';
 
 export const DippinDetail = () => {
   const dippinid: number = parseInt(useParams().dippinid as string);
@@ -108,7 +109,7 @@ export const DippinDetail = () => {
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const { isOpen: writeIsOpen, onOpen: writeOnOpen, onClose: writeOnClose } = useDisclosure();
   return (
     <Box>
       <ModalNavBar
@@ -177,10 +178,34 @@ export const DippinDetail = () => {
               _active={{
                 bg: 'cyan.500',
               }}
-              onClick={() => {}}
+              onClick={writeOnOpen}
             >
               포스트 작성
             </Button>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+      <Drawer isOpen={writeIsOpen} onClose={writeOnClose} size="md">
+        <DrawerContent>
+          <ModalNavBar
+            title="포스트"
+            leftElement={
+              <Box
+                className="fa-light fa-angle-left"
+                fontSize="28px"
+                lineHeight="36px"
+                bg=""
+                onClick={() => {
+                  writeOnClose();
+                  onClose();
+                }}
+              />
+            }
+          />
+          <DrawerBody paddingX="24px">
+            <Box h="48px" w="full" />
+
+            <PostFeedForm musicList={customlist} />
           </DrawerBody>
         </DrawerContent>
       </Drawer>

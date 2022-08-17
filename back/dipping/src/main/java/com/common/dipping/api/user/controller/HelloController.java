@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api")
 public class HelloController {
 
-    @Operation(summary = "test hello", description = "hello api example")
+    @Operation(summary = "API 테스트", description = "정상적 응답 확인용")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK !!"),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST !!"),
@@ -26,6 +26,7 @@ public class HelloController {
         return ResponseEntity.ok("성공적");
     }
 
+    @Operation(summary = "API 테스트", description = "로그인 후 정상적으로 토큰에서 사용자 정보 추출 확인용")
     @GetMapping(value = "/hi")
     public ResponseEntity<String> hello2(@AuthenticationPrincipal UserDetailsImpl userInfo){
         //@AuthenticationPrincipal 어노테이션을 UserDetailsImpl과 함께 사용하면 현재 토큰에 저장되어있는 사용자 정보를 다음과 같이 추출할 수 있습니다!

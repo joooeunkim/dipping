@@ -45,7 +45,7 @@ export const WritePost = () => {
       isOpen={isEditing}
       onOpen={setIsEditing.on}
       onClose={setIsEditing.off}
-      closeOnBlur={false}
+      // closeOnBlur={false}
     >
       <PopoverTrigger>
         <Circle
@@ -53,13 +53,25 @@ export const WritePost = () => {
           position="relative"
           bottom={size * 0.1 + 'px'}
           bgGradient="linear(to-br, blue.400, cyan.200)"
+          // onClick={() => (isEditing ? setIsEditing.off : setIsEditing.on)}
         >
           <Box fontSize={size * 0.5 + 'px'} className={icons_light[2]} color={bgColor} />
         </Circle>
       </PopoverTrigger>
       <Portal>
-        <PopoverContent w="140px" bg="none" border="0">
-          <PopoverBody>
+        <PopoverContent
+          w="140px"
+          bg="none"
+          border="0"
+          _focus={{
+            boxShadow: 'none',
+          }}
+        >
+          <PopoverBody
+            _focus={{
+              boxShadow: 'none',
+            }}
+          >
             <Button
               bg={popOverColor}
               color="white"

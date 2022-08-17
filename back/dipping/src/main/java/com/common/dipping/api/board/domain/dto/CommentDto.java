@@ -14,4 +14,5 @@ public class CommentDto {
 	private Long boardId;
 	private Boolean myLike;
 	private int likeCount;
+	private String nickname;
 }

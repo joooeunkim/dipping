@@ -1,11 +1,28 @@
-import { Box, useColorModeValue, Image, Avatar, Center, Flex, Spacer } from '@chakra-ui/react';
+import {
+  Box,
+  useColorModeValue,
+  Image,
+  Avatar,
+  Center,
+  Flex,
+  Spacer,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  useDisclosure,
+  DrawerBody,
+} from '@chakra-ui/react';
 import { useState } from 'react';
 import { authAxios } from '../../api/common';
+import { DippinForm } from '../DippinForm';
+import { ModalNavBar } from '../floatingbar/ModalNavBar';
 import { PlayerSmall } from './PlayerSmall';
 
 export const DippinPost = (props: any) => {
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { dippin, id } = props;
   const [mylike, setMyLike] = useState(dippin.myLike);
@@ -74,14 +91,46 @@ export const DippinPost = (props: any) => {
           {likecount}
         </Box>
         <Spacer />
-        <Box className="fa-light fa-eraser" marginLeft="8px" />
-        <Box className="fa-light fa-pencil" marginLeft="8px" />
-        <Box className="fa-light fa-comment-plus" marginLeft="8px" />
+        <Box
+          className="fa-light fa-eraser"
+          marginLeft="8px"
+          onClick={() => {
+            if (window.confirm('정말 삭제하시겠습니까?')) {
+              console.log('삭제');
+              authAxios.delete('/dipping?dippingId=' + dippin.id);
+              window.location.href = '/dippin';
+            }
+          }}
+        />
+        <Box className="fa-light fa-comment-plus" marginLeft="8px" onClick={onOpen} />
         <Box className="fa-light fa-share-nodes" marginLeft="8px" />
       </Flex>
 
       {/* music player */}
       {dippin.playlist.length > 0 && <PlayerSmall playlist={dippin.playlist} id={id} />}
+
+      <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="full">
+        <DrawerOverlay />
+        <DrawerContent>
+          <ModalNavBar
+            title="디핑"
+            leftElement={
+              <Box
+                className="fa-light fa-angle-left"
+                fontSize="28px"
+                lineHeight="36px"
+                bg=""
+                onClick={onClose}
+              />
+            }
+            // rightElement={'완료'}
+          />
+          <DrawerBody>
+            <Box h="48px" w="full" />
+            <DippinForm parent={dippin.id} />
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
 
       <Box h="16px" />
     </Box>

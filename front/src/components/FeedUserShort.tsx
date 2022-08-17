@@ -1,4 +1,18 @@
-import { Box, Text, Flex, Image, Grid, GridItem, Spacer, AspectRatio } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Flex,
+  Image,
+  Grid,
+  GridItem,
+  Spacer,
+  AspectRatio,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+} from '@chakra-ui/react';
 
 export const HomeFeed = () => {
   return (
@@ -204,5 +218,28 @@ export const UserShort = () => {
         </Box>
       </Flex>
     </Box>
+  );
+};
+
+export const FeedAll = () => {
+  return (
+    <Tabs isFitted margin="0px">
+      <TabList>
+        <Tab padding="0">내 게시글</Tab>
+        <Tab padding="0">내 디핑 게시글</Tab>
+        <Tab padding="0">북마크 게시글</Tab>
+      </TabList>
+      <TabPanels>
+        <TabPanel paddingLeft="0" paddingRight="0">
+          <HomeFeed />
+        </TabPanel>
+        <TabPanel paddingLeft="0" paddingRight="0">
+          <DippinFeed />
+        </TabPanel>
+        <TabPanel paddingLeft="0" paddingRight="0">
+          <UserShort />
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
   );
 };

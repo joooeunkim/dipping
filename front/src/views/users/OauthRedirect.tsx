@@ -7,7 +7,7 @@ import { SET_TOKEN } from '../../reducers/Auth';
 import { setDupEmail, setEmail, setProvider } from '../../reducers/registerReducer';
 
 export const OauthRedirect = () => {
-  let token = useLocation().search.split('=')[1];
+  let token: string = useLocation().search.split('=')[1];
   let role = parseJwt(token).roles[0].authority;
   let email = parseJwt(token).sub;
   console.log(parseJwt(token));
@@ -18,7 +18,16 @@ export const OauthRedirect = () => {
   useEffect(() => {
     dispatch(SET_TOKEN(token));
 
-    navigate('/process', { state: 'guest' });
+    if (role === 'ROLE_USER') {
+      // localStorage.removeItem('accessToken');
+      localStorage.setItem('accessToken', token);
+      window.location.href = '/';
+    } else {
+      navigate('/process', {
+        state: token,
+      });
+    }
+
     dispatch(setEmail(email));
     dispatch(setDupEmail(true));
     // dispatch(setProvider())
