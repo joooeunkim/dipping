@@ -169,6 +169,57 @@ public class BoardController {
     }
 
     @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "사용자 피드 목록 조회 성공", content = @Content(schema = @Schema(implementation = BoardResponse.class)))})
+    @Operation(summary = "사용자 피드 목록 조회", description = "userId 입력시 단일 조회하여 피드 정보와 음악 정보를 조회")
+    @GetMapping("/self")
+    public ResponseEntity<?> getBoardListByUserId(@Param("userId") Long userId) {
+
+        Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<String, Object>();
+
+        List<Object> posts = new ArrayList<>();
+        List<Board> boards = boardService.getAllBoardsByUserId(userId);
+
+        for (int i=0;i<boards.size();i++) {
+            Map<String, Object> item = new HashMap<>();
+            BoardResponse boardResponse = new BoardResponse(boards.get(i));
+            Long num = Long.valueOf(i) + 1;
+            boardResponse.setId(num);
+            boardResponse.setLikeCount(heartService.getCountByBoardId(boards.get(i)));
+            boardResponse.setMyLike(heartService.isMylikeByBoardId(userId, boards.get(i)));
+            boardResponse.setCommentCount(commentService.getCountByBoardId(boards.get(i)));
+            item.put("item", boardResponse);
+
+            List<BoardSong> boardSongs = boardService.getBoardSongAllById(boards.get(i));
+            List<BoardSongDto> boardSongDtos = new ArrayList<>();
+            if (!boardSongs.isEmpty()) {
+                for (BoardSong boardSong : boardSongs) {
+                    BoardSongDto boardSongDto = new BoardSongDto();
+                    boardSongDto.setId(boardSong.getId());
+                    boardSongDto.setBoardId(boardSong.getBoard().getId());
+                    boardSongDto.setSongTitle(boardSong.getSongTitle());
+                    boardSongDto.setSongSinger(boardSong.getSongSinger());
+                    boardSongDto.setSongUrl(boardSong.getSongUrl());
+                    boardSongDto.setSongImgUrl(boardSong.getSongImgUrl());
+                    boardSongDtos.add(boardSongDto);
+                }
+                item.put("music", boardSongDtos);
+            }
+
+            List<String> postTagDtos = boardService.getPostTagByBoard(boards.get(i));
+            item.put("tag", postTagDtos);
+
+            posts.add(item);
+        }
+
+        result.put("code", 201);
+        data.put("posts", posts);
+        result.put("data", data);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "팔로잉 피드 목록 조회 성공", content = @Content(schema = @Schema(implementation = BoardResponse.class ))) })
     @Operation(summary = "팔로잉 피드 목록 조회", description = "요청 유저가 팔로잉 중인 유저들의 최근 7일간의 피드 정보와 음악 정보를 조회")
     @GetMapping("/user")
