@@ -120,7 +120,7 @@ public class BoardService {
     }
 
     public List<ProfilePostDto> getAllBoardByUserId(Long userId){
-        List<Board> boardList = boardRepository.findAllWithUserId(userId);
+        List<Board> boardList = boardRepository.findAllByUserId(userId);
         List<ProfilePostDto> list = new ArrayList<>();
         for(Board board: boardList){
             List<BoardSong> boardSongList = getBoardSongAllById(board);
@@ -135,8 +135,8 @@ public class BoardService {
         return list;
     }
 
-    public boolean deleteBoard(Long boardId) {
-        boardRepository.deleteById(boardId);
+    public boolean deleteBoard(Long boardId,Long userId) {
+        boardRepository.deleteByIdAndUserId(boardId,userId);
         return boardRepository.existsById(boardId);
     }
 

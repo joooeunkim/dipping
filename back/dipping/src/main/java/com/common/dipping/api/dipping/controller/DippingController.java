@@ -135,8 +135,8 @@ public class DippingController {
 
 
     @DeleteMapping
-    public ResponseEntity deleteDipping(@RequestParam("dippingId") Long dippingId){
-        boolean result = dippingService.deleteDipping(dippingId);
+    public ResponseEntity deleteDipping(@AuthenticationPrincipal UserDetailsImpl userInfo,@RequestParam("dippingId") Long dippingId){
+        boolean result = dippingService.deleteDipping(dippingId,userInfo.getId());
         if(!result){
             return new ResponseEntity<Void>(HttpStatus.OK);
         }else {
