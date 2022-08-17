@@ -59,6 +59,7 @@ export const DippinMain = () => {
       params: {
         sort: mode,
         pageNum: page + 1,
+        search: query,
       },
     });
     console.log(res);

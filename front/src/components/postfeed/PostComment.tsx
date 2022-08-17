@@ -18,6 +18,9 @@ import {
   DrawerContent,
   DrawerCloseButton,
 } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { authAxios } from '../../api/common';
+import { Comment, FeedPost, User } from '../../types/HomeFeedData';
 import { ModalNavBar } from '../floatingbar/ModalNavBar';
 import { PostCommentItem } from './PostCommentItem';
 
@@ -26,7 +29,38 @@ export const PostComment = (props: any) => {
   const color = useColorModeValue('gray.200', 'gray.600');
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { user, article, last_modified, comments } = props;
+  const { user, article, id, last_modified } = props;
+  const [comments, setComments] = useState<Array<Comment>>([]);
+
+  useEffect(() => {
+    console.log('PostComment: load id ' + id);
+    getComments(id);
+  }, [id]);
+
+  // 백엔드에 요청
+  const getComments = async (id: number) => {
+    const res: any = await authAxios.get('/board/comment', {
+      params: {
+        boardId: id,
+      },
+    });
+    console.log(res);
+
+    const data = res.data.data.comment;
+    const main: Comment[] = data.map((e: any) => {
+      return {
+        user: { name: 'name', profile_image: 'profile_image' } as User,
+        comment: {
+          content: e.content,
+          last_modified: e.updatedAt,
+          parent: e.parentId,
+          id: e.commentId,
+        },
+      };
+    });
+    console.log(main);
+    setComments(main);
+  };
 
   return (
     <>

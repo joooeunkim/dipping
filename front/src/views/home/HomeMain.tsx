@@ -55,7 +55,7 @@ export const HomeMain = () => {
           endRef.current = true;
         }
       } else {
-        const posts = res.data.data;
+        const posts = res.data.data.posts;
         const list: FeedPost[] = posts.map((e: any) => {
           return {
             id: e.item.boardId,
@@ -123,10 +123,25 @@ export const HomeMain = () => {
   return (
     <Box>
       <MainNavBar />
-      {followposts.map((item, index) => (
-        <PlaylistPost postfeed={item} id={index} key={index} />
-      ))}
-      {mode === 'recommend' && <Box> 추천 포스트 </Box>}
+      {followposts.length > 0 ? (
+        followposts.map((item, index) => <PlaylistPost postfeed={item} id={index} key={index} />)
+      ) : (
+        <Box textAlign="center">{!load && '팔로잉 포스트가 없습니다.'}</Box>
+      )}
+      {mode === 'recommend' && (
+        <Box
+          paddingTop="40px"
+          paddingBottom="8px"
+          paddingX="24px"
+          fontSize="24px"
+          color="cyan.400"
+          bg="rgba(222,222,222,0.1)"
+          borderBottom="1px"
+          borderColor="inherit"
+        >
+          추천 포스트
+        </Box>
+      )}
       {recommendposts.map((item, index) => (
         <PlaylistPost postfeed={item} id={index} key={index} />
       ))}
