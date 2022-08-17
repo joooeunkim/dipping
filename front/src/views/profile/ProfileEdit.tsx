@@ -4,6 +4,7 @@ import React, { SetStateAction, useState } from 'react';
 import { Tag } from '../../components/Tag';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
 import { authAxios } from '../../api/common';
+import axios from 'axios';
 
 export const ProfileEdit = () => {
   const props = {
@@ -39,9 +40,23 @@ export const ProfileEdit = () => {
   const [images, setImages] = React.useState([]);
   const maxNumber = 69;
 
-  const onChange = (imageList: ImageListType, addUpdateIndex: number[] | undefined) => {
+  const onChange = async (imageList: ImageListType, addUpdateIndex: number[] | undefined) => {
     console.log(imageList, addUpdateIndex);
     setImages(imageList as never[]);
+    const res: any = await authAxios.get('/profile/', {
+      params: {
+        profileImgUrl: addUpdateIndex,
+      },
+    });
+    console.log(res);
+
+    // axios({
+    //   method: 'post',
+    //   url: 'http://localhost:3000/api/profile/',
+    //   data: addUpdateIndex,
+    // }).then(({ data }) => {
+    //   console.log('Succesfully uploaded: ', JSON.stringify(data));
+    // });
   };
 
   const [tags, setTags] = useState<SetStateAction<any>>([]);
