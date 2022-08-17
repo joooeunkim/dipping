@@ -19,8 +19,9 @@ export const OauthRedirect = () => {
     dispatch(SET_TOKEN(token));
 
     if (role === 'ROLE_USER') {
-      localStorage.removeItem('accessToken');
+      // localStorage.removeItem('accessToken');
       localStorage.setItem('accessToken', token);
+      navigate('/');
     } else {
       navigate('/process', {
         state: token,
