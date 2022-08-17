@@ -24,11 +24,14 @@ import { CyanButton } from './CyanButton';
 let selectedMusicList: any[] = [];
 
 // 입력 폼 컴포넌트
-export const DippinForm = () => {
+export const DippinForm = (props: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [musicList, setMusicList] = useState<any[]>([]);
 
   const [openPost, setOpenPost] = useState(false);
+
+  const parent = props.parent;
+  console.log(parent);
 
   const setData = (data: any) => {
     console.log('hi', data);
@@ -50,11 +53,18 @@ export const DippinForm = () => {
     let title = document.getElementById('title') as HTMLInputElement | null;
     let content = document.getElementById('content') as HTMLInputElement | null;
     let data = {
-      dipping: {
-        dippingTitle: title?.value,
-        dippingContent: content?.value,
-        openDipping: true,
-      },
+      dipping: parent
+        ? {
+            dippingTitle: title?.value,
+            dippingContent: content?.value,
+            parentId: parent,
+            openDipping: true,
+          }
+        : {
+            dippingTitle: title?.value,
+            dippingContent: content?.value,
+            openDipping: true,
+          },
       playlist: musicList,
     };
     console.log(data);
@@ -110,7 +120,12 @@ export const DippinForm = () => {
           <Switch onChange={() => setOpenPost(!openPost)} />
         </Flex>
       </Box>
-      <Box onClick={newDippin}>
+      <Box
+        onClick={e => {
+          newDippin(e);
+          window.location.href = parent ? `/dippin/${parent}` : '/dippin';
+        }}
+      >
         <CyanButton title="작성" />
       </Box>
 

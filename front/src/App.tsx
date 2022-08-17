@@ -24,6 +24,7 @@ import { SearchDetail } from './views/search/SearchDetail';
 import { ProtectedRouteProps } from './ProtectedRoute';
 import { useSelector } from 'react-redux';
 import { OauthRedirect } from './views/users/OauthRedirect';
+import { DippinDetail } from './views/dippin/DippinDetail';
 
 export const App = () => (
   <ChakraProvider>
@@ -40,6 +41,7 @@ export const App = () => (
       >
         <Route index element={<HomeMain />} />
         <Route path="dippin" element={<DippinMain />} />
+        <Route path="dippin/:dippinid" element={<DippinDetail />} />
         <Route path="search" element={<SearchMain />} />
         <Route path="search/result" element={<SearchResult />} />
         <Route path="search/result/:post" element={<SearchDetail />} />

@@ -18,8 +18,9 @@ import {
   Stack,
   CloseButton,
 } from '@chakra-ui/react';
-import { SetStateAction, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import { writePostFeed } from '../api/write';
+import dippinReducer from '../reducers/dippinReducer';
 import { AddMusic } from './AddMusic';
 import { CyanButton } from './CyanButton';
 
@@ -27,19 +28,32 @@ import { CyanButton } from './CyanButton';
 let selectedMusicList: any[] = [];
 
 // 입력 폼 컴포넌트
-export const PostFeedForm = () => {
+export const PostFeedForm = (props: any) => {
+  let dippingMusicList = props.musicList;
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [musicList, setMusicList] = useState<any[]>([]);
 
   const [openPost, setOpenPost] = useState(false);
   const [openComment, setOpenComment] = useState(false);
   const [mixAlbumArt, setmixAlbumArt] = useState(false);
+  useEffect(() => {
+    console.log('넘어온 음악리스트', dippingMusicList);
+
+    let tempList = [];
+
+    if (dippingMusicList) {
+      for (let i = 0; i < dippingMusicList.length; i++) {
+        tempList.push(refactorData(dippingMusicList[i]));
+      }
+    }
+    setMusicList(tempList);
+  }, [dippingMusicList]);
 
   const setData = (data: any) => {
     console.log('hi', data);
     selectedMusicList = [...musicList, refactorData(data)];
     setMusicList(selectedMusicList);
-    console.log('musiclist', musicList);
   };
 
   const refactorData = (data: any) => {
@@ -128,7 +142,7 @@ export const PostFeedForm = () => {
 
       <Textarea id="content" rows={10} variant="unstyled" placeholder="본문 내용" />
       <Input id="tag" mb="2" variant="flushed" placeholder="태그" />
-      <Input id="user_tag" mb="2" variant="flushed" placeholder="사용자 태그" />
+      <Input hidden id="user_tag" mb="2" variant="flushed" placeholder="사용자 태그" />
       <Box w="70%" m="32px auto">
         <Flex justifyContent="space-between" mb="4">
           팔로워에게만 공개
@@ -138,12 +152,21 @@ export const PostFeedForm = () => {
           댓글 잠금
           <Switch onChange={() => setOpenComment(!openComment)} />
         </Flex>
-        <Flex justifyContent="space-between" onChange={() => setmixAlbumArt(!mixAlbumArt)}>
+        <Flex
+          display="none"
+          justifyContent="space-between"
+          onChange={() => setmixAlbumArt(!mixAlbumArt)}
+        >
           앨범아트 믹스
           <Switch />
         </Flex>
       </Box>
-      <Box onClick={newPost}>
+      <Box
+        onClick={e => {
+          newPost(e);
+          window.location.href = '/';
+        }}
+      >
         <CyanButton title="작성" />
       </Box>
 
@@ -152,34 +175,6 @@ export const PostFeedForm = () => {
         <ModalContent>
           <ModalBody>
             <AddMusic isOpen={isOpen} onClose={onClose} setData={setData} />
-            {/* <Flex>
-              <Text fontSize="xl" pt="2" mr="1" color="gray.500">
-                <i className="fa-regular fa-search"></i>
-              </Text>
-
-              <Input
-                p="2"
-                size="lg"
-                variant="unstyled"
-                placeholder="검색어 입력"
-                onChange={inputChangeEventHandler}
-              />
-            </Flex>
-
-            <Box>
-              <List spacing={3} display={displayState} borderTop="1px" borderColor="gray.300">
-                {musicList.map((data, index) => (
-                  <MusicItem
-                    key={index}
-                    title={data.title}
-                    imgUrl={data.imgUrl}
-                    artist={data.artist}
-                    onClose={onClose}
-                    setMusicState={setMusicState}
-                  />
-                ))}
-              </List>
-            </Box> */}
           </ModalBody>
         </ModalContent>
       </Modal>

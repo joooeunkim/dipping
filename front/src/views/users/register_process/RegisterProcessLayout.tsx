@@ -4,13 +4,13 @@ import { useSelector } from 'react-redux';
 import { Genre } from './Genre';
 import { InterestTag } from './InterestTag';
 import { UserInfo } from './UserInfo';
-import { registerSubmit } from '../../../api/registerSubmit';
+import { registerSubmit, registerSubmitSocial } from '../../../api/registerSubmit';
 import { useLocation } from 'react-router-dom';
 
 export const RegisterProcessLayout = () => {
   const redirectState = useLocation();
   const [flag, setFlag] = useState<string>('step1');
-  const [view, setView] = useState(<UserInfo socialFlag={redirectState.state} />);
+  const [view, setView] = useState(<UserInfo token={redirectState.state} />);
   const [email, setEmail] = useState('');
 
   const registerState = useSelector((state: any) => {
@@ -33,7 +33,12 @@ export const RegisterProcessLayout = () => {
     if (step == 'submit') {
       // eslint-disable-next-line no-restricted-globals
       // location.href = '/login';
-      registerSubmit(registerState);
+      if (redirectState.state == null) {
+        registerSubmit(registerState);
+      } else {
+        // 회원가입 입력정보, jwt
+        registerSubmitSocial(registerState, redirectState.state);
+      }
     }
     if (step == 'step1') {
       setView(<UserInfo socialFlag={redirectState.state} />);
