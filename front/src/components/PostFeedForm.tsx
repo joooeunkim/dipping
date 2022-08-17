@@ -74,11 +74,11 @@ export const PostFeedForm = (props: any) => {
         content: content?.value,
         openPost: openPost,
         openComment: openComment,
-        mixAlbumArt: mixAlbumArt,
+        albumArt: mixAlbumArt,
       },
       post_tag: createTag(tag),
       user_tag: createTag(userTag),
-      play_list: musicList,
+      playlist: musicList,
     };
 
     console.log(data);
