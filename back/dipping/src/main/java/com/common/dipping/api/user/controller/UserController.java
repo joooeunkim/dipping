@@ -1,5 +1,6 @@
 package com.common.dipping.api.user.controller;
 
+import com.common.dipping.api.board.domain.dto.ProfileDippingPostDto;
 import com.common.dipping.api.board.domain.dto.ProfilePostDto;
 import com.common.dipping.api.board.service.BoardService;
 import com.common.dipping.api.dipping.service.DippingService;
@@ -286,7 +287,7 @@ public class UserController {
         List<ProfilePostDto> boardPostDto = boardService.getAllBoardByUserId(userinfo.getId());
 
         //사용자의 디핑 목록
-        List<ProfilePostDto> dippingPostDto = dippingService.getAllDippingByUserId(userinfo.getId());
+        List<ProfileDippingPostDto> dippingPostDto = dippingService.getAllDippingByUserId(userinfo.getId());
 
         //사용자의 보관함 목록
         List<ProfilePostDto> collectionPostDto = storageService.getAllStorageByUserId(userinfo.getId());
