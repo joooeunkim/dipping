@@ -124,7 +124,7 @@ public class DippingService {
         Pageable pageable = PageRequest.of(pagenum-1,10, Sort.by(Sort.Direction.DESC, "id"));
         List<Dipping> dippings = new ArrayList<>();
         if(search.isEmpty()){
-            dippings = dippingRepository.findAllWithPaginationByParentDippingNull(pageable);
+            dippings = dippingRepository.findAllWithPaginationByParentDippingNullAndOpenDippingTrue(pageable);
         }else if(!search.isEmpty()){
             String s = search.replace(" ", "|");
             dippings = dippingRepository.findAllWithPaginationByParentDippingNullAndDippingTitleDippingContent(offset,s,s);

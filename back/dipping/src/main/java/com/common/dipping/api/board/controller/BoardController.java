@@ -156,6 +156,9 @@ public class BoardController {
                 post.put("music", boardSongDtos);
             }
 
+            List<String> postTagDtos = boardService.getPostTagByBoard(board);
+            post.put("tag",postTagDtos);
+
             data.put("post", post);
             result.put("data", data);
         } else if (board.getId() == 0L) {
@@ -172,10 +175,14 @@ public class BoardController {
     public ResponseEntity<?> getfollowingBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestParam(name = "pageNum", required = false,defaultValue = "1") int pageNum) {
 
         Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<String,Object>();
+        List<Object> posts = new ArrayList<>();
+        int page = pageNum * 10;
         // 해당 유저의 팔로우 유저들을 찾아와서 포스트 검색하여 Id 내림차순으로 정렬
         List<Follow> follows = followService.getfollowListByFromUser(userInfo.getId());
         if(follows.isEmpty()){
             result.put("code", 201);
+            result.put("data", posts);
             return ResponseEntity.status(HttpStatus.OK).body(result);
         }
 
@@ -188,16 +195,15 @@ public class BoardController {
             }
         }
 
-        if(posting.isEmpty()){
+        if(posting.isEmpty() || posting.size() < page-10){
             result.put("code", 201);
+            result.put("data", posts);
             return ResponseEntity.status(HttpStatus.OK).body(result);
         }
         result.put("code", 200);
 
         Collections.sort(posting, new boardIdCompare());
 
-        List<Object> posts = new ArrayList<>();
-        int page = pageNum * 10;
         for (int i = page - 10; i < page; i++) {
             if ( i < posting.size()) {
                 Map<String,Object> item = new HashMap<>();
@@ -224,12 +230,17 @@ public class BoardController {
                     }
                     item.put("music", boardSongDtos);
                 }
+
+                List<String> postTagDtos = boardService.getPostTagByBoard(posting.get(i));
+                item.put("tag",postTagDtos);
+
                 posts.add(item);
             } else {
                 break;
             }
         }
-        result.put("data", posts);
+        data.put("posts",posts);
+        result.put("data", data);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -244,7 +255,6 @@ public class BoardController {
 
         HashSet<BoardResponse> boardSet = boardService.RecommednBoard(userInfo.getId());
         List<BoardResponse> boardList = new ArrayList<>(boardSet);
-        result.put("code", 200);
 
         List<Object> posts = new ArrayList<>();
         int page = pageNum * 10;
@@ -272,12 +282,23 @@ public class BoardController {
                     }
                     item.put("music", boardSongDtos);
                 }
+
+                List<String> postTagDtos = boardService.getPostTagByBoard(board);
+                item.put("tag",postTagDtos);
+
                 posts.add(item);
             } else {
                 break;
             }
         }
-        data.put("posts", posts);
+
+        if(posts.isEmpty()){
+            result.put("code", 201);
+        }else {
+            result.put("code", 200);
+            data.put("posts", posts);
+        }
+
         result.put("data", data);
 
         return ResponseEntity.ok().body(result);

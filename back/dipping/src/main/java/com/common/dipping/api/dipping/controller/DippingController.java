@@ -52,8 +52,6 @@ public class DippingController {
             // 딥핑 단일 조회
             Dipping dipping = dippingService.getDippingOne(dippingId);
 
-            result.put("code", 200);
-
             DippingResponseDto dippingResponseDto = new DippingResponseDto(dipping);
             List<Dipping> ChildDippings = dippingService.getChildByDippingId(dipping);
 
@@ -93,7 +91,6 @@ public class DippingController {
                     break;
             }
             if(!dippings.isEmpty()){
-                result.put("code", 200);
                 for (Dipping d: dippings) {
                     Map<String, Object> temp = new HashMap<String, Object>();
                     DippingResponseDto dip = new DippingResponseDto(d);
@@ -112,10 +109,11 @@ public class DippingController {
         }
 
         if(!data.isEmpty()){
-            result.put("data",data);
+            result.put("code",200);
         }else {
             result.put("code",201);
         }
+        result.put("data",data);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
 
