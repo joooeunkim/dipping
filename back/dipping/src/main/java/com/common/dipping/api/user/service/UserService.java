@@ -14,6 +14,7 @@ import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.domain.dto.ProfileEditDto;
 import com.common.dipping.api.user.domain.dto.SignUpDto;
 import com.common.dipping.api.user.repository.UserRepository;
+import com.common.dipping.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
@@ -158,6 +159,13 @@ public class UserService {
         userRepository.save(userinfo);
         interestTagRepository.deleteAllByUser(userinfo);
         registerIntersetTag(userinfo);
+        return true;
+    }
+
+    public boolean profileImgUrlEdit(UserDetailsImpl userinfo, String newProfileImgUrl) {
+        User user = userRepository.findByEmail(userinfo.getUsername()).orElse(null);
+        user.profileImgUrlEdit(newProfileImgUrl);
+        userRepository.save(user);
         return true;
     }
 

@@ -13,18 +13,27 @@ import com.common.dipping.common.ApiResponse;
 import com.common.dipping.common.ApiResponseType;
 import com.common.dipping.jwt.JwtProvider;
 import com.common.dipping.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -39,6 +48,10 @@ public class UserController {
     private final DippingService dippingService;
     private final StorageService storageService;
 
+    @Autowired
+    ResourceLoader resourceLoader;
+
+    @Operation(summary = "디핑 회원가입", description = "디핑 계정으로 회원가입")
     @PostMapping(value = "/signUp")
     public ResponseEntity signUp(@RequestBody final SignUpDto signUpDto) {
 
@@ -53,6 +66,7 @@ public class UserController {
 
     //소셜 로그인 후 사용자가 제공받은 토큰을 헤더에 담고, 추가정보(이메일, 닉네임, 음악 장르, 음악 취향)를 body에 보내면
     //아직 user의 Role이 GUEST이기 때문에 서버는 이 요청을 회원가입의 연장으로 이해하여 추가정보를 저장하고 user의 Role를 USER로 변경 후 토큰을 재발행해준다.
+    @Operation(summary = "소셜 회원가입", description = "소셜 회원가입 후 추가 입력 정보들을 담아 회원가입을 완료한다. 회원가입 후 사용자의 ROLE을 GUEST에서 USER로 업그레이드 되어 새로운 토큰을 재발행한다")
     @PostMapping(value="/signUp/info")
     public void signUpAddInfo(HttpServletResponse response, @AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody final SignUpDto signUpDto) throws IOException {
 
@@ -61,17 +75,20 @@ public class UserController {
         ApiResponse.token(response, token);
     }
 
+    @Operation(summary = "이메일 중복 확인", description = "이미 중복된 이메일이 있으면 true 반환")
     @GetMapping(value="/check/email")
     public boolean checkDuplicatedEmail(@RequestParam final String email){
         return userService.isEmailDuplicated(email);
     }
 
+    @Operation(summary = "닉네임 중복 확인", description = "이미 중복된 닉네임이 있으면 true 반환")
     @GetMapping(value="/check/nickname")
     public boolean checkDuplicatedNickname(@RequestParam final String nickname){
         return userService.isUserNicknameDuplicated(nickname);
     }
 
 
+    @Operation(summary = "비밀번호 찾기1", description = "사용자 이메일 입력시 해당 이메일로 비밀번호 변경 페이지 로드 할 수 있도록 함")
     @PostMapping(value="/findpw/sendEmail")
     public ResponseEntity<?> sendEmailToFindPw(@RequestBody LoginDto loginDto) throws MessagingException {
         Map<String, Object> result = new HashMap<>();
@@ -92,6 +109,7 @@ public class UserController {
         return ResponseEntity.ok().body(result);
     }
 
+    @Operation(summary = "비밀번호 찾기2", description = "요청 param에 있는 인증 코드를 확인하여 사용자의 비밀번호를 변경해준다")
     @PostMapping(value="/findpw/reset")
     public ResponseEntity<?> updateNewPassword(@RequestParam("code") String code, @RequestBody LoginDto loginDto) throws MessagingException {
         Map<String, Object> result = new HashMap<>();
@@ -123,6 +141,7 @@ public class UserController {
 //    }
 
 
+    @Operation(summary = "프로필 정보", description = "닉네임을 보낼 경우 닉네임의 사용자 프로필 정보, 닉네임이 없을 경우 자신의 프로필 정보 반환")
     @GetMapping(value = "/profile")
     public ResponseEntity<?> profile(@AuthenticationPrincipal UserDetailsImpl requestUser, @RequestParam(name = "userNickname", required = false) String userNickname) {
         Boolean isMe = false;
@@ -185,27 +204,49 @@ public class UserController {
     }'
     *
     * */
+    @Operation(summary = "프로필 수정", description = "변경할 프로필 정보로 저장")
     @PostMapping(value = "/profile")
-    public ResponseEntity<?> profileEdit(@RequestBody final ProfileEditDto profileEditDto) {
-        // 이메일을 통해 유저 정보를 가져오고 가져온 정보랑 ProfileEditDto의 정보를 비교
-        // 닉네임이 바뀔 경우
-        // UserService에서 처리하자!
-//        if(userService.isUserNicknameDuplicated(profileEditDto.getUserNickname())) {
-
-//            System.out.println(profileEditDto.getEmail() == userService.profile(profileEditDto.getUserNickname()).getEmail());
-//            if (profileEditDto.getEmail() != userService.profile(profileEditDto.getUserNickname()).getEmail()) {
-//                return ResponseEntity.badRequest().build();
-//            }
-//        }
-
+    public ResponseEntity<?> profileEdit(@RequestBody final ProfileEditDto profileEditDto) throws IOException {
         if (userService.profileEdit(profileEditDto)) {
             return ResponseEntity.ok().body("수정 완료");
         } else {
             return ResponseEntity.ok().body("닉네임이 중복되었습니다.");
         }
-
     }
 
+    @Operation(summary = "프로필 이미지 저장", description = "변경할 프로필 이미지를 저장 후 저장 경로를 profileImgUrl에 저장")
+    @PostMapping(value="/profile/upload")
+    public ResponseEntity<?> profileImgUrlEdit(@AuthenticationPrincipal UserDetailsImpl userinfo, @RequestBody MultipartFile file) throws IOException {
+        //FileUpload 관련 설정.
+        if (file!=null) {
+            // 파일을 저장할 폴더 지정
+            Resource res = resourceLoader.getResource("classpath:static/upload");
+            String canonicalPath = res.getFile().getCanonicalPath();
+            System.out.println("file upload canonical path : "+ canonicalPath);
+            File folder = new File(canonicalPath);
+            if (!folder.exists()){
+                folder.mkdirs();
+            }
+            String originalFileName = file.getOriginalFilename();
+            String saveFileName = "untitled";
+            if (!originalFileName.isEmpty()) {
+                saveFileName = userinfo.getUsername() + originalFileName.substring(originalFileName.lastIndexOf('.'));
+                System.out.println("원본 파일 이름 : "+file.getOriginalFilename()+", 실제 저장 파일 이름 : "+ saveFileName);
+                file.transferTo(new File(folder, saveFileName));
+            }
+            String newProfileImgUrl = canonicalPath + File.separator + saveFileName;
+
+            if (userService.profileImgUrlEdit(userinfo, newProfileImgUrl)) {
+                return ResponseEntity.ok().body("프로필 이미지 수정 완료");
+            } else {
+                return ResponseEntity.ok().body("프로필 이미지 수정 실패");
+            }
+        } else{
+            return ResponseEntity.ok().body("변경할 프로필 이미지가 없습니다");
+        }
+    }
+
+    @Operation(summary = "프로필 탭 조회", description = "프로필 전체 정보 반환(user, post, dipping, collection). 닉네임을 보낼 경우 닉네임의 사용자 프로필 전체 정보, 닉네임이 없을 경우 자신의 프로필 전체 정보 반환")
     @GetMapping(value="/profiles")
     public ResponseEntity<?> profileAll(@AuthenticationPrincipal UserDetailsImpl requestUser, @RequestParam(name = "userNickname", required = false) String userNickname) {
         Boolean isMe = false;

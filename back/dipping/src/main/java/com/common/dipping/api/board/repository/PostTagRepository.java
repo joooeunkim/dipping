@@ -21,4 +21,6 @@ public interface PostTagRepository extends JpaRepository<PostTag, Long>{
 
     @Query("select pt from PostTag as pt where pt.tag.id in (:tags) ")
     List<PostTag> findByTag(@Param("tags") List<Long> tags);
+
+    List<PostTag> findAllByBoard(Board board);
 }

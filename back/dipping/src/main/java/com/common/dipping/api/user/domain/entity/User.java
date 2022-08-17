@@ -119,4 +119,8 @@ public class User extends Common {
         this.musicGenre = musicGenre;
     }
 
+    public void profileImgUrlEdit(String profileImgUrl) {
+        this.profileImgUrl = profileImgUrl;
+    }
+
 }

@@ -44,7 +44,6 @@ public class CommentService {
     }
 
 	public List<CommentDto> getlistCommentByboardId(Long userId,Long boardId){
-		//Board board = boardRepository.findById(boardId).orElse(null);
 		List<Comment> comments = commentRepository.findlistByBoardId(boardId).orElse(new ArrayList<>());
 		List<CommentDto> commentDtos = new ArrayList<>();
 		if(comments.isEmpty()){
@@ -63,6 +62,7 @@ public class CommentService {
 			commentDto.setUpdatedAt(c.getUpdatedAt().toString());
 			commentDto.setLikeCount(heartService.getCountByCommentId(c));
 			commentDto.setMyLike(heartService.isMylikeByCommentId(userId,c));
+			commentDto.setNickname(c.getUser().getNickname());
 
 			commentDtos.add(commentDto);
 		}
