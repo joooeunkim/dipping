@@ -85,8 +85,8 @@ public class BoardController {
 
     @Operation(summary = "피드 삭제", description = "피드 아이디를 통해 삭제 요청")
     @DeleteMapping
-    public ResponseEntity<?> deleteBoard(@Param("boardId") Long boardId){
-        boolean result = boardService.deleteBoard(boardId);
+    public ResponseEntity<?> deleteBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @Param("boardId") Long boardId){
+        boolean result = boardService.deleteBoard(boardId,userInfo.getId());
         if(!result){
             return new ResponseEntity<Void>(HttpStatus.OK);
         }else {
@@ -349,8 +349,8 @@ public class BoardController {
 
     @Operation(summary = "피드 댓글 목록 삭제", description = "commentId를 입력받아 해당 댓글 삭제")
     @DeleteMapping("comment")
-    public ResponseEntity<?> deleteComment(@Param("commentId") Long commentId){
-        boolean result = commentService.deleteComment(commentId);
+    public ResponseEntity<?> deleteComment(@AuthenticationPrincipal UserDetailsImpl userInfo,@Param("commentId") Long commentId){
+        boolean result = commentService.deleteComment(commentId,userInfo.getId());
         if(!result){
             return new ResponseEntity<Void>(HttpStatus.OK);
         }else {
@@ -449,7 +449,7 @@ public class BoardController {
         ObjectMapper mapper = new ObjectMapper();
 
         StorageDto storageDto = mapper.treeToValue(registerObj.get("collection"), StorageDto.class);
-        storageService.deletStorage(storageDto.getUserId(),storageDto.getBoardId());
+        storageService.deletStorage(userInfo.getId(), storageDto.getBoardId());
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

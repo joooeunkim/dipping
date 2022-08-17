@@ -103,13 +103,8 @@ public class DippingService {
         return dippingSongDtos;
     }
 
-    public boolean deleteDipping(Long dippingId) {
-        Dipping dipping = dippingRepository.findById(dippingId).orElseThrow(() -> new IllegalArgumentException("해당 디핑이 없습니다. id=" + dippingId));
-        List<Dipping> childDipping = getChildByDippingId(dipping);
-        for (Dipping child: childDipping ) {
-            dippingRepository.deleteById(child.getId());
-        }
-        dippingRepository.deleteById(dippingId);
+    public boolean deleteDipping(Long dippingId,Long userId) {
+        dippingRepository.deleteByIdAndUserId(dippingId,userId);
         return dippingRepository.existsById(dippingId);
     }
 
