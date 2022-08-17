@@ -63,14 +63,15 @@ public class CommentService {
 			commentDto.setLikeCount(heartService.getCountByCommentId(c));
 			commentDto.setMyLike(heartService.isMylikeByCommentId(userId,c));
 			commentDto.setNickname(c.getUser().getNickname());
+			commentDto.setProfileImgUrl(c.getUser().getProfileImgUrl());
 
 			commentDtos.add(commentDto);
 		}
 		return commentDtos;
 	}
 
-	public boolean deleteComment(Long commentId) {
-		commentRepository.deleteById(commentId);
+	public boolean deleteComment(Long commentId, Long userId) {
+		commentRepository.deleteByIdAndUserId(commentId,userId);
 		commentRepository.deleteByParentId(commentId);
 		return commentRepository.existsById(commentId);
 	}

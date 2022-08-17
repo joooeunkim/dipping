@@ -103,13 +103,8 @@ public class DippingService {
         return dippingSongDtos;
     }
 
-    public boolean deleteDipping(Long dippingId) {
-        Dipping dipping = dippingRepository.findById(dippingId).orElseThrow(() -> new IllegalArgumentException("해당 디핑이 없습니다. id=" + dippingId));
-        List<Dipping> childDipping = getChildByDippingId(dipping);
-        for (Dipping child: childDipping ) {
-            dippingRepository.deleteById(child.getId());
-        }
-        dippingRepository.deleteById(dippingId);
+    public boolean deleteDipping(Long dippingId,Long userId) {
+        dippingRepository.deleteByIdAndUserId(dippingId,userId);
         return dippingRepository.existsById(dippingId);
     }
 
@@ -121,7 +116,7 @@ public class DippingService {
     public List<Dipping> getListByrecent(Long userId,int pagenum,String search) {
         int offset = (pagenum-1) * 10;
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + userId));
-        Pageable pageable = PageRequest.of(pagenum-1,10, Sort.by(Sort.Direction.DESC, "id"));
+        Pageable pageable = PageRequest.of(pagenum-1,10, Sort.by(Sort.Direction.DESC, "createdAt"));
         List<Dipping> dippings = new ArrayList<>();
         if(search.isEmpty()){
             dippings = dippingRepository.findAllWithPaginationByParentDippingNullAndOpenDippingTrue(pageable);

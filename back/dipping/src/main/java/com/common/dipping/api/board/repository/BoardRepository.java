@@ -24,4 +24,6 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
 
     @Query("select b from Board as b where b.openPost = true and b.id in (:boards)")
     List<Board> findListById(@Param("boards") List<Long> boards);
+
+    void deleteByIdAndUserId(Long id, Long userId);
 }

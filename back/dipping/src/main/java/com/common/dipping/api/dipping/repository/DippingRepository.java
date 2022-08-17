@@ -48,4 +48,6 @@ public interface DippingRepository extends JpaRepository<Dipping,Long> {
     @Query(nativeQuery = true, value = "select d.* from dipping as d join (select receiver from follow where sender = :userId) f " +
             "on d.user_id = f.receiver where d.open_dipping = true AND d.parent_dipping is null AND (d.dipping_title REGEXP :dippingTitle OR d.dipping_content REGEXP :dippingContent ) order by created_at DESC limit 10 offset :page")
     List<Dipping> findAllWithFollowingUserDippingTitleDippingContent(@Param("userId") Long userId,@Param("page") int page, @Param("dippingTitle") String dippingTitle,@Param("dippingContent") String dippingContent);
+
+    void deleteByIdAndUserId(Long id, Long userId);
 }

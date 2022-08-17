@@ -15,4 +15,5 @@ public class CommentDto {
 	private Boolean myLike;
 	private int likeCount;
 	private String nickname;
+	private String profileImgUrl;
 }

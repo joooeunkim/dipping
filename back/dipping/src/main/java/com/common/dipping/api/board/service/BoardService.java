@@ -135,8 +135,8 @@ public class BoardService {
         return list;
     }
 
-    public boolean deleteBoard(Long boardId) {
-        boardRepository.deleteById(boardId);
+    public boolean deleteBoard(Long boardId,Long userId) {
+        boardRepository.deleteByIdAndUserId(boardId,userId);
         return boardRepository.existsById(boardId);
     }
 
