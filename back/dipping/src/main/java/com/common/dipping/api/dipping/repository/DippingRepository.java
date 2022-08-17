@@ -39,7 +39,7 @@ public interface DippingRepository extends JpaRepository<Dipping,Long> {
     List<Dipping> findAllWithPaginationByParentDippingNullAndDippingTitleDippingContent(@Param("page") int page, @Param("dippingTitle") String dippingTitle,@Param("dippingContent") String dippingContent);
 
     @Query("select d from Dipping d where d.user.id = :userId")
-    List<Dipping> findAllWithUserId(@Param("userId") Long userId);
+    List<Dipping> findAllByUserId(@Param("userId") Long userId);
 
     @Query(nativeQuery = true, value = "select d.* from dipping as d join (select receiver from follow where sender = :userId) f " +
             "on d.user_id = f.receiver where d.open_dipping = true AND d.parent_dipping is null order by created_at DESC limit 10 offset :page")
