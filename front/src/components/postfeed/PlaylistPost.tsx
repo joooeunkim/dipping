@@ -1,5 +1,7 @@
 import { Box, useColorModeValue, Image, Avatar } from '@chakra-ui/react';
 import { useState } from 'react';
+import { authAxios } from '../../api/common';
+import { FeedPost, User } from '../../types/HomeFeedData';
 import { PlayerLarge } from './PlayerLarge';
 import { PostComment } from './PostComment';
 
@@ -7,7 +9,7 @@ export const PlaylistPost = (props: any) => {
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
 
-  const { postfeed, id } = props;
+  const { postfeed, id, setCommentInfo, onOpen } = props;
 
   // 본문 더보기
   const [limit, setLimit] = useState(95);
@@ -19,6 +21,23 @@ export const PlaylistPost = (props: any) => {
   };
   const onClickMore = (str: string) => () => {
     setLimit(str.length);
+  };
+
+  const [mylike, setMyLike] = useState(postfeed.myLike);
+  const [likecount, setLikeCount] = useState(postfeed.likes);
+
+  const toggleLike = async () => {
+    setLikeCount((likes: number) => (mylike ? likes - 1 : likes + 1));
+    setMyLike((mylike: boolean) => !mylike);
+
+    authAxios
+      .post('/board/like', {
+        postLike: {
+          boardId: postfeed.id,
+        },
+      })
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
   };
 
   return (
@@ -80,16 +99,29 @@ export const PlaylistPost = (props: any) => {
 
       {/* icon set */}
       <Box position="relative" h="30px" w="full" bg="" marginBottom="16px">
-        <Box
-          position="absolute"
-          left="4vw"
-          className="fa-solid fa-heart"
-          fontSize="24px"
-          lineHeight="30px"
-          color="cyan.400"
-        />
+        {mylike ? (
+          <Box
+            position="absolute"
+            left="4vw"
+            className="fa-solid fa-heart"
+            fontSize="24px"
+            lineHeight="30px"
+            color="cyan.400"
+            onClick={toggleLike}
+          />
+        ) : (
+          <Box
+            position="absolute"
+            left="4vw"
+            className="fa-regular fa-heart"
+            fontSize="24px"
+            lineHeight="30px"
+            onClick={toggleLike}
+          />
+        )}
+
         <Box position="absolute" left="12vw" fontSize="24px" lineHeight="30px">
-          {postfeed.likes}
+          {likecount}
         </Box>
         <Box
           position="absolute"
@@ -97,7 +129,17 @@ export const PlaylistPost = (props: any) => {
           className="fa-regular fa-comment"
           fontSize="24px"
           lineHeight="30px"
-          // onClick={'onOpen'}
+          onClick={() => {
+            onOpen();
+            const info = {
+              id: (postfeed as FeedPost).id,
+              name: postfeed.user.name,
+              profile_image: postfeed.user.profile_image,
+              article: postfeed.article,
+              last_modified: postfeed.last_modified,
+            };
+            setCommentInfo(info);
+          }}
         />
         <Box
           position="absolute"

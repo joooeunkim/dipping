@@ -5,6 +5,7 @@ import { Outlet } from 'react-router-dom';
 import { authAxios } from '../../api/common';
 import { MainNavBar } from '../../components/floatingbar/MainNavBar';
 import { PlaylistPost } from '../../components/postfeed/PlaylistPost';
+import { PostComment } from '../../components/postfeed/PostComment';
 import { setDefault } from '../../reducers/iframeReducer';
 import { HomeFeedData, FeedPost } from '../../types/HomeFeedData';
 
@@ -120,12 +121,22 @@ export const HomeMain = () => {
 
   // 댓글 drawer 제어
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [commentinfo, setCommentInfo] = useState<any>();
 
   return (
     <Box>
       <MainNavBar />
+      <PostComment commentinfo={commentinfo} isOpen={isOpen} onClose={onClose} />
       {followposts.length > 0 ? (
-        followposts.map((item, index) => <PlaylistPost postfeed={item} id={index} key={index} />)
+        followposts.map((item, index) => (
+          <PlaylistPost
+            postfeed={item}
+            id={index}
+            key={index}
+            setCommentInfo={setCommentInfo}
+            onOpen={onOpen}
+          />
+        ))
       ) : (
         <Box paddingY="24px" textAlign="center" bg="rgba(222,222,222,0.1)">
           {!load && '팔로잉 포스트가 없습니다.'}
@@ -146,7 +157,13 @@ export const HomeMain = () => {
         </Box>
       )}
       {recommendposts.map((item, index) => (
-        <PlaylistPost postfeed={item} id={index} key={index} />
+        <PlaylistPost
+          key={index}
+          postfeed={item}
+          id={index}
+          setCommentInfo={setCommentInfo}
+          onOpen={onOpen}
+        />
       ))}
       {load && (
         <Box position="relative" w="full" h="100px">

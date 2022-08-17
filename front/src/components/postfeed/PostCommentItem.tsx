@@ -33,29 +33,12 @@ export const PostCommentItem = (props: any) => {
             </Box>
             <Box display="inline">&nbsp; {comment.content}</Box>
             <Box fontSize="12px" color="gray.500" marginY="8px">
-              {comment.likes > 0 ? (
-                <Box display="inline">좋아요 {comment.likes} 개 &nbsp;&nbsp;</Box>
-              ) : (
-                <Box />
-              )}
-              <Box display="inline">{comment.last_modified}</Box>
+              <Box display="inline">{comment.last_modified.substr(0, 10)}</Box>
               &nbsp;&nbsp;
               <Box display="inline" fontWeight="600">
                 답글
               </Box>
             </Box>
-          </Box>
-          <Box w="32px" h="32px" marginLeft="8px" textAlign="center" bg="" onClick={onClickLike}>
-            {like ? (
-              <Box
-                className="fa-solid fa-heart"
-                fontSize="16px"
-                lineHeight="30px"
-                color="cyan.400"
-              />
-            ) : (
-              <Box className="fa-regular fa-heart" fontSize="16px" lineHeight="30px" color="" />
-            )}
           </Box>
         </Flex>
       </Box>
