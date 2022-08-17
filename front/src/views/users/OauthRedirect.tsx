@@ -21,7 +21,7 @@ export const OauthRedirect = () => {
     if (role === 'ROLE_USER') {
       // localStorage.removeItem('accessToken');
       localStorage.setItem('accessToken', token);
-      navigate('/');
+      window.location.href = '/';
     } else {
       navigate('/process', {
         state: token,
