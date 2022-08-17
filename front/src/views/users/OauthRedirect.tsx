@@ -18,9 +18,15 @@ export const OauthRedirect = () => {
   useEffect(() => {
     dispatch(SET_TOKEN(token));
 
-    navigate('/process', {
-      state: token,
-    });
+    if (role === 'ROLE_USER') {
+      localStorage.removeItem('accessToken');
+      localStorage.setItem('accessToken', token);
+    } else {
+      navigate('/process', {
+        state: token,
+      });
+    }
+
     dispatch(setEmail(email));
     dispatch(setDupEmail(true));
     // dispatch(setProvider())

@@ -25,16 +25,23 @@ export const registerSubmitSocial = (registerState: any, token: any) => {
   const headers = {
     Authorization: 'Bearer ' + token,
   };
-  defaultAxios.post(
-    '/signUp/info',
-    {
-      email: '',
-      nickname: registerState.nickname,
-      profileImgUrl: '',
-      musicTaste: registerState.musicTaste,
-      provider: parseJwt(token).provider,
-      musicGenre: registerState.musicGenre,
-    },
-    { headers },
-  );
+  defaultAxios
+    .post(
+      '/signUp/info',
+      {
+        email: '',
+        nickname: registerState.nickname,
+        profileImgUrl: '',
+        musicTaste: registerState.musicTaste,
+        provider: parseJwt(token).provider,
+        musicGenre: registerState.musicGenre,
+      },
+      { headers },
+    )
+    .then((res: any) => {
+      window.location.href = '/login';
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
