@@ -15,16 +15,24 @@ import com.common.dipping.jwt.JwtProvider;
 import com.common.dipping.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -38,6 +46,9 @@ public class UserController {
     private final BoardService boardService;
     private final DippingService dippingService;
     private final StorageService storageService;
+
+    @Autowired
+    ResourceLoader resourceLoader;
 
     @PostMapping(value = "/signUp")
     public ResponseEntity signUp(@RequestBody final SignUpDto signUpDto) {
@@ -186,24 +197,43 @@ public class UserController {
     *
     * */
     @PostMapping(value = "/profile")
-    public ResponseEntity<?> profileEdit(@RequestBody final ProfileEditDto profileEditDto) {
-        // 이메일을 통해 유저 정보를 가져오고 가져온 정보랑 ProfileEditDto의 정보를 비교
-        // 닉네임이 바뀔 경우
-        // UserService에서 처리하자!
-//        if(userService.isUserNicknameDuplicated(profileEditDto.getUserNickname())) {
-
-//            System.out.println(profileEditDto.getEmail() == userService.profile(profileEditDto.getUserNickname()).getEmail());
-//            if (profileEditDto.getEmail() != userService.profile(profileEditDto.getUserNickname()).getEmail()) {
-//                return ResponseEntity.badRequest().build();
-//            }
-//        }
-
+    public ResponseEntity<?> profileEdit(@RequestBody final ProfileEditDto profileEditDto) throws IOException {
         if (userService.profileEdit(profileEditDto)) {
             return ResponseEntity.ok().body("수정 완료");
         } else {
             return ResponseEntity.ok().body("닉네임이 중복되었습니다.");
         }
+    }
 
+    @PostMapping(value="/profile/upload")
+    public ResponseEntity<?> profileImgUrlEdit(@AuthenticationPrincipal UserDetailsImpl userinfo, @RequestBody MultipartFile file) throws IOException {
+        //FileUpload 관련 설정.
+        if (file!=null) {
+            // 파일을 저장할 폴더 지정
+            Resource res = resourceLoader.getResource("classpath:static/upload");
+            String canonicalPath = res.getFile().getCanonicalPath();
+            System.out.println("file upload canonical path : "+ canonicalPath);
+            File folder = new File(canonicalPath);
+            if (!folder.exists()){
+                folder.mkdirs();
+            }
+            String originalFileName = file.getOriginalFilename();
+            String saveFileName = "untitled";
+            if (!originalFileName.isEmpty()) {
+                saveFileName = userinfo.getUsername() + originalFileName.substring(originalFileName.lastIndexOf('.'));
+                System.out.println("원본 파일 이름 : "+file.getOriginalFilename()+", 실제 저장 파일 이름 : "+ saveFileName);
+                file.transferTo(new File(folder, saveFileName));
+            }
+            String newProfileImgUrl = canonicalPath + File.separator + saveFileName;
+
+            if (userService.profileImgUrlEdit(userinfo, newProfileImgUrl)) {
+                return ResponseEntity.ok().body("프로필 이미지 수정 완료");
+            } else {
+                return ResponseEntity.ok().body("프로필 이미지 수정 실패");
+            }
+        } else{
+            return ResponseEntity.ok().body("변경할 프로필 이미지가 없습니다");
+        }
     }
 
     @GetMapping(value="/profiles")

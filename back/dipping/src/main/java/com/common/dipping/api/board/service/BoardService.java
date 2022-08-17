@@ -165,4 +165,13 @@ public class BoardService {
         }
         return boardResponses;
     }
+
+    public List<String> getPostTagByBoard(Board board) {
+        List<PostTag> postTags = postTagRepository.findAllByBoard(board);
+        List<String> postTagDtos = new ArrayList<>();
+        for (PostTag p: postTags) {
+            postTagDtos.add(p.getTag().getContent());
+        }
+        return postTagDtos;
+    }
 }

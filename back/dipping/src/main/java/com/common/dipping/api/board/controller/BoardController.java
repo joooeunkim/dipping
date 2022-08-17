@@ -9,6 +9,11 @@ import com.common.dipping.api.user.repository.StorageRepository;
 import com.common.dipping.api.user.service.StorageService;
 import com.common.dipping.api.user.service.UserService;
 import com.common.dipping.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import net.minidev.json.JSONArray;
 
 import com.common.dipping.api.board.domain.dto.*;
@@ -55,6 +60,7 @@ public class BoardController {
         }
     }
 
+    @Operation(summary = "피드 등록", description = "피드 내용과, 포스트 태그, 유저 태그, 음악 정보를 입력")
     @PostMapping
     public ResponseEntity<?> register(@AuthenticationPrincipal UserDetailsImpl userInfo,@RequestBody ObjectNode registerObj)
             throws JsonProcessingException, IllegalArgumentException {
@@ -77,6 +83,7 @@ public class BoardController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+    @Operation(summary = "피드 삭제", description = "피드 아이디를 통해 삭제 요청")
     @DeleteMapping
     public ResponseEntity<?> deleteBoard(@Param("boardId") Long boardId){
         boolean result = boardService.deleteBoard(boardId);
@@ -87,6 +94,7 @@ public class BoardController {
         }
     }
 
+    @Operation(summary = "피드 수정", description = "피드 내용을 전송시 덮어쓰기를 통해 수정")
     @PostMapping("/edit")
     public ResponseEntity<?> editBoard(@RequestBody ObjectNode registerObj)
             throws JsonProcessingException, IllegalArgumentException {
@@ -109,6 +117,9 @@ public class BoardController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "단일 피드 조회 성공", content = @Content(schema = @Schema(implementation = BoardResponse.class ))) })
+    @Operation(summary = "피드 단일 조회", description = "boardId 입력시 단일 조회하여 피드 정보와 음악 정보를 조회")
     @GetMapping("/board")
     public ResponseEntity<?> getBoardOne(@AuthenticationPrincipal UserDetailsImpl userInfo, @Param("boardId") Long boardId) {
 
@@ -145,6 +156,9 @@ public class BoardController {
                 post.put("music", boardSongDtos);
             }
 
+            List<String> postTagDtos = boardService.getPostTagByBoard(board);
+            post.put("tag",postTagDtos);
+
             data.put("post", post);
             result.put("data", data);
         } else if (board.getId() == 0L) {
@@ -154,14 +168,21 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "팔로잉 피드 목록 조회 성공", content = @Content(schema = @Schema(implementation = BoardResponse.class ))) })
+    @Operation(summary = "팔로잉 피드 목록 조회", description = "요청 유저가 팔로잉 중인 유저들의 최근 7일간의 피드 정보와 음악 정보를 조회")
     @GetMapping("/user")
     public ResponseEntity<?> getfollowingBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestParam(name = "pageNum", required = false,defaultValue = "1") int pageNum) {
 
         Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<String,Object>();
+        List<Object> posts = new ArrayList<>();
+        int page = pageNum * 10;
         // 해당 유저의 팔로우 유저들을 찾아와서 포스트 검색하여 Id 내림차순으로 정렬
         List<Follow> follows = followService.getfollowListByFromUser(userInfo.getId());
         if(follows.isEmpty()){
             result.put("code", 201);
+            result.put("data", posts);
             return ResponseEntity.status(HttpStatus.OK).body(result);
         }
 
@@ -174,16 +195,15 @@ public class BoardController {
             }
         }
 
-        if(posting.isEmpty()){
+        if(posting.isEmpty() || posting.size() < page-10){
             result.put("code", 201);
+            result.put("data", posts);
             return ResponseEntity.status(HttpStatus.OK).body(result);
         }
         result.put("code", 200);
 
         Collections.sort(posting, new boardIdCompare());
 
-        List<Object> posts = new ArrayList<>();
-        int page = pageNum * 10;
         for (int i = page - 10; i < page; i++) {
             if ( i < posting.size()) {
                 Map<String,Object> item = new HashMap<>();
@@ -210,16 +230,24 @@ public class BoardController {
                     }
                     item.put("music", boardSongDtos);
                 }
+
+                List<String> postTagDtos = boardService.getPostTagByBoard(posting.get(i));
+                item.put("tag",postTagDtos);
+
                 posts.add(item);
             } else {
                 break;
             }
         }
-        result.put("data", posts);
+        data.put("posts",posts);
+        result.put("data", data);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "추천 피드 목록 조회 성공", content = @Content(schema = @Schema(implementation = BoardResponse.class ))) })
+    @Operation(summary = "추천 피드 목록 조회", description = "요청 유저의 취향을 통해 피드 정보와 음악 정보를 조회")
     @GetMapping("/recommend")
     public ResponseEntity<?> getRecommendBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestParam(name = "pageNum", required = false,defaultValue = "1") int pageNum) {
         Map<String,Object> result = new HashMap<>();
@@ -227,7 +255,6 @@ public class BoardController {
 
         HashSet<BoardResponse> boardSet = boardService.RecommednBoard(userInfo.getId());
         List<BoardResponse> boardList = new ArrayList<>(boardSet);
-        result.put("code", 200);
 
         List<Object> posts = new ArrayList<>();
         int page = pageNum * 10;
@@ -255,17 +282,29 @@ public class BoardController {
                     }
                     item.put("music", boardSongDtos);
                 }
+
+                List<String> postTagDtos = boardService.getPostTagByBoard(board);
+                item.put("tag",postTagDtos);
+
                 posts.add(item);
             } else {
                 break;
             }
         }
-        data.put("posts", posts);
+
+        if(posts.isEmpty()){
+            result.put("code", 201);
+        }else {
+            result.put("code", 200);
+            data.put("posts", posts);
+        }
+
         result.put("data", data);
 
         return ResponseEntity.ok().body(result);
     }
 
+    @Operation(summary = "댓글 등록", description = "댓글 내용과 boardId를 받아 해당 피드에 댓글을 등록")
 	@PostMapping("/comment")
 	public ResponseEntity<?> registerComment(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
 
@@ -289,6 +328,9 @@ public class BoardController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "피드 댓글 목록 조회 성공", content = @Content(schema = @Schema(implementation = CommentDto.class ))) })
+    @Operation(summary = "피드 댓글 목록 조회", description = "boardId를 통해 해당 피드의 댓글 조회")
 	@GetMapping("/comment")
 	public ResponseEntity<?> getCommentByBoardId(@AuthenticationPrincipal UserDetailsImpl userInfo, @Param("boardId") Long boardId){
 		List<CommentDto> commentDtos = commentService.getlistCommentByboardId(userInfo.getId(), boardId);
@@ -305,6 +347,7 @@ public class BoardController {
 		}
 	}
 
+    @Operation(summary = "피드 댓글 목록 삭제", description = "commentId를 입력받아 해당 댓글 삭제")
     @DeleteMapping("comment")
     public ResponseEntity<?> deleteComment(@Param("commentId") Long commentId){
         boolean result = commentService.deleteComment(commentId);
@@ -315,6 +358,7 @@ public class BoardController {
         }
     }
 
+    @Operation(summary = "피드 댓글 목록 수정", description = "commentId를 통해 해당 댓글 수정")
     @PostMapping("/comment/edit")
     public ResponseEntity<?> editComment(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
 
@@ -327,6 +371,7 @@ public class BoardController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+    @Operation(summary = "피드 좋아요/좋아요취소", description = "boardId를 통해 해당 피드 좋아요 혹은 좋아요 취소")
     @PostMapping("/like")
     public ResponseEntity<?> likeUnlike(@AuthenticationPrincipal UserDetailsImpl userInfo,@RequestBody ObjectNode registerObj) throws JsonProcessingException{
 
@@ -360,6 +405,9 @@ public class BoardController {
         }
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "피드 좋아요 목록 조회 성공", content = @Content(schema = @Schema(implementation = HeartDto.class ))) })
+    @Operation(summary = "피드 좋아요 목록 조회", description = "boardId를 통해 해당 피드의 좋아요 조회")
     @GetMapping("/like")
     public ResponseEntity<?> getCommentByBoardId(@RequestParam(name = "boardId", required = false,defaultValue = "0") Long boardId, @RequestParam(name = "commentId", required = false,defaultValue = "0") Long commentId){
         List<HeartDto> heartDtos = new ArrayList<>();
@@ -381,6 +429,7 @@ public class BoardController {
         }
     }
 
+    @Operation(summary = "피드 보관함 추가", description = "boardId를 통해 해당 피드를 사용자의 보관함에 추가")
     @PostMapping("/collection")
     public ResponseEntity<?> collectionBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
 
@@ -393,6 +442,7 @@ public class BoardController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+    @Operation(summary = "보관함에서 피드 삭제", description = "해당 유저의 보관함에 있는 피드 삭제")
     @DeleteMapping("/collection")
     public ResponseEntity<?> deletecollection(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
 

@@ -124,10 +124,10 @@ public class DippingService {
         Pageable pageable = PageRequest.of(pagenum-1,10, Sort.by(Sort.Direction.DESC, "id"));
         List<Dipping> dippings = new ArrayList<>();
         if(search.isEmpty()){
-            dippings = dippingRepository.findAllWithPaginationByParentDippingNullAndUserNot(user,pageable);
+            dippings = dippingRepository.findAllWithPaginationByParentDippingNullAndOpenDippingTrue(pageable);
         }else if(!search.isEmpty()){
             String s = search.replace(" ", "|");
-            dippings = dippingRepository.findAllWithPaginationByParentDippingNullAndUserNotDippingTitleDippingContent(user.getId(),offset,s,s);
+            dippings = dippingRepository.findAllWithPaginationByParentDippingNullAndDippingTitleDippingContent(offset,s,s);
         }
 
         return dippings;
