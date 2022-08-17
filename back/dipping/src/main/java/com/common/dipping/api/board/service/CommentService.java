@@ -63,6 +63,7 @@ public class CommentService {
 			commentDto.setLikeCount(heartService.getCountByCommentId(c));
 			commentDto.setMyLike(heartService.isMylikeByCommentId(userId,c));
 			commentDto.setNickname(c.getUser().getNickname());
+			commentDto.setProfileImgUrl(c.getUser().getProfileImgUrl());
 
 			commentDtos.add(commentDto);
 		}

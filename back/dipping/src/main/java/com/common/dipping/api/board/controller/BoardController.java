@@ -56,7 +56,7 @@ public class BoardController {
     static class boardIdCompare implements Comparator<Board> {
         @Override
         public int compare(Board b1, Board b2) {
-            return (int) (b2.getId() - b1.getId());
+            return (b2.getCreatedAt().compareTo(b1.getCreatedAt()));
         }
     }
 

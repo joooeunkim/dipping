@@ -121,7 +121,7 @@ public class DippingService {
     public List<Dipping> getListByrecent(Long userId,int pagenum,String search) {
         int offset = (pagenum-1) * 10;
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + userId));
-        Pageable pageable = PageRequest.of(pagenum-1,10, Sort.by(Sort.Direction.DESC, "id"));
+        Pageable pageable = PageRequest.of(pagenum-1,10, Sort.by(Sort.Direction.DESC, "createdAt"));
         List<Dipping> dippings = new ArrayList<>();
         if(search.isEmpty()){
             dippings = dippingRepository.findAllWithPaginationByParentDippingNullAndOpenDippingTrue(pageable);
