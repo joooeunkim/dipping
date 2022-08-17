@@ -2,19 +2,19 @@ package com.common.dipping.api.user.controller;
 
 import com.common.dipping.api.board.domain.dto.ProfilePostDto;
 import com.common.dipping.api.board.service.BoardService;
+import com.common.dipping.api.dipping.service.DippingService;
 import com.common.dipping.api.user.domain.dto.*;
 import com.common.dipping.api.user.domain.entity.Code;
 import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.service.CodeService;
+import com.common.dipping.api.user.service.StorageService;
 import com.common.dipping.api.user.service.UserService;
 import com.common.dipping.common.ApiResponse;
 import com.common.dipping.common.ApiResponseType;
 import com.common.dipping.jwt.JwtProvider;
 import com.common.dipping.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,9 +24,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -38,6 +36,8 @@ public class UserController {
     private final CodeService codeService;
     private final JwtProvider jwtProvider;
     private final BoardService boardService;
+    private final DippingService dippingService;
+    private final StorageService storageService;
 
     @PostMapping(value = "/signUp")
     public ResponseEntity signUp(@RequestBody final SignUpDto signUpDto) {
@@ -242,22 +242,30 @@ public class UserController {
         profileDto.setIsMe(isMe);
 
         //사용자의 게시물 목록
-        List<ProfilePostDto> profilePostDto = boardService.getAllBoardByUserId(userinfo.getId());
+        List<ProfilePostDto> boardPostDto = boardService.getAllBoardByUserId(userinfo.getId());
+
+        //사용자의 디핑 목록
+        List<ProfilePostDto> dippingPostDto = dippingService.getAllDippingByUserId(userinfo.getId());
+
+        //사용자의 보관함 목록
+        List<ProfilePostDto> collectionPostDto = storageService.getAllStorageByUserId(userinfo.getId());
+
 
         // result는 code와 data는 key값이
         Map<String,Object> result = new HashMap<>();
-        Map<String,Object> userResult = new HashMap<>(); // user 라고 명시하기 위한 키값
-        Map<String,Object> boardResult = new HashMap<>(); // post 라고 명시하기 위한 키값
+        Map<String,Object> dataResult = new HashMap<>(); // user 와 post 정보 담기
         result.put("code", 200); // code : 200
-        userResult.put("user", profileDto); // "user" : profileDto
-        boardResult.put("post", profilePostDto);
-        result.put("data", userResult);
+        dataResult.put("user", profileDto); // "user" : profileDto
+        dataResult.put("post", boardPostDto); //"post" : 사용자의 포스트
+        dataResult.put("dipping", dippingPostDto); //"dipping" : 사용자의 디핑
+        dataResult.put("collection", collectionPostDto); //"collection" : 사용자의 보관함
+        result.put("data", dataResult);
         /*
          *  "data" : {
          *   "user" : {
          *       userEmail,
          *       }
-         *   }
+         *   },
          *   "post" : [
          *      {
          *         boardId,

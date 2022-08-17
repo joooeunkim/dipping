@@ -22,6 +22,12 @@ public class Dipping extends Common {
     private String dippingContent;
     private Boolean openDipping;
 
+    public void update(String dippingTitle, String dippingContent, Boolean openDipping){
+        this.dippingTitle = dippingTitle;
+        this.dippingContent = dippingContent;
+        this.openDipping = openDipping;
+    }
+
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
@@ -30,7 +36,7 @@ public class Dipping extends Common {
     @JoinColumn(name = "parentDipping",columnDefinition = "bigint default 0")
     private Dipping parentDipping;
 
-    @OneToMany(mappedBy = "parentDipping")
+    @OneToMany(mappedBy = "parentDipping", cascade = {CascadeType.REMOVE})
     private List<Dipping> childDipping;
 
     @OneToMany(mappedBy = "dipping", cascade = {CascadeType.REMOVE})

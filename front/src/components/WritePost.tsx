@@ -18,11 +18,14 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { CyanButton } from './CyanButton';
 import { DippinForm } from './DippinForm';
 import { ModalNavBar } from './floatingbar/ModalNavBar';
 import { PostFeedForm } from './PostFeedForm';
 
 export const WritePost = () => {
+  const popOverColor = useColorModeValue('cyan.400', 'cyan.500');
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isEditing, setIsEditing] = useBoolean(); // popover hook
   const btnRef = React.useRef(null);
@@ -58,8 +61,14 @@ export const WritePost = () => {
         <PopoverContent w="140px" bg="none" border="0">
           <PopoverBody>
             <Button
-              colorScheme="cyan"
+              bg={popOverColor}
               color="white"
+              _hover={{
+                bg: { popOverColor },
+              }}
+              _active={{
+                bg: { popOverColor },
+              }}
               w="100%"
               mb="1"
               ref={btnRef}
@@ -71,8 +80,14 @@ export const WritePost = () => {
               <i className="fa-light fa-pen-to-square"></i>&nbsp;포스트
             </Button>
             <Button
-              colorScheme="cyan"
+              bg={popOverColor}
               color="white"
+              _hover={{
+                bg: { popOverColor },
+              }}
+              _active={{
+                bg: { popOverColor },
+              }}
               w="100%"
               ref={btnRef}
               onClick={() => {

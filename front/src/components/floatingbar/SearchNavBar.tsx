@@ -12,7 +12,7 @@ export const SearchNavBar = (props: any) => {
   const bg = useColorModeValue('white', 'gray.800');
   const color = useColorModeValue('gray.200', 'gray.600');
 
-  const { leftDisplay, rightDisplay } = props;
+  const { leftDisplay, rightDisplay, onKeyInput } = props;
 
   return (
     <Box>
@@ -50,6 +50,7 @@ export const SearchNavBar = (props: any) => {
                   borderRadius="1.5vh"
                   type="text"
                   placeholder="검색어를 입력하세요."
+                  onKeyDown={onKeyInput}
                 />
               </InputGroup>
             </Box>

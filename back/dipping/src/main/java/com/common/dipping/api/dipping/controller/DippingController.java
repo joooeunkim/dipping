@@ -1,5 +1,6 @@
 package com.common.dipping.api.dipping.controller;
 
+import com.common.dipping.api.dipping.domain.dto.DippingDto;
 import com.common.dipping.api.dipping.domain.dto.DippingResponseDto;
 import com.common.dipping.api.dipping.domain.dto.DippingSongDto;
 import com.common.dipping.api.dipping.domain.entity.Dipping;
@@ -18,10 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/dipping")
@@ -32,19 +30,26 @@ public class DippingController {
     private final DippingHeartService dippingHeartService;
 
     @GetMapping
-    public ResponseEntity<?> getDippingListOrDippingOne(@RequestParam(name = "dippingId", required = false) Long dippingId,
-                                                        @RequestParam(name = "sort", required = false) String sort){
+    public ResponseEntity<?> getDippingListOrDippingOne(@AuthenticationPrincipal UserDetailsImpl userInfo,
+                                                        @RequestParam(name = "dippingId", required = false) Long dippingId,
+                                                        @RequestParam(name = "sort", required = false) String sort,
+                                                        @RequestParam(name = "pageNum", required = false,defaultValue = "1") int pageNum,
+                                                        @RequestParam(name = "search", required = false, defaultValue = "") String search){
         Map<String, Object> result = new HashMap<String, Object>();
         Map<String, Object> data = new HashMap<String, Object>();
         Map<String, Object> Main = new HashMap<String, Object>();
         List<Object> comment = new ArrayList<>();
-        if(dippingId > 0L) {
+        if(dippingId != null) {
             // 딥핑 단일 조회
             Dipping dipping = dippingService.getDippingOne(dippingId);
 
             result.put("code", 200);
 
             DippingResponseDto dippingResponseDto = new DippingResponseDto(dipping);
+            List<Dipping> ChildDippings = dippingService.getChildByDippingId(dipping);
+
+            dippingResponseDto.LikeAndChild(dippingHeartService.isMylikeByDippingId(userInfo.getId(),dipping)
+            ,dippingHeartService.getCountByDippingId(dipping),dippingService.getCountChild(dipping));
             Main.put("item", dippingResponseDto);
 
             // 딥핑 음악 정보
@@ -52,11 +57,11 @@ public class DippingController {
             Main.put("music", dippingSongDtos);
             data.put("Main",Main);
 
-            List<Dipping> ChildDippings = dippingService.getChildByDippingId(dipping);
             if(!ChildDippings.isEmpty()){
                 for (Dipping d: ChildDippings) {
                     Map<String, Object> temp = new HashMap<String, Object>();
                     DippingResponseDto child = new DippingResponseDto(d);
+                    child.LikeAndChild(dippingHeartService.isMylikeByDippingId(userInfo.getId(),d),dippingHeartService.getCountByDippingId(d),0);
                     List<DippingSongDto> childSong = dippingService.getDippingSongAllById(d);
                     temp.put("item", child);
                     temp.put("music", childSong);
@@ -65,16 +70,29 @@ public class DippingController {
                 data.put("comment",comment);
             }
         }
-        else if(sort.equals("recent")){
-            result.put("code", 200);
-            List<Dipping> dippings = dippingService.getListByDippingId();
+        else if(sort != null){
+            List<Dipping> dippings = new ArrayList<>();
+            switch (sort){
+                case "recent":
+                    dippings = dippingService.getListByrecent(userInfo.getId(),pageNum,search);
+                    break;
+                case "trend":
+                    dippings = dippingService.getTrendDippings(pageNum,search);
+                    break;
+                case "following":
+                    dippings = dippingService.getFollowingDippings(userInfo.getId(),pageNum,search);
+                    break;
+            }
             if(!dippings.isEmpty()){
+                result.put("code", 200);
                 for (Dipping d: dippings) {
                     Map<String, Object> temp = new HashMap<String, Object>();
-                    DippingResponseDto child = new DippingResponseDto(d);
-                    List<DippingSongDto> childSong = dippingService.getDippingSongAllById(d);
-                    temp.put("item", child);
-                    temp.put("music", childSong);
+                    DippingResponseDto dip = new DippingResponseDto(d);
+                    dip.LikeAndChild(dippingHeartService.isMylikeByDippingId(userInfo.getId(),d)
+                            ,dippingHeartService.getCountByDippingId(d),dippingService.getCountChild(d));;
+                    List<DippingSongDto> dipSong = dippingService.getDippingSongAllById(d);
+                    temp.put("item", dip);
+                    temp.put("music", dipSong);
                     comment.add(temp);
                 }
                 data.put("posts",comment);
@@ -86,6 +104,8 @@ public class DippingController {
 
         if(!data.isEmpty()){
             result.put("data",data);
+        }else {
+            result.put("code",201);
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -94,17 +114,40 @@ public class DippingController {
 
     @PostMapping
     public ResponseEntity<?> registerDipping(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+
+        DippingDto dippingDto = mapper.treeToValue(registerObj.get("dipping"), DippingDto.class);
+        dippingDto.setUserId(userInfo.getId());
+        List<DippingSongDto> dippingSongDto = Arrays.asList(mapper.treeToValue(registerObj.get("playlist"), DippingSongDto[].class));
+
+        Dipping newDipping = dippingService.register(dippingDto);
+        dippingService.registerSong(dippingSongDto, newDipping);
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+
     @DeleteMapping
-    public ResponseEntity deleteDipping(@Param("dippingId") Long dippingId){
-        return new ResponseEntity<Void>(HttpStatus.OK);
+    public ResponseEntity deleteDipping(@RequestParam("dippingId") Long dippingId){
+        boolean result = dippingService.deleteDipping(dippingId);
+        if(!result){
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/edit")
     public ResponseEntity<?> editDipping(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestBody ObjectNode registerObj) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+
+        DippingDto dippingDto = mapper.treeToValue(registerObj.get("dipping"), DippingDto.class);
+        dippingDto.setUserId(userInfo.getId());
+        List<DippingSongDto> dippingSongDto = Arrays.asList(mapper.treeToValue(registerObj.get("playlist"), DippingSongDto[].class));
+
+        Dipping newDipping = dippingService.edit(dippingDto);
+        dippingService.editSong(dippingSongDto, newDipping);
+
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
