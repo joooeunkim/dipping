@@ -2,12 +2,34 @@ import { SearchNavBar } from '../../components/floatingbar/SearchNavBar';
 import { useEffect, useState } from 'react';
 import { Box, Grid, Link, Text, Button, Image } from '@chakra-ui/react';
 import { HomeFeed } from '../../components/FeedUserShort';
+import { useDispatch, useSelector } from 'react-redux';
+import { setInput } from '../../reducers/searchReducer';
 
 export const SearchMain = () => {
-  const props = {
-    leftDisplay: 'none',
-    rightDisplay: 'none',
+  const dispatch = useDispatch();
+  // 요청에 쓰일 파라미터들
+  const input = useSelector((state: any) => state.searchReducer.input);
+  const mode = useSelector((state: any) => state.searchReducer.mode);
+  const page = useSelector((state: any) => state.searchReducer.page);
+
+  // 화면에 표시할 리스트
+  const userlist: FeedPost[] = useSelector((state: any) => state.searchReducer.userlist);
+  const postlist: FeedPost[] = useSelector((state: any) => state.searchReducer.postlist);
+  const dippinlist: FeedPost[] = useSelector((state: any) => state.searchReducer.dippinlist);
+
+  // 검색 창 입력
+  const onKeyInput = (e: any) => {
+    if (e.key === 'Enter') dispatch(setInput(e.target.value));
   };
+
+  // 검색어나 모드가 바뀌면 페이지 초기화
+  useEffect(() => {
+    console.log('SearchMain: input or mode changed');
+    window.scrollTo(0, 0);
+    endRef.current = false;
+    dispatch(setPage(0));
+    getDippinPage(input, mode, 0);
+  }, [dispatch, input, mode]);
 
   return (
     <Box>
