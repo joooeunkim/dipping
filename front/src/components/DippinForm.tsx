@@ -28,7 +28,7 @@ export const DippinForm = (props: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [musicList, setMusicList] = useState<any[]>([]);
 
-  const [openPost, setOpenPost] = useState(false);
+  const [openPost, setOpenPost] = useState(true);
 
   const parent = props.parent;
   console.log(parent);

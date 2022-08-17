@@ -34,9 +34,9 @@ export const PostFeedForm = (props: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [musicList, setMusicList] = useState<any[]>([]);
 
-  const [openPost, setOpenPost] = useState(false);
-  const [openComment, setOpenComment] = useState(false);
-  const [mixAlbumArt, setmixAlbumArt] = useState(false);
+  const [openPost, setOpenPost] = useState(true);
+  const [openComment, setOpenComment] = useState(true);
+  const [mixAlbumArt, setmixAlbumArt] = useState(true);
   useEffect(() => {
     console.log('넘어온 음악리스트', dippingMusicList);
 
