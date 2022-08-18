@@ -99,7 +99,7 @@ export const PostComment = (props: any) => {
           setComments([]);
         }}
       >
-        <DrawerContent maxW="400px" h="full" padding="0">
+        <DrawerContent maxW="100vw" h="full" padding="0">
           <ModalNavBar
             title="댓글"
             leftElement={
