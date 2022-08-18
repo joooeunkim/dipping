@@ -25,21 +25,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
             "classpath:/META-INF/resources/webjars/"
     };
 
-    private final String uploadImagesPath;
-
-
-    public WebMvcConfig(@Value("${custom.path.upload-images}") String uploadImagesPath){
-        this.uploadImagesPath = uploadImagesPath;
-    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
-        registry.addResourceHandler("/static/img/**")
-                .addResourceLocations("file:///"+uploadImagesPath)
-                .setCachePeriod(3600)
-                .resourceChain(true)
-                .addResolver(new PathResourceResolver());
         // 정적 자원의 경로를 허용
         registry.addResourceHandler("/**").addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
 
