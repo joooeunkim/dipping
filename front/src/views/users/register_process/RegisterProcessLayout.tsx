@@ -93,7 +93,7 @@ export const RegisterProcessLayout = () => {
         pl="4"
         mb="10"
         position="absolute"
-        bottom="0"
+        top="70vh"
         left="0"
         justifyContent="space-between"
       >

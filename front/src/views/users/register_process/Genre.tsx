@@ -70,14 +70,14 @@ export const Genre = () => {
 
   return (
     <Flex flexWrap="wrap" justifyContent="center" mt="8">
-      <Flex width="100%" justifyContent="space-between" mb="calc(10vw)">
+      <Flex width="90%" justifyContent="space-between" mb="calc(6vw)">
         <Center
           id="ballad"
           onClick={clickGenre}
           border="1px"
           borderRadius="full"
-          w="100px"
-          h="100px"
+          w="24vw"
+          h="24vw"
           borderColor={genreList.ballad ? 'cyan.400' : 'gray.500'}
           color={genreList.ballad ? 'cyan.400' : 'gray.500'}
         >
@@ -89,8 +89,8 @@ export const Genre = () => {
           onClick={clickGenre}
           border="1px"
           borderRadius="full"
-          w="100px"
-          h="100px"
+          w="24vw"
+          h="24vw"
           borderColor={genreList.dance ? 'cyan.400' : 'gray.500'}
           color={genreList.dance ? 'cyan.400' : 'gray.500'}
         >
@@ -102,22 +102,22 @@ export const Genre = () => {
           onClick={clickGenre}
           border="1px"
           borderRadius="full"
-          w="100px"
-          h="100px"
+          w="24vw"
+          h="24vw"
           borderColor={genreList.rap ? 'cyan.400' : 'gray.500'}
           color={genreList.rap ? 'cyan.400' : 'gray.500'}
         >
           랩/힙합
         </Center>
       </Flex>
-      <Flex width="100%" justifyContent="space-between" mb="calc(10vw)">
+      <Flex width="90%" justifyContent="space-between" mb="calc(6vw)">
         <Center
           id="RBSoul"
           onClick={clickGenre}
           border="1px"
           borderRadius="full"
-          w="100px"
-          h="100px"
+          w="24vw"
+          h="24vw"
           borderColor={genreList.RBSoul ? 'cyan.400' : 'gray.500'}
           color={genreList.RBSoul ? 'cyan.400' : 'gray.500'}
         >
@@ -129,8 +129,8 @@ export const Genre = () => {
           onClick={clickGenre}
           border="1px"
           borderRadius="full"
-          w="100px"
-          h="100px"
+          w="24vw"
+          h="24vw"
           borderColor={genreList.indi ? 'cyan.400' : 'gray.500'}
           color={genreList.indi ? 'cyan.400' : 'gray.500'}
         >
@@ -142,22 +142,22 @@ export const Genre = () => {
           onClick={clickGenre}
           border="1px"
           borderRadius="full"
-          w="100px"
-          h="100px"
+          w="24vw"
+          h="24vw"
           borderColor={genreList.rock ? 'cyan.400' : 'gray.500'}
           color={genreList.rock ? 'cyan.400' : 'gray.500'}
         >
           록/메탈
         </Center>
       </Flex>
-      <Flex width="100%" justifyContent="space-between" mb="calc(10vw)">
+      <Flex width="90%" justifyContent="space-between" mb="calc(6vw)">
         <Center
           id="pop"
           onClick={clickGenre}
           border="1px"
           borderRadius="full"
-          w="100px"
-          h="100px"
+          w="24vw"
+          h="24vw"
           borderColor={genreList.pop ? 'cyan.400' : 'gray.500'}
           color={genreList.pop ? 'cyan.400' : 'gray.500'}
         >
@@ -169,8 +169,8 @@ export const Genre = () => {
           onClick={clickGenre}
           border="1px"
           borderRadius="full"
-          w="100px"
-          h="100px"
+          w="24vw"
+          h="24vw"
           borderColor={genreList.edm ? 'cyan.400' : 'gray.500'}
           color={genreList.edm ? 'cyan.400' : 'gray.500'}
         >
@@ -182,22 +182,22 @@ export const Genre = () => {
           onClick={clickGenre}
           border="1px"
           borderRadius="full"
-          w="100px"
-          h="100px"
+          w="24vw"
+          h="24vw"
           borderColor={genreList.jazz ? 'cyan.400' : 'gray.500'}
           color={genreList.jazz ? 'cyan.400' : 'gray.500'}
         >
           재즈
         </Center>
       </Flex>
-      <Flex width="100%" justifyContent="space-between" mb="calc(10vw)">
+      <Flex width="90%" justifyContent="space-between" mb="calc(6vw)">
         <Center
           id="folk"
           onClick={clickGenre}
           border="1px"
           borderRadius="full"
-          w="100px"
-          h="100px"
+          w="24vw"
+          h="24vw"
           borderColor={genreList.folk ? 'cyan.400' : 'gray.500'}
           color={genreList.folk ? 'cyan.400' : 'gray.500'}
         >
@@ -209,8 +209,8 @@ export const Genre = () => {
           onClick={clickGenre}
           border="1px"
           borderRadius="full"
-          w="100px"
-          h="100px"
+          w="24vw"
+          h="24vw"
           borderColor={genreList.trot ? 'cyan.400' : 'gray.500'}
           color={genreList.trot ? 'cyan.400' : 'gray.500'}
         >
@@ -222,8 +222,8 @@ export const Genre = () => {
           onClick={clickGenre}
           border="1px"
           borderRadius="full"
-          w="100px"
-          h="100px"
+          w="24vw"
+          h="24vw"
           borderColor={genreList.newage ? 'cyan.400' : 'gray.500'}
           color={genreList.newage ? 'cyan.400' : 'gray.500'}
         >
