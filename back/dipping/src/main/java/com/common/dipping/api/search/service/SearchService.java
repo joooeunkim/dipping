@@ -19,6 +19,7 @@ import com.common.dipping.api.user.repository.UserRepository;
 import com.common.dipping.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,7 +58,7 @@ public class SearchService {
         List<Tag> tagList = tagRepository.findAllByContentContaining(keyword);
         HashSet<BoardDto> boardList = new HashSet<>();
         for (int i = 0; i < tagList.size(); i++) {
-            List<PostTag> postTags = postTagRepository.findAllByTag(tagList.get(i));
+            List<PostTag> postTags = postTagRepository.findAllByTag(tagList.get(i), Sort.by(Sort.Direction.DESC, "create_at"));
             for (PostTag postTag:postTags){
                 BoardDto board = new BoardDto();
                 board.setId(postTag.getBoard().getId());
@@ -133,7 +134,7 @@ public class SearchService {
         List<ProfilePostDto> boards = new ArrayList<>();
         List<InterestTag>interestTags = userInfo.getInterestTags();
         for (InterestTag interestTag: interestTags) {
-            List<PostTag> postTags = postTagRepository.findAllByTag(interestTag.getTag());
+            List<PostTag> postTags = postTagRepository.findAllByTag(interestTag.getTag(), Sort.by(Sort.Direction.DESC, "create_at"));
             for (PostTag postTag: postTags) {
                 if(postTag.getBoard().getUser() == userInfo) {continue;}
                 boards.add(new ProfilePostDto(postTag.getBoard()));
