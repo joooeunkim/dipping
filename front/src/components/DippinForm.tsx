@@ -129,12 +129,8 @@ export const DippinForm = (props: any) => {
         <CyanButton title="작성" />
       </Box>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalBody>
-            <AddMusic isOpen={isOpen} onClose={onClose} setData={setData} />
-            {/* <Flex>
+      <AddMusic isOpen={isOpen} onClose={onClose} setData={setData} />
+      {/* <Flex>
               <Text fontSize="xl" pt="2" mr="1" color="gray.500">
                 <i className="fa-regular fa-search"></i>
               </Text>
@@ -162,9 +158,6 @@ export const DippinForm = (props: any) => {
                 ))}
               </List>
             </Box> */}
-          </ModalBody>
-        </ModalContent>
-      </Modal>
     </Box>
   );
 };

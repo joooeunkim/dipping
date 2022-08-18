@@ -123,7 +123,7 @@ export const ProfileEdit = () => {
             <Input
               type="file"
               display="none"
-              accept="image/jpg,image/png,image/jpeg"
+              accept="image/jpg,image/jpeg"
               name="profileImg"
               ref={fileInput}
               onChange={profileImgChangeEvent}

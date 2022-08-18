@@ -174,15 +174,7 @@ export const PostFeedForm = (props: any) => {
       >
         <CyanButton title="작성" />
       </Box>
-
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalBody>
-            <AddMusic isOpen={isOpen} onClose={onClose} setData={setData} />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <AddMusic isOpen={isOpen} onClose={onClose} setData={setData} />
     </Box>
   );
 };

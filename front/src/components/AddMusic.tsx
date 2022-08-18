@@ -39,6 +39,7 @@ export const AddMusic = ({
   // 모달이 닫힐 때 실행되는 것들
   const onCloseModal = () => {
     // 목록 비우기(다음에 입력할때를 위해)
+    console.log('closemodal');
     setYoutube([]);
     setLastFm([]);
     // 음악 정지
@@ -233,7 +234,6 @@ export const AddMusic = ({
                       }}
                     />
                   )} */}
-
                   <ChakraImage
                     marginX="16px"
                     borderRadius="10px"

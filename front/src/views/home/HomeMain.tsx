@@ -41,8 +41,6 @@ export const HomeMain = () => {
         pageNum: page,
       },
     });
-    console.log(res);
-
     if (res.data) {
       if (res.data.code === 201) {
         console.log('없음');
