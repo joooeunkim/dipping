@@ -1,6 +1,8 @@
 import { Box, useColorModeValue, Image, Avatar, Center, Flex, Spacer } from '@chakra-ui/react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { authAxios } from '../../api/common';
+import { parseJwt } from '../../api/login/local';
 import { PlayerSmall } from './PlayerSmall';
 
 export const DippinPostSmall = (props: any) => {
@@ -50,7 +52,9 @@ export const DippinPostSmall = (props: any) => {
         >
           {dippin.user.name}
         </Box>
-        <Avatar boxSize="36px" name="mocha_oca" src={dippin.user.profile_image} />
+        <Link to={'/profile/' + dippin.user.name}>
+          <Avatar boxSize="36px" name="mocha_oca" src={dippin.user.profile_image} />
+        </Link>
       </Flex>
 
       {/* article set */}
@@ -74,8 +78,20 @@ export const DippinPostSmall = (props: any) => {
           {likecount}
         </Box>
         <Spacer />
-        <Box fontSize="20px" className="fa-light fa-eraser" marginLeft="8px" />
-        <Box fontSize="20px" className="fa-light fa-pencil" marginLeft="8px" />
+        {dippin.user.name === parseJwt(localStorage.getItem('accessToken')).nickname && (
+          <Box
+            className="fa-light fa-eraser"
+            fontSize="20px"
+            marginLeft="8px"
+            onClick={() => {
+              if (window.confirm('정말 삭제하시겠습니까?')) {
+                console.log('삭제');
+                authAxios.delete('/dipping?dippingId=' + dippin.id);
+                window.location.reload();
+              }
+            }}
+          />
+        )}
       </Flex>
 
       {/* music player */}

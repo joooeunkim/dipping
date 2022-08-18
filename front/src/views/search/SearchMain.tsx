@@ -1,9 +1,16 @@
 import { SearchNavBar } from '../../components/floatingbar/SearchNavBar';
 import { useEffect, useRef, useState } from 'react';
-import { Box, Avatar } from '@chakra-ui/react';
+import { Box, Avatar, Grid, Image, GridItem } from '@chakra-ui/react';
 import { HomeFeed } from '../../components/FeedUserShort';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPage, setInput, setMode, setPage, setUserList } from '../../reducers/searchReducer';
+import {
+  addPage,
+  setInput,
+  setMode,
+  setPage,
+  setPostList,
+  setUserList,
+} from '../../reducers/searchReducer';
 import { FeedPost, User } from '../../types/HomeFeedData';
 import { authAxios } from '../../api/common';
 import { SearchMode } from '../../components/search/SearchMode';
@@ -18,7 +25,7 @@ export const SearchMain = () => {
 
   // 화면에 표시할 리스트
   const userlist: User[] = useSelector((state: any) => state.searchReducer.userlist);
-  const postlist: FeedPost[] = useSelector((state: any) => state.searchReducer.postlist);
+  const postlist: [] = useSelector((state: any) => state.searchReducer.postlist);
   const dippinlist: FeedPost[] = useSelector((state: any) => state.searchReducer.dippinlist);
 
   // 검색 창 입력
@@ -34,7 +41,7 @@ export const SearchMain = () => {
     dispatch(setPage(0));
 
     if (mode === 'user') getUserList(input, page);
-    // if (mode === 'post') getUserList(input, page);
+    if (mode === 'post') getPostList(input, page);
   }, [dispatch, input, mode]);
 
   // 새 요청 받아서 리스트에 추가
@@ -54,21 +61,22 @@ export const SearchMain = () => {
   // 백엔드에 요청
   const getPostList = async (query: string, page: number) => {
     setLoad(true); //로딩 시작
-    console.log('SearchMain: call getUserList: ' + query + '/' + page);
-    const res: any = await authAxios.get('/search/user', {
+    console.log('SearchMain: call getPostList: ' + query + '/' + page);
+    const res: any = await authAxios.get('/search/post', {
       params: {
         keyword: query,
       },
     });
     setLoad(false); //로딩 종료
-    const users = res.data.data.users.map((e: any) => {
-      return {
-        id: e.id,
-        name: e.nickname,
-        profile_image: e.profileImgUrl,
-      };
-    });
-    dispatch(setUserList(users));
+    const posts = res.data.data.posts
+      .map((e: any) => {
+        return {
+          id: e.id,
+          albumart: e.songImgUrl,
+        };
+      })
+      .sort((a: any, b: any) => b.id - a.id);
+    dispatch(setPostList(posts));
   };
   const getUserList = async (query: string, page: number) => {
     setLoad(true); //로딩 시작
@@ -138,7 +146,13 @@ export const SearchMain = () => {
             </Link>
           ))
         ) : (
-          <HomeFeed />
+          <Grid templateColumns="repeat(3, 1fr)" gap={0.5}>
+            {postlist.map((item, index) => (
+              <Link key={index} to={'/post/' + (item as any).id}>
+                <Image boxSize="33vw" src={(item as any).albumart} objectFit="cover" />
+              </Link>
+            ))}
+          </Grid>
         )}
       </Box>
     </Box>

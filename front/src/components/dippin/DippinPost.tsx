@@ -13,7 +13,9 @@ import {
   DrawerBody,
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { authAxios } from '../../api/common';
+import { parseJwt } from '../../api/login/local';
 import { DippinForm } from '../DippinForm';
 import { ModalNavBar } from '../floatingbar/ModalNavBar';
 import { PlayerSmall } from './PlayerSmall';
@@ -67,7 +69,9 @@ export const DippinPost = (props: any) => {
         >
           {dippin.user.name}
         </Box>
-        <Avatar boxSize="40px" name="mocha_oca" src={dippin.user.profile_image} />
+        <Link to={'/profile/' + dippin.user.name}>
+          <Avatar boxSize="40px" name="mocha_oca" src={dippin.user.profile_image} />
+        </Link>
       </Flex>
 
       {/* article set */}
@@ -91,17 +95,20 @@ export const DippinPost = (props: any) => {
           {likecount}
         </Box>
         <Spacer />
-        <Box
-          className="fa-light fa-eraser"
-          marginLeft="8px"
-          onClick={() => {
-            if (window.confirm('정말 삭제하시겠습니까?')) {
-              console.log('삭제');
-              authAxios.delete('/dipping?dippingId=' + dippin.id);
-              window.location.href = '/dippin';
-            }
-          }}
-        />
+        {dippin.user.name === parseJwt(localStorage.getItem('accessToken')).nickname && (
+          <Box
+            className="fa-light fa-eraser"
+            marginLeft="8px"
+            onClick={() => {
+              if (window.confirm('정말 삭제하시겠습니까?')) {
+                console.log('삭제');
+                authAxios.delete('/dipping?dippingId=' + dippin.id);
+                window.location.href = '/dippin';
+              }
+            }}
+          />
+        )}
+
         <Box className="fa-light fa-comment-plus" marginLeft="8px" onClick={onOpen} />
         <Box className="fa-light fa-share-nodes" marginLeft="8px" />
       </Flex>
