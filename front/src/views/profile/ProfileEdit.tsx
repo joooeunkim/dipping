@@ -1,16 +1,30 @@
-import { Container, Flex, Image, Box, Text, Input, Spacer, Link, Button } from '@chakra-ui/react';
+import {
+  Container,
+  Flex,
+  Image,
+  Box,
+  Text,
+  Input,
+  Spacer,
+  Link,
+  Button,
+  Avatar,
+  Circle,
+  Center,
+} from '@chakra-ui/react';
 import { ModalNavBar } from '../../components/floatingbar/ModalNavBar';
-import React, { SetStateAction, useState } from 'react';
+import React, { SetStateAction, useRef, useState } from 'react';
 import { Tag } from '../../components/Tag';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
 import { authAxios } from '../../api/common';
 import axios from 'axios';
+import { CyanButton } from '../../components/CyanButton';
 
 export const ProfileEdit = () => {
   const props = {
     title: '프로필 수정',
     leftElement: <Box className="fa-light fa-angle-left" lineHeight="36px" fontSize="24px" bg="" />,
-    rightElement: <Box className="fa-light fa-bars" lineHeight="36px" fontSize="24px" bg="" />,
+    // rightElement: <Box className="fa-light fa-bars" lineHeight="36px" fontSize="24px" bg="" />,
   };
   const createTag = (e: any) => {
     let tagName: string = e.target.value;
@@ -61,63 +75,50 @@ export const ProfileEdit = () => {
 
   const [tags, setTags] = useState<SetStateAction<any>>([]);
 
+  const [profileImg, setProfileImg] = useState('');
+  const fileInput = useRef<any>(null);
+
+  const profileImgChangeEvent = (e: any) => {
+    const formData = new FormData();
+    const file = e.target.files[0];
+    formData.append('file', file);
+    console.log('file', file);
+
+    authAxios
+      .post('/profile/upload', formData)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   return (
     <Box>
       <ModalNavBar {...props} />
       <Container maxW="480px" w="100%" bg="" h="100vh" margin="0 auto">
         <Flex flexDirection="column" alignItems="center" marginTop="40px" marginBottom="40px">
-          <Box>
-            <ImageUploading multiple value={images} onChange={onChange} maxNumber={maxNumber}>
-              {({
-                imageList,
-                onImageUpload,
-                onImageRemoveAll,
-                onImageUpdate,
-                onImageRemove,
-                isDragging,
-                dragProps,
-              }) => (
-                <Box className="upload__image-wrapper">
-                  <button
-                    style={isDragging ? { color: 'red' } : undefined}
-                    onClick={onImageUpload}
-                    {...dragProps}
-                  >
-                    프로필 이미지 등록
-                  </button>
-                  {imageList.map((image, index) => (
-                    <Box key={index} className="image-item">
-                      <Image
-                        src={image.dataURL}
-                        borderRadius="full"
-                        boxSize="96px"
-                        alt="ProfileImg"
-                        marginBottom="16px"
-                      />
-                      <Box className="image-item__btn-wrapper">
-                        <Button
-                          width="96px"
-                          height="32px"
-                          bg="cyan.400"
-                          // size="lg"
-                          color="white"
-                          _hover={{
-                            bg: 'cyan.500',
-                          }}
-                          _active={{
-                            bg: 'cyan.500',
-                          }}
-                          onClick={() => onImageUpdate(index)}
-                        >
-                          이미지 변경
-                        </Button>
-                      </Box>
-                    </Box>
-                  ))}
-                </Box>
-              )}
-            </ImageUploading>
-          </Box>
+          <Flex w="100%" flexWrap="wrap" justifyContent="center">
+            <Center mb="4" w="100%">
+              <Avatar m="0 auto" name="sangham" src={profileImg} size="xl" />
+            </Center>
+            <Input
+              type="file"
+              // display="none"
+              accept="image/jpg,image/png,image/jpeg"
+              name="profileImg"
+              ref={fileInput}
+              onChange={profileImgChangeEvent}
+            />
+            <Box
+              onClick={() => {
+                fileInput.current.click();
+              }}
+            >
+              <CyanButton size="sm" title="이미지 변경" />
+            </Box>
+          </Flex>
         </Flex>
         <Flex>
           <Box alignItems="left" marginTop="8px" width="96px">

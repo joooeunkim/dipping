@@ -20,6 +20,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { authAxios } from '../../api/common';
+import { parseJwt } from '../../api/login/local';
 import { Comment, FeedPost, User } from '../../types/HomeFeedData';
 import { ModalNavBar } from '../floatingbar/ModalNavBar';
 import { PostCommentItem } from './PostCommentItem';
@@ -99,7 +100,7 @@ export const PostComment = (props: any) => {
           setComments([]);
         }}
       >
-        <DrawerContent maxW="400px" h="full" padding="0">
+        <DrawerContent maxW="100vw" h="full" padding="0">
           <ModalNavBar
             title="댓글"
             leftElement={
@@ -162,7 +163,11 @@ export const PostComment = (props: any) => {
             </Box>
             <Box position="relative" top="6px" h="auto" w="full" bg="" marginX="16px" marginY="4px">
               <Flex h="56px">
-                <Avatar boxSize="32px" name={commentinfo.name} src={commentinfo.profile_image} />
+                <Avatar
+                  boxSize="32px"
+                  name={parseJwt(localStorage.getItem('accessToken')).nickname}
+                  src={parseJwt(localStorage.getItem('accessToken')).profileImgUrl}
+                />
                 <Box flex="1" position="relative" top="2px" marginX="16px">
                   <InputGroup>
                     <InputRightElement
