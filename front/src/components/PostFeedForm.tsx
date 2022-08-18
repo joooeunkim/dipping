@@ -50,6 +50,15 @@ export const PostFeedForm = (props: any) => {
     setMusicList(tempList);
   }, [dippingMusicList]);
 
+  const popMusicList = (id: string) => {
+    setMusicList((data: any) => {
+      const targetidx = data.findIndex((e: any) => e.id === id);
+      const list = data.slice();
+      list.splice(targetidx, 1);
+      return list;
+    });
+  };
+
   const setData = (data: any) => {
     console.log('hi', data);
     selectedMusicList = [...musicList, refactorData(data)];
@@ -121,7 +130,7 @@ export const PostFeedForm = (props: any) => {
                   </Text>
                   <Text lineHeight="4">{music.songTitle}</Text>
                 </Box>
-                <CloseButton mt="2" />
+                <CloseButton mt="2" onClick={() => popMusicList(music.id)} />
               </Flex>
             );
           })
@@ -173,7 +182,7 @@ export const PostFeedForm = (props: any) => {
         }}
       >
         <CyanButton title="작성" />
-        <Box h="72px" w="100%"></Box>
+        <Box h="72px" w="100%" />
       </Box>
       <AddMusic isOpen={isOpen} onClose={onClose} setData={setData} />
     </Box>

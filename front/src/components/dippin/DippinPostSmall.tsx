@@ -52,8 +52,8 @@ export const DippinPostSmall = (props: any) => {
         >
           {dippin.user.name}
         </Box>
-        <Link to={'/profile/' + dippin.user.name}>
-          <Avatar boxSize="36px" name="mocha_oca" src={dippin.user.profile_image} />
+        <Link to={'/profile/?nickname=' + dippin.user.name}>
+          <Avatar boxSize="36px" name={dippin.user.name} src={dippin.user.profile_image} />
         </Link>
       </Flex>
 

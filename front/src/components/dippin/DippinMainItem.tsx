@@ -10,7 +10,7 @@ export const DippinMainItem = (props: any) => {
         <Avatar
           position="relative"
           boxSize="40px"
-          name="mocha_oca"
+          name={dippin.user.name}
           src={dippin.user.profile_image}
         />
         <Box position="relative" marginX="8px" w="full">
