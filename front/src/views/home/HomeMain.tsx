@@ -13,8 +13,7 @@ export const HomeMain = () => {
   const dispatch = useDispatch();
 
   // 요청에 쓰일 파라미터
-  const [page, setPage] = useState<number>(0);
-  const [mode, setMode] = useState<string>('user');
+  const [pagemode, setPageMode] = useState<any>([0, 'user']);
   // 화면에 표시할 리스트
   const [followposts, setFollowPosts] = useState<FeedPost[]>([]);
   const [recommendposts, setRecommendPosts] = useState<FeedPost[]>([]);
@@ -29,11 +28,12 @@ export const HomeMain = () => {
 
   // 새 요청 받아서 리스트에 추가
   useEffect(() => {
-    getMainPage(mode, page);
-  }, [page]);
+    getMainPage(pagemode[0], pagemode[1]);
+  }, [pagemode]);
 
   // function
-  const getMainPage = async (mode: string, page: number) => {
+  const getMainPage = async (page: number, mode: string) => {
+    if (page === 0) return;
     setLoad(true); //로딩 시작
     console.log('HomeMain: call getMainPage: ' + mode + '/' + page);
     const res: any = await authAxios.get('/board/' + mode, {
@@ -45,9 +45,9 @@ export const HomeMain = () => {
       if (res.data.code === 201) {
         console.log('없음');
         if (mode === 'user') {
-          setMode('recommend');
-          console.log('setmode recommend');
-          setPage(1);
+          console.log('setmode recommend ' + mode + '/' + page);
+          setPageMode([1, 'recommend']);
+          //setPage(1);
         } else if (mode === 'recommend') {
           endRef.current = true;
         }
@@ -112,7 +112,7 @@ export const HomeMain = () => {
       preventRef.current = false; //옵저버 중복 실행 방지
       // 실행하고 싶은 것
       console.log('HomeMain: call setPage');
-      setPage(num => num + 1);
+      setPageMode((data: any) => [data[0] + 1, data[1]]);
     }
   };
   // 무한 스크롤로 업데이트 하기 위한 코드 end
@@ -140,7 +140,7 @@ export const HomeMain = () => {
           {!load && '팔로잉 포스트가 없습니다.'}
         </Box>
       )}
-      {mode === 'recommend' && (
+      {pagemode[1] === 'recommend' && (
         <Box
           paddingTop="40px"
           paddingBottom="8px"
