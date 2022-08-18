@@ -11,6 +11,7 @@ import com.common.dipping.api.board.domain.entity.Board;
 import com.common.dipping.api.board.repository.CommentRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,14 +64,16 @@ public class CommentService {
 			commentDto.setLikeCount(heartService.getCountByCommentId(c));
 			commentDto.setMyLike(heartService.isMylikeByCommentId(userId,c));
 			commentDto.setNickname(c.getUser().getNickname());
+			commentDto.setProfileImgUrl(c.getUser().getProfileImgUrl());
 
 			commentDtos.add(commentDto);
 		}
 		return commentDtos;
 	}
 
-	public boolean deleteComment(Long commentId) {
-		commentRepository.deleteById(commentId);
+	@Transactional
+	public boolean deleteComment(Long commentId, Long userId) {
+		commentRepository.deleteByIdAndUserId(commentId,userId);
 		commentRepository.deleteByParentId(commentId);
 		return commentRepository.existsById(commentId);
 	}

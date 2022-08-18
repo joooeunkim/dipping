@@ -11,6 +11,7 @@ import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,7 @@ public class HeartService {
     }
 
     // 유저아이디와 포스트번호를 통해 좋아요가 눌러져있다면 삭제 없다면 등록
+    @Transactional
     public int setHeartByUserIdAndBoardId(Long userId, Long boardId){
         User user = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("해당 유저가 없습니다. id="+userId));
         Board board = boardRepository.findById(boardId).orElseThrow(()->new IllegalArgumentException("해당 게시물이 없습니다. id="+boardId));
@@ -73,6 +75,7 @@ public class HeartService {
     }
 
     // 유저아이디와 댓글 번호를 통해 좋아요가 눌러져있다면 삭제 없다면 등록
+    @Transactional
     public int setHeartByUserIdAndCommentId(Long userId, Long commentId){
         User user = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("해당 유저가 없습니다. id="+userId));
         Comment comment = commentRepository.findById(commentId).orElseThrow(()->new IllegalArgumentException("해당 댓글이 없습니다. id="+commentId));

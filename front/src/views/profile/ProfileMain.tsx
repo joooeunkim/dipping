@@ -42,6 +42,11 @@ export const ProfileMain = () => {
     });
   }, []);
 
+  const logout = () => {
+    localStorage.removeItem('accessToken');
+    window.location.href = '/';
+  };
+
   const props = {
     title: '프로필',
     leftElement: (
@@ -49,6 +54,11 @@ export const ProfileMain = () => {
     ),
     rightElement: (
       <Box
+        onClick={() => {
+          if (window.confirm('로그아웃 하시겠습니까?')) {
+            logout();
+          }
+        }}
         className="fa-light fa-arrow-right-from-bracket"
         lineHeight="36px"
         fontSize="24px"

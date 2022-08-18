@@ -1,12 +1,15 @@
 package com.common.dipping.config;
 
 //import com.common.dipping.filter.HeaderFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.resource.PathResourceResolver;
 
 //import com.common.dipping.interceptor.JwtTokenInterceptor;
 
@@ -22,10 +25,24 @@ public class WebMvcConfig implements WebMvcConfigurer {
             "classpath:/META-INF/resources/webjars/"
     };
 
+    private final String uploadImagesPath;
+
+
+    public WebMvcConfig(@Value("${custom.path.upload-images}") String uploadImagesPath){
+        this.uploadImagesPath = uploadImagesPath;
+    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+
+        registry.addResourceHandler("/static/img/**")
+                .addResourceLocations("file:///"+uploadImagesPath)
+                .setCachePeriod(3600)
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver());
         // 정적 자원의 경로를 허용
         registry.addResourceHandler("/**").addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
+
     }
 
 

@@ -17,6 +17,7 @@ public class DippingResponseDto {
     private boolean myLike;
     private int likeCount;
     private int childCount;
+    private String profileImgUrl;
 
     public DippingResponseDto(Dipping dipping) {
         this.dippingId = dipping.getId();
@@ -28,6 +29,7 @@ public class DippingResponseDto {
         this.parentDipping = (dipping.getParentDipping() != null ) ? dipping.getParentDipping().getId(): 0L;
         this.createdAt = dipping.getCreatedAt().toString();
         this.updatedAt = dipping.getCreatedAt().toString();
+        this.profileImgUrl = dipping.getUser().getProfileImgUrl();
     }
 
     public void LikeAndChild(boolean myLike, int likeCount, int childCount){

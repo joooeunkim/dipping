@@ -85,6 +85,7 @@ public final class JwtProvider {
         claims.put("nickname", user.getNickname());
         claims.put("provider", user.getProvider());
         claims.put("roles", authentication.getAuthorities());
+        claims.put("profileImgUrl", user.getProfileImgUrl());
         Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims)

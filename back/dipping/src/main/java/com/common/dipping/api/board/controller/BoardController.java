@@ -56,7 +56,7 @@ public class BoardController {
     static class boardIdCompare implements Comparator<Board> {
         @Override
         public int compare(Board b1, Board b2) {
-            return (int) (b2.getId() - b1.getId());
+            return (b2.getCreatedAt().compareTo(b1.getCreatedAt()));
         }
     }
 
@@ -85,8 +85,8 @@ public class BoardController {
 
     @Operation(summary = "피드 삭제", description = "피드 아이디를 통해 삭제 요청")
     @DeleteMapping
-    public ResponseEntity<?> deleteBoard(@Param("boardId") Long boardId){
-        boolean result = boardService.deleteBoard(boardId);
+    public ResponseEntity<?> deleteBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestParam("boardId") Long boardId){
+        boolean result = boardService.deleteBoard(boardId,userInfo.getId());
         if(!result){
             return new ResponseEntity<Void>(HttpStatus.OK);
         }else {
@@ -164,6 +164,57 @@ public class BoardController {
         } else if (board.getId() == 0L) {
             ResponseEntity.badRequest(); // 잘못된 요청
         }
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "사용자 피드 목록 조회 성공", content = @Content(schema = @Schema(implementation = BoardResponse.class)))})
+    @Operation(summary = "사용자 피드 목록 조회", description = "userId 입력시 단일 조회하여 피드 정보와 음악 정보를 조회")
+    @GetMapping("/self")
+    public ResponseEntity<?> getBoardListByUserId(@Param("userId") Long userId) {
+
+        Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<String, Object>();
+
+        List<Object> posts = new ArrayList<>();
+        List<Board> boards = boardService.getAllBoardsByUserId(userId);
+
+        for (int i=0;i<boards.size();i++) {
+            Map<String, Object> item = new HashMap<>();
+            BoardResponse boardResponse = new BoardResponse(boards.get(i));
+            Long num = Long.valueOf(i) + 1;
+            boardResponse.setId(num);
+            boardResponse.setLikeCount(heartService.getCountByBoardId(boards.get(i)));
+            boardResponse.setMyLike(heartService.isMylikeByBoardId(userId, boards.get(i)));
+            boardResponse.setCommentCount(commentService.getCountByBoardId(boards.get(i)));
+            item.put("item", boardResponse);
+
+            List<BoardSong> boardSongs = boardService.getBoardSongAllById(boards.get(i));
+            List<BoardSongDto> boardSongDtos = new ArrayList<>();
+            if (!boardSongs.isEmpty()) {
+                for (BoardSong boardSong : boardSongs) {
+                    BoardSongDto boardSongDto = new BoardSongDto();
+                    boardSongDto.setId(boardSong.getId());
+                    boardSongDto.setBoardId(boardSong.getBoard().getId());
+                    boardSongDto.setSongTitle(boardSong.getSongTitle());
+                    boardSongDto.setSongSinger(boardSong.getSongSinger());
+                    boardSongDto.setSongUrl(boardSong.getSongUrl());
+                    boardSongDto.setSongImgUrl(boardSong.getSongImgUrl());
+                    boardSongDtos.add(boardSongDto);
+                }
+                item.put("music", boardSongDtos);
+            }
+
+            List<String> postTagDtos = boardService.getPostTagByBoard(boards.get(i));
+            item.put("tag", postTagDtos);
+
+            posts.add(item);
+        }
+
+        result.put("code", 201);
+        data.put("posts", posts);
+        result.put("data", data);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -349,8 +400,8 @@ public class BoardController {
 
     @Operation(summary = "피드 댓글 목록 삭제", description = "commentId를 입력받아 해당 댓글 삭제")
     @DeleteMapping("comment")
-    public ResponseEntity<?> deleteComment(@Param("commentId") Long commentId){
-        boolean result = commentService.deleteComment(commentId);
+    public ResponseEntity<?> deleteComment(@AuthenticationPrincipal UserDetailsImpl userInfo,@Param("commentId") Long commentId){
+        boolean result = commentService.deleteComment(commentId,userInfo.getId());
         if(!result){
             return new ResponseEntity<Void>(HttpStatus.OK);
         }else {
@@ -449,7 +500,7 @@ public class BoardController {
         ObjectMapper mapper = new ObjectMapper();
 
         StorageDto storageDto = mapper.treeToValue(registerObj.get("collection"), StorageDto.class);
-        storageService.deletStorage(storageDto.getUserId(),storageDto.getBoardId());
+        storageService.deletStorage(userInfo.getId(), storageDto.getBoardId());
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
