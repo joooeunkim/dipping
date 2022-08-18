@@ -221,9 +221,12 @@ public class UserController {
         //FileUpload 관련 설정.
         if (file!=null) {
             // 파일을 저장할 폴더 지정
-            Resource res = resourceLoader.getResource("classpath:static/upload");
-            //String canonicalPath = res.getFile().getCanonicalPath();
-            String canonicalPath = "home"+File.separator+"ubuntu"+File.separator+"S07P12B210"+File.separator+"back"+File.separator+"dipping"+File.separator+"build"+File.separator+"resources"+File.separator+"main"+File.separator+"static"+File.separator+"upload";
+            Resource res = resourceLoader.getResource("/static/upload");
+            System.out.println("res.exists(): "+res.exists());
+            System.out.println("res.getDescription(): "+res.getDescription());
+            System.out.println("res.getURI().getPath(): "+res.getURI().getPath());
+            String canonicalPath = res.getFile().getCanonicalPath();
+            //String canonicalPath = "home"+File.separator+"ubuntu"+File.separator+"S07P12B210"+File.separator+"back"+File.separator+"dipping"+File.separator+"build"+File.separator+"resources"+File.separator+"main"+File.separator+"static"+File.separator+"upload";
             System.out.println("file upload canonical path : "+ canonicalPath);
             File folder = new File(canonicalPath);
             if (!folder.exists()){
