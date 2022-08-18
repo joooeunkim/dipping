@@ -14,6 +14,8 @@ import {
   useControllableState,
   Avatar,
   useColorModeValue,
+  Spinner,
+  Center,
 } from '@chakra-ui/react';
 import { ModalNavBar } from '../../components/floatingbar/ModalNavBar';
 import { FeedAll } from '../../components/FeedUserShort';
@@ -21,10 +23,13 @@ import { useEffect, useState } from 'react';
 import { authAxios } from '../../api/common';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CyanButton } from '../../components/CyanButton';
+import { parseJwt } from '../../api/login/local';
 
 export const ProfileMain = () => {
   const [profile, setProfile] = useState<any>();
   const [content, setContent] = useState<any>();
+  const [isFollow, setIsFollow] = useState<any>();
+  const [load, setLoad] = useState<boolean>(true);
   const location = useLocation();
   const navigate = useNavigate();
   const buttonColor = useColorModeValue('cyan.400', 'cyan.500');
@@ -33,12 +38,14 @@ export const ProfileMain = () => {
   useEffect(() => {
     authAxios.get(search ? '/profiles/?userNickname=' + search : '/profiles').then((res: any) => {
       setProfile(res.data.data.user);
+      setIsFollow(res.data.data.user.isFollowed);
       setContent({
         post: res.data.data.post,
         dipping: res.data.data.dipping,
         collection: res.data.data.collection,
       });
       console.log(res);
+      setLoad(false);
     });
   }, []);
 
@@ -67,77 +74,124 @@ export const ProfileMain = () => {
     ),
   };
 
+  useEffect(() => {
+    console.log('여긴 뭔가 변하면 항상 실행?');
+  });
+
+  const changeFollow = (e: any) => {
+    console.log(e.currentTarget.id);
+    const receiver = e.currentTarget.id;
+    const sender = parseJwt(localStorage.getItem('accessToken'))?.nickname;
+    console.log(sender, receiver);
+    authAxios
+      .post('/follow', {
+        senderNickname: sender,
+        receiverNickname: receiver,
+      })
+      .then(res => {
+        console.log(res);
+        setIsFollow(!isFollow);
+      });
+  };
+
   return (
     <Box>
       <ModalNavBar {...props} />
-      <Container maxW="480px" w="100%" bg="" h="100vh" margin="0 auto">
-        <FormControl marginTop="16px" marginBottom="16px">
-          <Flex marginRight="0px" paddingLeft="24px">
-            <Box>
-              <Avatar w="20" h="20" name={profile?.nickname} src={profile?.profileImgUrl} />
-              <Text textAlign="center" fontSize="16px">
-                {profile?.nickname}
-              </Text>
-            </Box>
-            <Spacer />
-            <Box w="200px">
-              <Flex height="72px">
-                <FormHelperText p="2" textAlign="center" fontSize="16px">
-                  <Text>{profile?.boardCount + content?.dipping.length}</Text>
-                  <Text>게시물</Text>
-                </FormHelperText>
-                <FormHelperText
-                  p="2"
-                  textAlign="center"
-                  fontSize="16px"
-                  onClick={() => navigate('/follow?nickname=' + profile?.nickname)}
-                >
-                  <Text>{profile?.followerCount}</Text>
-                  <Text>팔로워</Text>
-                </FormHelperText>
-                <FormHelperText
-                  p="2"
-                  textAlign="center"
-                  fontSize="16px"
-                  onClick={() => navigate('/follow?nickname=' + profile?.nickname)}
-                >
-                  <Text>{profile?.followingCount}</Text>
-                  <Text>팔로잉</Text>
-                </FormHelperText>
-              </Flex>
-              {!search ? (
-                <Button colorScheme="gray.200" variant="outline" height="24px" width="87%">
-                  <Link href="/profile/edit" fontSize="16px">
-                    프로필 수정
-                  </Link>
-                </Button>
-              ) : (
-                <Box>
-                  <Button
-                    bg={buttonColor}
-                    _hover={{
-                      bg: 'cyan.500',
-                    }}
-                    _active={{
-                      bg: 'cyan.500',
-                    }}
+      {load ? (
+        <Center>
+          <Spinner />
+        </Center>
+      ) : (
+        <Container maxW="480px" w="100%" bg="" h="100vh" margin="0 auto">
+          <FormControl marginTop="16px" marginBottom="16px">
+            <Flex marginRight="0px" paddingLeft="24px">
+              <Box>
+                <Avatar w="20" h="20" name={profile?.nickname} src={profile?.profileImgUrl} />
+                <Text textAlign="center" fontSize="16px">
+                  {profile?.nickname}
+                </Text>
+              </Box>
+              <Spacer />
+              <Box w="200px">
+                <Flex height="72px">
+                  <FormHelperText p="2" textAlign="center" fontSize="16px">
+                    <Text>{profile?.boardCount + content?.dipping.length}</Text>
+                    <Text>게시물</Text>
+                  </FormHelperText>
+                  <FormHelperText
+                    p="2"
+                    textAlign="center"
+                    fontSize="16px"
+                    onClick={() => navigate('/follow?nickname=' + profile?.nickname)}
                   >
-                    팔로우
+                    <Text>{profile?.followerCount}</Text>
+                    <Text>팔로워</Text>
+                  </FormHelperText>
+                  <FormHelperText
+                    p="2"
+                    textAlign="center"
+                    fontSize="16px"
+                    onClick={() => navigate('/follow?nickname=' + profile?.nickname)}
+                  >
+                    <Text>{profile?.followingCount}</Text>
+                    <Text>팔로잉</Text>
+                  </FormHelperText>
+                </Flex>
+                {!search ? (
+                  <Button
+                    colorScheme="gray.200"
+                    variant="outline"
+                    width="87%"
+                    onClick={() => navigate('/profile/edit', { state: profile?.profileImgUrl })}
+                  >
+                    프로필 수정
                   </Button>
-                </Box>
-              )}
-            </Box>
+                ) : (
+                  <Box>
+                    {isFollow ? (
+                      <Button
+                        id={profile?.nickname}
+                        bg="red.400"
+                        _hover={{
+                          bg: 'red.500',
+                        }}
+                        _active={{
+                          bg: 'cyan.500',
+                        }}
+                        onClick={changeFollow}
+                      >
+                        언팔로우
+                      </Button>
+                    ) : (
+                      <Button
+                        id={profile?.nickname}
+                        bg={buttonColor}
+                        _hover={{
+                          bg: 'cyan.500',
+                        }}
+                        _active={{
+                          bg: 'cyan.500',
+                        }}
+                        onClick={changeFollow}
+                      >
+                        팔로우
+                      </Button>
+                    )}
+                  </Box>
+                )}
+              </Box>
+            </Flex>
+          </FormControl>
+          <Flex marginLeft="24px" marginBottom="32px">
+            <Text fontSize="16px" color="gray.500">
+              {profile?.musicTaste}
+            </Text>
           </Flex>
-        </FormControl>
-        <Flex marginLeft="24px" marginBottom="32px">
-          <Text fontSize="16px" color="gray.500">
-            {profile?.musicTaste}
-          </Text>
-        </Flex>
-        <Box marginTop="32px">
-          <FeedAll content={content} />
-        </Box>
-      </Container>
+          <Box marginTop="32px">
+            <FeedAll content={content} />
+          </Box>
+        </Container>
+      )}
     </Box>
   );
 };

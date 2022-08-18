@@ -113,7 +113,7 @@ export const DippinForm = (props: any) => {
         </Button>
       </Center>
       <Input id="title" mt="4" variant="flushed" placeholder="제목" />
-      <Textarea id="content" rows={14} variant="unstyled" placeholder="본문 내용" />
+      <Textarea id="content" rows={8} variant="unstyled" placeholder="본문 내용" />
       <Box w="70%" m="32px auto">
         <Flex justifyContent="space-between" mb="4">
           팔로워에게만 공개

@@ -64,7 +64,7 @@ export const HomeMain = () => {
             last_modified: e.item.updatedAt,
             user: {
               name: e.item.nickname,
-              profile_image: e.item.userId,
+              profile_image: e.item.profileImgUrl,
             },
             playlist: e.music.map((el: any) => {
               return {
