@@ -11,26 +11,51 @@ import {
   Link,
   FormHelperText,
   Spacer,
-  useControllableProp,
   useControllableState,
+  Avatar,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { ModalNavBar } from '../../components/floatingbar/ModalNavBar';
 import { FeedAll } from '../../components/FeedUserShort';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { authAxios } from '../../api/common';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { CyanButton } from '../../components/CyanButton';
 
 export const ProfileMain = () => {
+  const [profile, setProfile] = useState<any>();
+  const [content, setContent] = useState<any>();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const buttonColor = useColorModeValue('cyan.400', 'cyan.500');
+  const search = location.search.split('=')[1];
+  console.log(search);
+  useEffect(() => {
+    authAxios.get(search ? '/profiles/?userNickname=' + search : '/profiles').then((res: any) => {
+      setProfile(res.data.data.user);
+      setContent({
+        post: res.data.data.post,
+        dipping: res.data.data.dipping,
+        collection: res.data.data.collection,
+      });
+      console.log(res);
+    });
+  }, []);
+
   const props = {
     title: '프로필',
     leftElement: (
       <Image src="/logo_icon.png" alt="logo" objectFit="contain" h="32px" margin="2px" />
     ),
-    rightElement: <Box className="fa-light fa-bars" lineHeight="36px" fontSize="24px" bg="" />,
+    rightElement: (
+      <Box
+        className="fa-light fa-arrow-right-from-bracket"
+        lineHeight="36px"
+        fontSize="24px"
+        bg=""
+      />
+    ),
   };
-  const [show, setShow] = useState(false);
-  const [internalShow, setInternalShow] = useControllableState({
-    onChange: setShow,
-  });
-  const onClick = () => setInternalShow((currentShow: any) => !currentShow);
 
   return (
     <Box>
@@ -39,71 +64,69 @@ export const ProfileMain = () => {
         <FormControl marginTop="16px" marginBottom="16px">
           <Flex marginRight="0px" paddingLeft="24px">
             <Box>
-              <Image
-                src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                borderRadius="full"
-                htmlWidth="88px"
-                htmlHeight="88px"
-                alt="ProfileImg"
-              />
+              <Avatar w="20" h="20" name={profile?.nickname} src={profile?.profileImgUrl} />
               <Text textAlign="center" fontSize="16px">
-                nick
+                {profile?.nickname}
               </Text>
             </Box>
             <Spacer />
             <Box w="200px">
               <Flex height="72px">
                 <FormHelperText p="2" textAlign="center" fontSize="16px">
-                  <Text>11</Text>
+                  <Text>{profile?.boardCount + content?.dipping.length}</Text>
                   <Text>게시물</Text>
                 </FormHelperText>
-                <Link href="/Follow">
-                  <FormHelperText p="2" textAlign="center" fontSize="16px">
-                    <Text>12</Text>
-                    <Text>팔로워</Text>
-                  </FormHelperText>
-                </Link>
-                <Link href="/Follow">
-                  <FormHelperText p="2" textAlign="center" fontSize="16px">
-                    <Text>13</Text>
-                    <Text>팔로잉</Text>
-                  </FormHelperText>
-                </Link>
+                <FormHelperText
+                  p="2"
+                  textAlign="center"
+                  fontSize="16px"
+                  onClick={() => navigate('/follow?nickname=' + profile?.nickname)}
+                >
+                  <Text>{profile?.followerCount}</Text>
+                  <Text>팔로워</Text>
+                </FormHelperText>
+                <FormHelperText
+                  p="2"
+                  textAlign="center"
+                  fontSize="16px"
+                  onClick={() => navigate('/follow?nickname=' + profile?.nickname)}
+                >
+                  <Text>{profile?.followingCount}</Text>
+                  <Text>팔로잉</Text>
+                </FormHelperText>
               </Flex>
-              <Button colorScheme="gray.200" variant="outline" height="24px" width="100%">
-                <Link href="/profile/edit" fontSize="16px">
-                  프로필 수정
-                </Link>
-              </Button>
+              {!search ? (
+                <Button colorScheme="gray.200" variant="outline" height="24px" width="87%">
+                  <Link href="/profile/edit" fontSize="16px">
+                    프로필 수정
+                  </Link>
+                </Button>
+              ) : (
+                <Box>
+                  <Button
+                    bg={buttonColor}
+                    _hover={{
+                      bg: 'cyan.500',
+                    }}
+                    _active={{
+                      bg: 'cyan.500',
+                    }}
+                  >
+                    팔로우
+                  </Button>
+                </Box>
+              )}
             </Box>
           </Flex>
         </FormControl>
         <Flex marginLeft="24px" marginBottom="32px">
           <Text fontSize="16px" color="gray.500">
-            #힙 #신나는 #코딩중
+            {profile?.musicTaste}
           </Text>
         </Flex>
-        <FormControl display="flex" alignItems="center" justifyContent="right">
-          <Button
-            w="25%"
-            height="24px"
-            bg="cyan.400"
-            // size="lg"
-            color="white"
-            _hover={{
-              bg: 'cyan.500',
-            }}
-            _active={{
-              bg: 'cyan.500',
-            }}
-            onClick={onClick}
-          >
-            <FormLabel htmlFor="email-alerts" mb="0" fontSize="10px">
-              <i className="fa-thin fa-lock"> 게시글숨기기</i>
-            </FormLabel>
-          </Button>
-        </FormControl>
-        <Box marginTop="32px">{show ? <FeedAll /> : null}</Box>
+        <Box marginTop="32px">
+          <FeedAll content={content} />
+        </Box>
       </Container>
     </Box>
   );

@@ -12,164 +12,112 @@ import {
   Tab,
   TabPanels,
   TabPanel,
+  useDisclosure,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  DrawerBody,
+  Drawer,
 } from '@chakra-ui/react';
+import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ModalNavBar } from './floatingbar/ModalNavBar';
+import { PlaylistPost } from './postfeed/PlaylistPost';
 
-export const HomeFeed = () => {
+export const HomeFeed = (props: any) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [postContent, setPostContent] = useState<any>();
+
+  const navigate = useNavigate();
+
+  console.log(props.post);
   return (
     <Grid templateColumns="repeat(3, 1fr)" gap={0.5}>
-      <Image
-        src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-        alt="PostImg"
-      />
-      <Image
-        src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-        alt="PostImg"
-      />
-      <Image
-        src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-        alt="PostImg"
-      />
-      <Image
-        src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-        alt="PostImg"
-      />
-      <Image
-        src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-        alt="PostImg"
-      />
-      <Image
-        src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-        alt="PostImg"
-      />
+      {props.post
+        ? props.post.map((e: any, index: number) => (
+            <Box
+              id={e.id}
+              key={index}
+              onClick={e => {
+                navigate(`/post/${e.currentTarget.id}`);
+              }}
+            >
+              <Image
+                id={e.id}
+                alt={e.id}
+                src={e.songImgUrl}
+                w="30vw"
+                h="30vw"
+                maxH="148px"
+                objectFit="cover"
+              />
+            </Box>
+          ))
+        : ''}
+      <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
+        <DrawerOverlay />
+        <DrawerContent maxW="100vw" h="full">
+          <ModalNavBar
+            title="포스트"
+            leftElement={
+              <Box
+                className="fa-light fa-angle-left"
+                fontSize="28px"
+                lineHeight="36px"
+                bg=""
+                onClick={onClose}
+              />
+            }
+          />
+          <DrawerBody>
+            <Box h="48px" w="full" />
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </Grid>
   );
 };
 
-export const DippinFeed = () => {
+export const DippinFeed = (props: any) => {
+  // console.log('profile dipping', props.dipping);
+  const dipping = props.dipping;
+  const navigate = useNavigate();
+
   return (
     <Box>
-      <Flex marginBottom="8px">
-        <Grid templateColumns="repeat(8, 1fr)" gap={0.5}>
-          <GridItem colSpan={1}>
-            <Image
-              src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-              borderRadius="full"
-              boxSize="36px"
-              alt="ProfileImg"
-            />
-          </GridItem>
-          <GridItem colSpan={5}>
-            <Box>
-              <Text>제목인듯</Text>
-              <Text fontSize="8px">
-                게시물 내용 대충 어쩌구 적으면 글자수가 이렇게 채워지겠지 그러면 두줄이
-              </Text>
-              <Flex fontSize="8px" marginRight="0" width="40px">
-                <Box fontSize="8px" rowGap="2">
-                  <i className="fa-light fa-comment">6</i>
-                </Box>
-                <Spacer />
-                <Box fontSize="8px" rowGap="2">
-                  <i className="fa-light fa-heart">12</i>
-                </Box>
-              </Flex>
-            </Box>
-          </GridItem>
-          <GridItem colSpan={2}>
-            <AspectRatio maxW="77px" ratio={1 / 1}>
-              <Image
-                src="https://images.unsplash.com/photo-1420161900862-9a86fa1f5c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjB8fG11c2ljJTIwYmFja2dyb3VuZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                borderRadius="10%"
-                boxSize="90%"
-                alt="DippinImg"
-              />
-            </AspectRatio>
-          </GridItem>
-        </Grid>
-      </Flex>
-      <Flex marginBottom="8px">
-        <Grid templateColumns="repeat(8, 1fr)" gap={0.5}>
-          <GridItem colSpan={1}>
-            <Image
-              src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-              borderRadius="full"
-              boxSize="36px"
-              alt="ProfileImg"
-            />
-          </GridItem>
-          <GridItem colSpan={5}>
-            <Box>
-              <Text>제목인듯</Text>
-              <Text fontSize="8px">
-                게시물 내용 대충 어쩌구 적으면 글자수가 이렇게 채워지겠지 그러면 두줄이
-              </Text>
-              <Flex fontSize="8px" marginRight="0" width="40px">
-                <Box fontSize="8px" rowGap="2">
-                  <i className="fa-light fa-comment">6</i>
-                </Box>
-                <Spacer />
-                <Box fontSize="8px" rowGap="2">
-                  <i className="fa-light fa-heart">12</i>
-                </Box>
-              </Flex>
-            </Box>
-          </GridItem>
-          <GridItem colSpan={2}>
-            <AspectRatio maxW="77px" ratio={1 / 1}>
-              <Image
-                src="https://images.unsplash.com/photo-1420161900862-9a86fa1f5c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjB8fG11c2ljJTIwYmFja2dyb3VuZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                borderRadius="10%"
-                boxSize="90%"
-                alt="DippinImg"
-              />
-            </AspectRatio>
-          </GridItem>
-        </Grid>
-      </Flex>
-      <Flex marginBottom="8px">
-        <Grid templateColumns="repeat(8, 1fr)" gap={0.5}>
-          <GridItem colSpan={1}>
-            <Image
-              src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-              borderRadius="full"
-              boxSize="36px"
-              alt="ProfileImg"
-            />
-          </GridItem>
-          <GridItem colSpan={5}>
-            <Box>
-              <Text>제목인듯</Text>
-              <Text fontSize="8px">
-                게시물 내용 대충 어쩌구 적으면 글자수가 이렇게 채워지겠지 그러면 두줄이
-              </Text>
-              <Flex fontSize="8px" marginRight="0" width="40px">
-                <Box fontSize="8px" rowGap="2">
-                  <i className="fa-light fa-comment">6</i>
-                </Box>
-                <Spacer />
-                <Box fontSize="8px" rowGap="2">
-                  <i className="fa-light fa-heart">12</i>
-                </Box>
-              </Flex>
-            </Box>
-          </GridItem>
-          <GridItem colSpan={2}>
-            <AspectRatio maxW="77px" ratio={1 / 1}>
-              <Image
-                src="https://images.unsplash.com/photo-1420161900862-9a86fa1f5c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjB8fG11c2ljJTIwYmFja2dyb3VuZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                borderRadius="10%"
-                boxSize="70%"
-                alt="DippinImg"
-              />
-            </AspectRatio>
-          </GridItem>
-        </Grid>
-      </Flex>
+      {dipping
+        ? dipping.map((e: any, index: number) => (
+            <Flex
+              id={e.id}
+              key={index}
+              mb="2"
+              onClick={() => {
+                navigate('/dippin/' + e.id);
+              }}
+            >
+              <Box w="30vw" h="30vw" maxH="148px">
+                <Image
+                  src={e.songImgUrl}
+                  borderRadius="10%"
+                  alt="DippinImg"
+                  w="100%"
+                  h="100%"
+                  objectFit="cover"
+                />
+              </Box>
+
+              <Box>
+                <Text>{e.title}</Text>
+              </Box>
+            </Flex>
+          ))
+        : ''}
     </Box>
   );
 };
 
-export const UserShort = () => {
+export const UserShort = (props: any) => {
+  const collection = props.collection;
   return (
     <Box>
       <Flex marginBottom="16px" align="center">
@@ -221,23 +169,20 @@ export const UserShort = () => {
   );
 };
 
-export const FeedAll = () => {
+export const FeedAll = (props: any) => {
+  console.log('feedAll content', props.content);
   return (
     <Tabs isFitted margin="0px">
       <TabList>
         <Tab padding="0">내 게시글</Tab>
         <Tab padding="0">내 디핑 게시글</Tab>
-        <Tab padding="0">북마크 게시글</Tab>
       </TabList>
       <TabPanels>
         <TabPanel paddingLeft="0" paddingRight="0">
-          <HomeFeed />
+          <HomeFeed post={props.content?.post} />
         </TabPanel>
         <TabPanel paddingLeft="0" paddingRight="0">
-          <DippinFeed />
-        </TabPanel>
-        <TabPanel paddingLeft="0" paddingRight="0">
-          <UserShort />
+          <DippinFeed dipping={props.content?.dipping} />
         </TabPanel>
       </TabPanels>
     </Tabs>
