@@ -203,7 +203,7 @@ export const AddMusic = ({
               )}
               <Box position="relative" w="full" h="64px" bg="" marginY="16px">
                 <Flex w="auto">
-                  {playstate === PlayerState.PLAYING ? (
+                  {/* {playstate === PlayerState.PLAYING ? (
                     <Box
                       position="absolute"
                       left="38px"
@@ -232,7 +232,7 @@ export const AddMusic = ({
                         checkMaxRes(item.id, target);
                       }}
                     />
-                  )}
+                  )} */}
 
                   <ChakraImage
                     marginX="16px"

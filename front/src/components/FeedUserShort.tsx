@@ -90,12 +90,14 @@ export const DippinFeed = (props: any) => {
             <Flex
               id={e.id}
               key={index}
+              ml="4"
+              mr="4"
               mb="2"
               onClick={() => {
                 navigate('/dippin/' + e.id);
               }}
             >
-              <Box w="30vw" h="30vw" maxH="148px">
+              <Box minW="75px" minH="75px" w="20vw" h="20vw" maxW="148px" maxH="148px" mr="2">
                 <Image
                   src={e.songImgUrl}
                   borderRadius="10%"
@@ -107,7 +109,9 @@ export const DippinFeed = (props: any) => {
               </Box>
 
               <Box>
-                <Text>{e.title}</Text>
+                <Text lineHeight="8" fontSize="lg" maxW="220px">
+                  {e.title}
+                </Text>
               </Box>
             </Flex>
           ))

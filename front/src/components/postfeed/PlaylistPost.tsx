@@ -12,6 +12,7 @@ export const PlaylistPost = (props: any) => {
   const borderColor = useColorModeValue('gray.200', 'gray.600');
 
   const { postfeed, id, setCommentInfo, onOpen } = props;
+  console.log(postfeed);
 
   // 본문 더보기
   const [limit, setLimit] = useState(95);
