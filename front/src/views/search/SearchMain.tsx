@@ -1,9 +1,13 @@
 import { SearchNavBar } from '../../components/floatingbar/SearchNavBar';
-import { useEffect, useState } from 'react';
-import { Box, Grid, Link, Text, Button, Image } from '@chakra-ui/react';
+import { useEffect, useRef, useState } from 'react';
+import { Box, Avatar } from '@chakra-ui/react';
 import { HomeFeed } from '../../components/FeedUserShort';
 import { useDispatch, useSelector } from 'react-redux';
-import { setInput } from '../../reducers/searchReducer';
+import { addPage, setInput, setMode, setPage, setUserList } from '../../reducers/searchReducer';
+import { FeedPost, User } from '../../types/HomeFeedData';
+import { authAxios } from '../../api/common';
+import { SearchMode } from '../../components/search/SearchMode';
+import { Link } from 'react-router-dom';
 
 export const SearchMain = () => {
   const dispatch = useDispatch();
@@ -13,7 +17,7 @@ export const SearchMain = () => {
   const page = useSelector((state: any) => state.searchReducer.page);
 
   // 화면에 표시할 리스트
-  const userlist: FeedPost[] = useSelector((state: any) => state.searchReducer.userlist);
+  const userlist: User[] = useSelector((state: any) => state.searchReducer.userlist);
   const postlist: FeedPost[] = useSelector((state: any) => state.searchReducer.postlist);
   const dippinlist: FeedPost[] = useSelector((state: any) => state.searchReducer.dippinlist);
 
@@ -28,63 +32,115 @@ export const SearchMain = () => {
     window.scrollTo(0, 0);
     endRef.current = false;
     dispatch(setPage(0));
-    getDippinPage(input, mode, 0);
+
+    if (mode === 'user') getUserList(input, page);
+    // if (mode === 'post') getUserList(input, page);
   }, [dispatch, input, mode]);
+
+  // 새 요청 받아서 리스트에 추가
+  useEffect(() => {
+    if (page === 0) {
+      return;
+    }
+    // get list by mode
+  }, [page]);
+
+  // 무한 스크롤로 업데이트 하기 위한 코드 start
+  const obsRef = useRef(null); // 옵저버
+  const [load, setLoad] = useState(false); //로딩 스피너
+  const preventRef = useRef(true); //옵저버 중복 실행 방지
+  const endRef = useRef(false); //모든 글 로드 확인
+
+  // 백엔드에 요청
+  const getPostList = async (query: string, page: number) => {
+    setLoad(true); //로딩 시작
+    console.log('SearchMain: call getUserList: ' + query + '/' + page);
+    const res: any = await authAxios.get('/search/user', {
+      params: {
+        keyword: query,
+      },
+    });
+    setLoad(false); //로딩 종료
+    const users = res.data.data.users.map((e: any) => {
+      return {
+        id: e.id,
+        name: e.nickname,
+        profile_image: e.profileImgUrl,
+      };
+    });
+    dispatch(setUserList(users));
+  };
+  const getUserList = async (query: string, page: number) => {
+    setLoad(true); //로딩 시작
+    console.log('SearchMain: call getUserList: ' + query + '/' + page);
+    const res: any = await authAxios.get('/search/user', {
+      params: {
+        keyword: query,
+      },
+    });
+    setLoad(false); //로딩 종료
+    const users = res.data.data.users.map((e: any) => {
+      return {
+        id: e.id,
+        name: e.nickname,
+        profile_image: e.profileImgUrl,
+      };
+    });
+    dispatch(setUserList(users));
+  };
+
+  useEffect(() => {
+    // 옵저버 생성
+    console.log('create observer');
+    const observer = new IntersectionObserver(obs, { threshold: 0.5 }); // IntersectionObserver
+    if (obsRef.current) observer.observe(obsRef.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+  const obs = (entries: IntersectionObserverEntry[]) => {
+    //옵저버 중복 실행 방지
+    if (!endRef.current && entries[0].isIntersecting && preventRef.current) {
+      preventRef.current = false; //옵저버 중복 실행 방지
+      // 실행하고 싶은 것
+      console.log('DippinMain: call setPage');
+      dispatch(addPage());
+    }
+  };
+  // 무한 스크롤로 업데이트 하기 위한 코드 end
 
   return (
     <Box>
-      <SearchNavBar {...props} />
-      <Link href="search/result">임시</Link>
-      <Text marginLeft="8px" marginBottom="8px">
-        추천 사용자
-      </Text>
-      <Grid templateColumns="repeat(5, 1fr)" gap={0.5} paddingLeft="8px">
-        <Box textAlign="center" width="64px">
-          <Image
-            src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-            borderRadius="full"
-            boxSize="64px"
-            alt="ProfileImg"
-          />
-          <Text fontSize="16px">nick1</Text>
-          <Button bgColor="blue.300" color="white" width="64px" height="32px">
-            팔로우
-          </Button>
-        </Box>
-        <Box textAlign="center" width="64px">
-          <Image src="https://bit.ly/3A2BqqJ" borderRadius="full" boxSize="64px" alt="ProfileImg" />
-          <Text fontSize="16px">nick2</Text>
-          <Button bgColor="blue.300" color="white" width="64px" height="32px">
-            팔로우
-          </Button>
-        </Box>
-        <Box textAlign="center" width="64px">
-          <Image src="https://bit.ly/3PXNy1o" borderRadius="full" boxSize="64px" alt="ProfileImg" />
-          <Text fontSize="16px">nick3</Text>
-          <Button bgColor="blue.300" color="white" width="64px" height="32px">
-            팔로우
-          </Button>
-        </Box>
-        <Box textAlign="center" width="64px">
-          <Image src="https://bit.ly/3QdDcu6" borderRadius="full" boxSize="64px" alt="ProfileImg" />
-          <Text fontSize="16px">nick4</Text>
-          <Button bgColor="blue.300" color="white" width="64px" height="32px">
-            팔로우
-          </Button>
-        </Box>
-        <Box textAlign="center" width="64px">
-          <Image src="https://bit.ly/3bwSzPF" borderRadius="full" boxSize="64px" alt="ProfileImg" />
-          <Text fontSize="16px">nick5</Text>
-          <Button bgColor="blue.300" color="white" width="64px" height="32px">
-            팔로우
-          </Button>
-        </Box>
-      </Grid>
-      <Box marginTop="32px">
-        <Text marginLeft="8px" marginBottom="8px">
-          추천 게시물
-        </Text>
-        <HomeFeed />
+      <SearchNavBar leftDisplay="none" rightDisplay="none" onKeyInput={onKeyInput} />
+      <SearchMode />
+      <Box marginTop="16px">
+        {mode === 'user' ? (
+          userlist.map((item, index) => (
+            <Link key={index} to={'/profile/' + item.name}>
+              <Box marginX="8px" marginY="16px" position="relative" h="40px" w="full" bg="">
+                <Box
+                  position="absolute"
+                  left="4vw"
+                  top="6px"
+                  fontSize="16px"
+                  fontWeight="300"
+                  lineHeight="40px"
+                  bg=""
+                >
+                  <Avatar
+                    marginRight="16px"
+                    boxSize="40px"
+                    name={item.name}
+                    src={item.profile_image}
+                  />
+                  {item.name}
+                </Box>
+              </Box>
+            </Link>
+          ))
+        ) : (
+          <HomeFeed />
+        )}
       </Box>
     </Box>
   );

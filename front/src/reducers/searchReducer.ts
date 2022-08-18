@@ -53,6 +53,7 @@ export const {
   pushDippinList,
   setDippinList,
   pushUserList,
+  setUserList,
   pushPostList,
   setPostList,
 } = searchReducer.actions;
