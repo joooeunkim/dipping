@@ -12,6 +12,7 @@ import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +34,13 @@ public class DippingHeartService {
         return mylike;
     }
 
-    // 포스트번호의 좋아요 개수 가져오기
+    // 해당 디핑의 좋아요 개수 가져오기
     public int getCountByDippingId(Dipping dipping) {
         return dippingHeartRepository.findHeartsCountByDippingId(dipping.getId());
     }
 
-    // 유저아이디와 포스트번호를 통해 좋아요가 눌러져있다면 삭제 없다면 등록
+    // 유저아이디와 디핑번호를 통해 좋아요가 눌러져있다면 삭제 없다면 등록
+    @Transactional
     public int setHeartByUserIdAndDippingId(Long userId, Long dippingId){
         User user = userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("해당 유저가 없습니다. id="+userId));
         Dipping dipping = dippingRepository.findById(dippingId).orElseThrow(()->new IllegalArgumentException("해당 게시물이 없습니다. id="+dippingId));
