@@ -3,6 +3,7 @@ package com.common.dipping.api.board.repository;
 import com.common.dipping.api.board.domain.entity.Board;
 import com.common.dipping.api.board.domain.entity.InterestTag;
 import com.common.dipping.api.board.domain.entity.Tag;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.common.dipping.api.board.domain.entity.PostTag;
@@ -17,7 +18,7 @@ public interface PostTagRepository extends JpaRepository<PostTag, Long>{
 
     void deleteAllByBoard(Board board);
     
-    List<PostTag> findAllByTag(Tag tag);
+    List<PostTag> findAllByTag(Tag tag, Sort sort);
 
     @Query("select pt from PostTag as pt where pt.tag.id in (:tags) ")
     List<PostTag> findByTag(@Param("tags") List<Long> tags);
