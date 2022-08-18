@@ -31,7 +31,15 @@ export const FollowList = () => {
   }, []);
   const props = {
     title: '팔로우 정보',
-    leftElement: <Box className="fa-light fa-angle-left" fontSize="28px" lineHeight="36px" bg="" />,
+    leftElement: (
+      <Box
+        className="fa-light fa-angle-left"
+        fontSize="28px"
+        lineHeight="36px"
+        bg=""
+        onClick={() => navigate(-1)}
+      />
+    ),
   };
   console.log(followUsers);
   return (

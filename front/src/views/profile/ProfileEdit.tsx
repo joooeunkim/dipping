@@ -13,17 +13,27 @@ import {
   Center,
 } from '@chakra-ui/react';
 import { ModalNavBar } from '../../components/floatingbar/ModalNavBar';
-import React, { SetStateAction, useRef, useState } from 'react';
+import React, { SetStateAction, useEffect, useRef, useState } from 'react';
 import { Tag } from '../../components/Tag';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
 import { authAxios } from '../../api/common';
 import axios from 'axios';
 import { CyanButton } from '../../components/CyanButton';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const ProfileEdit = () => {
+  const navigate = useNavigate();
   const props = {
     title: '프로필 수정',
-    leftElement: <Box className="fa-light fa-angle-left" lineHeight="36px" fontSize="24px" bg="" />,
+    leftElement: (
+      <Box
+        className="fa-light fa-angle-left"
+        lineHeight="36px"
+        fontSize="24px"
+        bg=""
+        onClick={() => (window.location.href = '/profile')}
+      />
+    ),
     // rightElement: <Box className="fa-light fa-bars" lineHeight="36px" fontSize="24px" bg="" />,
   };
   const createTag = (e: any) => {
@@ -75,7 +85,7 @@ export const ProfileEdit = () => {
 
   const [tags, setTags] = useState<SetStateAction<any>>([]);
 
-  const [profileImg, setProfileImg] = useState('');
+  const [profileImg, setProfileImg] = useState<any>('');
   const fileInput = useRef<any>(null);
 
   const profileImgChangeEvent = (e: any) => {
@@ -87,12 +97,19 @@ export const ProfileEdit = () => {
     authAxios
       .post('/profile/upload', formData)
       .then(res => {
-        console.log(res);
+        console.log('이미지업로드', res);
+        window.location.href = '/profile';
       })
       .catch(err => {
         console.log(err);
       });
   };
+
+  const { state } = useLocation();
+  useEffect(() => {
+    console.log(state);
+    setProfileImg(state);
+  }, []);
 
   return (
     <Box>
@@ -105,7 +122,7 @@ export const ProfileEdit = () => {
             </Center>
             <Input
               type="file"
-              // display="none"
+              display="none"
               accept="image/jpg,image/png,image/jpeg"
               name="profileImg"
               ref={fileInput}

@@ -124,7 +124,7 @@ export const SearchMain = () => {
       <Box marginTop="16px">
         {mode === 'user' ? (
           userlist.map((item, index) => (
-            <Link key={index} to={'/profile/' + item.name}>
+            <Link key={index} to={'/profile/?nickname=' + item.name}>
               <Box
                 position="relative"
                 h="64px"

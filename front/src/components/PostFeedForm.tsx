@@ -66,23 +66,29 @@ export const PostFeedForm = (props: any) => {
   };
 
   const newPost = (e: any) => {
-    let content = document.getElementById('content') as HTMLInputElement | null;
-    let tag = document.getElementById('tag') as HTMLInputElement | null;
-    let userTag = document.getElementById('user_tag') as HTMLInputElement | null;
-    let data = {
-      post: {
-        content: content?.value,
-        openPost: openPost,
-        openComment: openComment,
-        albumArt: mixAlbumArt,
-      },
-      post_tag: createTag(tag),
-      user_tag: createTag(userTag),
-      playlist: musicList,
-    };
+    if (musicList.length <= 0) {
+      alert('음악을 추가해주세요.');
+    } else {
+      let content = document.getElementById('content') as HTMLInputElement | null;
+      let tag = document.getElementById('tag') as HTMLInputElement | null;
+      let userTag = document.getElementById('user_tag') as HTMLInputElement | null;
+      let data = {
+        post: {
+          content: content?.value,
+          openPost: openPost,
+          openComment: openComment,
+          albumArt: mixAlbumArt,
+        },
+        post_tag: createTag(tag),
+        user_tag: createTag(userTag),
+        playlist: musicList,
+      };
 
-    console.log(data);
-    writePostFeed(data);
+      console.log(data);
+      writePostFeed(data);
+
+      window.location.href = '/';
+    }
   };
 
   const createTag = (tag: any) => {
@@ -108,7 +114,7 @@ export const PostFeedForm = (props: any) => {
             console.log(music);
             return (
               <Flex key={index} mb="2">
-                <Image src={music.songImgUrl} w="12" h="12" borderRadius="lg" />
+                <Image src={music.songImgUrl} w="12" h="12" borderRadius="lg" objectFit="cover" />
                 <Box pl="2" pt="1" w="100%">
                   <Text fontSize="sm" color="gray.500">
                     {music.songSinger}
@@ -140,7 +146,7 @@ export const PostFeedForm = (props: any) => {
         </Button>
       </Center>
 
-      <Textarea id="content" rows={10} variant="unstyled" placeholder="본문 내용" />
+      <Textarea id="content" rows={6} variant="unstyled" placeholder="본문 내용" />
       <Input id="tag" mb="2" variant="flushed" placeholder="태그" />
       <Input hidden id="user_tag" mb="2" variant="flushed" placeholder="사용자 태그" />
       <Box w="70%" m="32px auto">
@@ -164,7 +170,6 @@ export const PostFeedForm = (props: any) => {
       <Box
         onClick={e => {
           newPost(e);
-          window.location.href = '/';
         }}
       >
         <CyanButton title="작성" />
