@@ -13,6 +13,7 @@ import {
   DrawerBody,
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { authAxios } from '../../api/common';
 import { DippinForm } from '../DippinForm';
 import { ModalNavBar } from '../floatingbar/ModalNavBar';
@@ -67,7 +68,9 @@ export const DippinPost = (props: any) => {
         >
           {dippin.user.name}
         </Box>
-        <Avatar boxSize="40px" name="mocha_oca" src={dippin.user.profile_image} />
+        <Link to={'/profile/' + dippin.user.name}>
+          <Avatar boxSize="40px" name="mocha_oca" src={dippin.user.profile_image} />
+        </Link>
       </Flex>
 
       {/* article set */}

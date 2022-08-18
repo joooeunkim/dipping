@@ -1,5 +1,6 @@
 import { Box, Avatar, Flex, Spacer } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ModalNavBar } from '../floatingbar/ModalNavBar';
 
 export const PostCommentItem = (props: any) => {
@@ -26,8 +27,9 @@ export const PostCommentItem = (props: any) => {
         bg=""
       >
         <Flex>
-          <Avatar boxSize="32px" marginRight="8px" name={user.name} src={user.profile_image} />
-
+          <Link to={'/profile/' + user.name}>
+            <Avatar boxSize="32px" marginRight="8px" name={user.name} src={user.profile_image} />
+          </Link>
           <Box w="full" bg="">
             <Box display="inline" fontWeight="600">
               {user.name}

@@ -1,5 +1,6 @@
 import { Box, useColorModeValue, Image, Avatar, Center, Flex, Spacer } from '@chakra-ui/react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { authAxios } from '../../api/common';
 import { PlayerSmall } from './PlayerSmall';
 
@@ -50,7 +51,9 @@ export const DippinPostSmall = (props: any) => {
         >
           {dippin.user.name}
         </Box>
-        <Avatar boxSize="36px" name="mocha_oca" src={dippin.user.profile_image} />
+        <Link to={'/profile/' + dippin.user.name}>
+          <Avatar boxSize="36px" name="mocha_oca" src={dippin.user.profile_image} />
+        </Link>
       </Flex>
 
       {/* article set */}
@@ -75,7 +78,6 @@ export const DippinPostSmall = (props: any) => {
         </Box>
         <Spacer />
         <Box fontSize="20px" className="fa-light fa-eraser" marginLeft="8px" />
-        <Box fontSize="20px" className="fa-light fa-pencil" marginLeft="8px" />
       </Flex>
 
       {/* music player */}

@@ -1,5 +1,6 @@
 import { Box, useColorModeValue, Image, Avatar } from '@chakra-ui/react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { authAxios } from '../../api/common';
 import { FeedPost, User } from '../../types/HomeFeedData';
 import { PlayerLarge } from './PlayerLarge';
@@ -53,13 +54,15 @@ export const PlaylistPost = (props: any) => {
           lineHeight="32px"
           bg=""
         >
-          <Avatar
-            marginRight="1vw"
-            boxSize="32px"
-            name="mocha_oca"
-            src={postfeed.user.profile_image}
-          />
-          {postfeed.user.name}
+          <Link to={'/profile/' + postfeed.user.name}>
+            <Avatar
+              marginRight="1vw"
+              boxSize="32px"
+              name="mocha_oca"
+              src={postfeed.user.profile_image}
+            />
+            {postfeed.user.name}
+          </Link>
         </Box>
       </Box>
 
@@ -123,39 +126,41 @@ export const PlaylistPost = (props: any) => {
         <Box position="absolute" left="12vw" fontSize="24px" lineHeight="30px">
           {likecount}
         </Box>
+        {postfeed.openComment && (
+          <Box
+            position="absolute"
+            right="12vw"
+            className="fa-regular fa-comment"
+            fontSize="24px"
+            lineHeight="30px"
+            onClick={() => {
+              onOpen();
+              const info = {
+                id: (postfeed as FeedPost).id,
+                name: postfeed.user.name,
+                profile_image: postfeed.user.profile_image,
+                article: postfeed.article,
+                last_modified: postfeed.last_modified,
+              };
+              setCommentInfo(info);
+            }}
+          />
+        )}
         <Box
           position="absolute"
-          right="20vw"
-          className="fa-regular fa-comment"
-          fontSize="24px"
-          lineHeight="30px"
-          onClick={() => {
-            onOpen();
-            const info = {
-              id: (postfeed as FeedPost).id,
-              name: postfeed.user.name,
-              profile_image: postfeed.user.profile_image,
-              article: postfeed.article,
-              last_modified: postfeed.last_modified,
-            };
-            setCommentInfo(info);
-          }}
-        />
-        <Box
-          position="absolute"
-          right="12vw"
+          right="4vw"
           className="fa-regular fa-share-nodes"
           fontSize="24px"
           lineHeight="30px"
         />
-        <Box
+        {/* <Box
           position="absolute"
           right="4vw"
           className="fa-solid fa-bookmark"
           fontSize="24px"
           lineHeight="30px"
           color="cyan.400"
-        />
+        /> */}
       </Box>
     </Box>
   );
