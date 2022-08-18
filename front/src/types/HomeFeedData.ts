@@ -22,6 +22,7 @@ export type Comment = {
 };
 
 export type FeedPost = {
+  id: number;
   title: string;
   likes: any;
   article: string;
@@ -30,11 +31,13 @@ export type FeedPost = {
   user: User;
   playlist: Array<Music>;
   comments: Array<Comment>;
+  myLike?: boolean;
 };
 
 export const HomeFeedData: Array<FeedPost> = [
   {
-    title: 'Track_Emocore',
+    id: 1,
+    title: 'My Playlist',
     likes: '10.2k',
     article:
       'The Black Parade is the third studio album by American rock band My Chemical Romance. ' +
@@ -53,19 +56,19 @@ export const HomeFeedData: Array<FeedPost> = [
       {
         title: 'Stressed Out',
         artist: '​twenty one pilots',
-        albumart: 'https://i.ytimg.com/vi/Gc4sY98Jn9I/hqdefault.jpg',
+        albumart: 'https://i.ytimg.com/vi/Gc4sY98Jn9I/maxresdefault.jpg',
         id: 'Gc4sY98Jn9I',
       },
       {
         title: 'Welcome To The Black Parade',
         artist: 'My Chemical Romance',
-        albumart: 'https://i.ytimg.com/vi/G-I9csAflBs/hqdefault.jpg',
+        albumart: 'https://i.ytimg.com/vi/G-I9csAflBs/maxresdefault.jpg',
         id: 'G-I9csAflBs',
       },
       {
         title: 'LA Devotee',
         artist: 'Panic! At The Disco',
-        albumart: 'https://i.ytimg.com/vi/RzMITAmJfeg/hqdefault.jpg',
+        albumart: 'https://i.ytimg.com/vi/RzMITAmJfeg/maxresdefault.jpg',
         id: 'RzMITAmJfeg',
       },
       {
@@ -75,9 +78,15 @@ export const HomeFeedData: Array<FeedPost> = [
         id: 'qRaAvEbKmt0',
       },
       {
+        title: 'Confusion And Frustration In Modern Times',
+        artist: 'Sum 41',
+        albumart: 'https://i.ytimg.com/vi/N5KrNotNDio/maxresdefault.jpg',
+        id: 'N5KrNotNDio',
+      },
+      {
         title: 'Dead!',
         artist: 'My Chemical Romance',
-        albumart: 'https://i.ytimg.com/vi/H48kOqqaWv0/hqdefault.jpg',
+        albumart: 'https://i.ytimg.com/vi/H48kOqqaWv0/maxresdefault.jpg',
         id: 'H48kOqqaWv0',
       },
     ],
@@ -172,6 +181,7 @@ export const HomeFeedData: Array<FeedPost> = [
     ],
   },
   {
+    id: 1,
     title: 'SimpleIsBest',
     likes: '22',
     article: 'no more confusion.',
@@ -302,5 +312,46 @@ export const HomeFeedData: Array<FeedPost> = [
         },
       },
     ],
+  },
+  {
+    id: 3,
+    title: 'No Playlist with very very long title',
+    likes: '10.2k',
+    article: 'no playlist article',
+    tags: '#no_tag?',
+    last_modified: '1일',
+    user: {
+      name: 'mocha_oca',
+      profile_image: 'https://bit.ly/3A2BqqJ',
+    },
+    playlist: [],
+    comments: [],
+  },
+  {
+    id: 4,
+    title: 'one music playlist with very very long title',
+    likes: '10.2k',
+    article: 'one playlist article',
+    tags: '#no_tag?',
+    last_modified: '1일',
+    user: {
+      name: 'mocha_oca',
+      profile_image: 'https://bit.ly/3A2BqqJ',
+    },
+    playlist: [
+      {
+        title: 'Confusion And Frustration In Modern Times',
+        artist: 'Sum 41',
+        albumart: 'https://i.ytimg.com/vi/N5KrNotNDio/maxresdefault.jpg',
+        id: 'N5KrNotNDio',
+      },
+      {
+        title: 'Dead!',
+        artist: 'My Chemical Romance',
+        albumart: 'https://i.ytimg.com/vi/H48kOqqaWv0/maxresdefault.jpg',
+        id: 'H48kOqqaWv0',
+      },
+    ],
+    comments: [],
   },
 ];

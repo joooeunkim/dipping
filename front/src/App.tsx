@@ -24,6 +24,8 @@ import { SearchDetail } from './views/search/SearchDetail';
 import { ProtectedRouteProps } from './ProtectedRoute';
 import { useSelector } from 'react-redux';
 import { OauthRedirect } from './views/users/OauthRedirect';
+import { DippinDetail } from './views/dippin/DippinDetail';
+import { HomeDetail } from './views/home/HomeDetail';
 
 export const App = () => (
   <ChakraProvider>
@@ -32,17 +34,16 @@ export const App = () => (
         path="/"
         element={
           <ProtectedRoute
-            isAuthenticated={
-              // useSelector((state: any) => state.tokenReducer.accessToken) ? true : false
-              true
-            }
+            isAuthenticated={localStorage.getItem('accessToken') ? true : false}
             authenticationPath="/login"
             outlet={<Layout />}
           />
         }
       >
         <Route index element={<HomeMain />} />
+        <Route path="post/:postid" element={<HomeDetail />} />
         <Route path="dippin" element={<DippinMain />} />
+        <Route path="dippin/:dippinid" element={<DippinDetail />} />
         <Route path="search" element={<SearchMain />} />
         <Route path="search/result" element={<SearchResult />} />
         <Route path="search/result/:post" element={<SearchDetail />} />

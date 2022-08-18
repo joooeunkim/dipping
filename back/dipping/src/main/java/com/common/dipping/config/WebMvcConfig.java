@@ -1,14 +1,17 @@
 package com.common.dipping.config;
 
 //import com.common.dipping.filter.HeaderFilter;
-//import com.common.dipping.interceptor.JwtTokenInterceptor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.resource.PathResourceResolver;
+
+//import com.common.dipping.interceptor.JwtTokenInterceptor;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
@@ -22,16 +25,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
             "classpath:/META-INF/resources/webjars/"
     };
 
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // 정적 자원의 경로를 허용
         registry.addResourceHandler("/**").addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
+
     }
 
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(jwtTokenInterceptor()).excludePathPatterns("/api/login/*").excludePathPatterns("/api/signUp");
-//    }
 
 //    @Bean
 //    public FilterRegistrationBean<HeaderFilter> getFilterRegistrationBean() {
@@ -44,11 +45,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //    @Bean
 //    public HeaderFilter createHeaderFilter() {
 //        return new HeaderFilter();
-//    }
-
-//    @Bean
-//    public HandlerInterceptor jwtTokenInterceptor() {
-//        return new JwtTokenInterceptor();
 //    }
 
 }

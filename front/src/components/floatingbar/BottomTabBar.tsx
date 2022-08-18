@@ -1,15 +1,51 @@
 import * as React from 'react';
-import { Box, VStack, Spacer, Button, Flex, Circle, useColorModeValue } from '@chakra-ui/react';
+import {
+  Box,
+  VStack,
+  Spacer,
+  Button,
+  Flex,
+  Circle,
+  useColorModeValue,
+  Popover,
+  PopoverTrigger,
+  Portal,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  useBoolean,
+  useDisclosure,
+  Select,
+  FormLabel,
+  Textarea,
+  DrawerFooter,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  DrawerHeader,
+  DrawerBody,
+  Stack,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  InputRightAddon,
+} from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
+import { WritePost } from '../WritePost';
 
 export const BottomTabBar = () => {
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
+
   const size = 48;
 
   const icons_light = [
-    'fa-light fa-house',
     'fa-light fa-music',
+    'fa-light fa-search',
     'fa-regular fa-plus',
     'fa-light fa-compact-disc',
     'fa-light fa-user',
@@ -52,15 +88,7 @@ export const BottomTabBar = () => {
             <Box fontSize={size * 0.5 + 'px'} className={icons_light[1]} color={iconColors[1]} />
           </Link>
           <Spacer />
-
-          <Circle
-            size={size * 0.7 + 'px'}
-            position="relative"
-            bottom={size * 0.1 + 'px'}
-            bgGradient="linear(to-br, blue.400, cyan.200)"
-          >
-            <Box fontSize={size * 0.5 + 'px'} className={icons_light[2]} color={bgColor} />
-          </Circle>
+          <WritePost />
           <Spacer />
 
           <Link to="/dippin">

@@ -3,9 +3,7 @@ package com.common.dipping.api.user.service;
 import com.common.dipping.api.board.domain.dto.PostTagDto;
 import com.common.dipping.api.board.domain.dto.UserTagDto;
 import com.common.dipping.api.board.domain.entity.*;
-import com.common.dipping.api.board.repository.InterestTagRepository;
-import com.common.dipping.api.board.repository.TagRepository;
-import com.common.dipping.api.board.repository.UserTagRepository;
+import com.common.dipping.api.board.repository.*;
 import com.common.dipping.api.user.domain.dto.MailDto;
 import com.common.dipping.api.user.domain.entity.Code;
 import com.common.dipping.api.user.repository.CodeRepository;
@@ -16,6 +14,7 @@ import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.domain.dto.ProfileEditDto;
 import com.common.dipping.api.user.domain.dto.SignUpDto;
 import com.common.dipping.api.user.repository.UserRepository;
+import com.common.dipping.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
@@ -41,6 +40,8 @@ public class UserService {
     private final FollowRepository followRepository;
     private final TagRepository tagRepository;
     private final InterestTagRepository interestTagRepository;
+    private final BoardRepository boardRepository;
+    private final CommentRepository commentRepository;
 
 
     @Transactional
@@ -156,6 +157,15 @@ public class UserService {
         userinfo.profileEdit(profileEditDto.getNickname(), profileEditDto.getProfileImgUrl(), profileEditDto.getMusicTaste(), profileEditDto.getOpenUser(), profileEditDto.getMusicGenre());
 
         userRepository.save(userinfo);
+        interestTagRepository.deleteAllByUser(userinfo);
+        registerIntersetTag(userinfo);
+        return true;
+    }
+
+    public boolean profileImgUrlEdit(UserDetailsImpl userinfo, String newProfileImgUrl) {
+        User user = userRepository.findByEmail(userinfo.getUsername()).orElse(null);
+        user.profileImgUrlEdit(newProfileImgUrl);
+        userRepository.save(user);
         return true;
     }
 
@@ -189,6 +199,28 @@ public class UserService {
                 interestTagRepository.save(interestTag);
             }
         }
+    }
+
+    public User findByBoard(Long boardId) {
+        Board board = boardRepository.findById(boardId).orElse(null);
+        if (board == null) {
+            return null;
+        }
+
+        User user = userRepository.findByBoards(board);
+        return user;
+
+    }
+
+    public User findByComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElse(null);
+        if (comment == null) {
+            return null;
+        }
+
+        User user = userRepository.findByComments(comment);
+        return user;
+
     }
 
 }

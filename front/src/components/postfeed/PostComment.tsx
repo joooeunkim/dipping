@@ -18,29 +18,89 @@ import {
   DrawerContent,
   DrawerCloseButton,
 } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { authAxios } from '../../api/common';
+import { parseJwt } from '../../api/login/local';
+import { Comment, FeedPost, User } from '../../types/HomeFeedData';
 import { ModalNavBar } from '../floatingbar/ModalNavBar';
 import { PostCommentItem } from './PostCommentItem';
 
 export const PostComment = (props: any) => {
   const bg = useColorModeValue('white', 'gray.800');
   const color = useColorModeValue('gray.200', 'gray.600');
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { user, article, last_modified, comments } = props;
+  // 댓글 불러오기 파트
+  const { commentinfo, onClose, isOpen } = props;
+  const [comments, setComments] = useState<Array<Comment>>([]);
+
+  useEffect(() => {
+    if (commentinfo) {
+      console.log('PostComment: load id ' + commentinfo.id);
+      getComments(commentinfo.id);
+    }
+  }, [commentinfo]);
+
+  // 백엔드에 요청
+  const getComments = async (id: number) => {
+    const res: any = await authAxios.get('/board/comment', {
+      params: {
+        boardId: id,
+      },
+    });
+    console.log(res);
+
+    const data = res.data.data.comment;
+    const main: Comment[] = data.map((e: any) => {
+      return {
+        user: { name: e.nickname, profile_image: 'profile_image' } as User,
+        comment: {
+          content: e.content,
+          last_modified: e.updatedAt,
+          parent: e.parentId,
+          id: e.commentId,
+        },
+      };
+    });
+    console.log(main);
+    setComments(main);
+  };
+
+  // 댓글 작성 파트
+  // 검색 창 입력
+  const onKeyInput = (e: any) => {
+    if (e.key === 'Enter') {
+      const input = e.target.value;
+      authAxios
+        .post('/board/comment', {
+          comment: {
+            boardId: commentinfo.id,
+            content: input,
+            parentId: 0,
+          },
+        })
+        .then(res => {
+          e.target.value = '';
+          getComments(commentinfo.id);
+          let content = document.getElementById('drawerBody') as HTMLInputElement | null;
+          content?.scrollTo(0, 0);
+        })
+        .catch(err => console.log(err));
+    }
+  };
 
   return (
-    <>
-      <Box
-        position="absolute"
-        right="20vw"
-        className="fa-regular fa-comment"
-        fontSize="24px"
-        lineHeight="30px"
-        onClick={onOpen}
-      />
-
-      <Drawer trapFocus={false} placement="right" onClose={onClose} size="full" isOpen={isOpen}>
-        <DrawerContent maxW="400px" h="full" padding="0">
+    commentinfo && (
+      <Drawer
+        trapFocus={false}
+        placement="right"
+        onClose={onClose}
+        size="full"
+        isOpen={isOpen}
+        onCloseComplete={() => {
+          setComments([]);
+        }}
+      >
+        <DrawerContent maxW="100vw" h="full" padding="0">
           <ModalNavBar
             title="댓글"
             leftElement={
@@ -53,7 +113,7 @@ export const PostComment = (props: any) => {
               />
             }
           />
-          <DrawerBody padding="0">
+          <DrawerBody padding="0" id="drawerBody">
             <Box h="48px" w="full" />
 
             <Box w="full" marginY="8px" bg="">
@@ -62,17 +122,17 @@ export const PostComment = (props: any) => {
                   <Avatar
                     boxSize="32px"
                     marginRight="8px"
-                    name={user.name}
-                    src={user.profile_image}
+                    name={commentinfo.name}
+                    src={commentinfo.profile_image}
                   />
 
                   <Box w="full" bg="">
                     <Box display="inline" fontWeight="600">
-                      {user.name}
+                      {commentinfo.name}
                     </Box>
-                    <Box display="inline">&nbsp; {article}</Box>
+                    <Box display="inline">&nbsp; {commentinfo.article}</Box>
                     <Box fontSize="12px" color="gray.500" marginY="8px">
-                      <Box display="inline">{last_modified}</Box>
+                      <Box display="inline">{commentinfo.last_modified.substr(0, 10)}</Box>
                     </Box>
                   </Box>
                 </Flex>
@@ -82,6 +142,7 @@ export const PostComment = (props: any) => {
             {comments.map((item: any, index: number) => (
               <PostCommentItem {...item} key={index} />
             ))}
+            <Box h="56px" />
           </DrawerBody>
           {/* input area */}
           <Box
@@ -96,13 +157,17 @@ export const PostComment = (props: any) => {
           >
             <Box fontSize="14px" marginX="16px" color="gray.500" display="none">
               <Box display="inline" fontWeight="600">
-                {user.name}
+                {commentinfo.name}
               </Box>
               에게 답글 입력 중
             </Box>
             <Box position="relative" top="6px" h="auto" w="full" bg="" marginX="16px" marginY="4px">
               <Flex h="56px">
-                <Avatar boxSize="32px" name={user.name} src={user.profile_image} />
+                <Avatar
+                  boxSize="32px"
+                  name={parseJwt(localStorage.getItem('accessToken')).nickname}
+                  src={parseJwt(localStorage.getItem('accessToken')).profileImgUrl}
+                />
                 <Box flex="1" position="relative" top="2px" marginX="16px">
                   <InputGroup>
                     <InputRightElement
@@ -119,7 +184,8 @@ export const PostComment = (props: any) => {
                       h="32px"
                       variant="flushed"
                       type="text"
-                      placeholder="검색어를 입력하세요."
+                      placeholder="댓글을 입력하세요."
+                      onKeyDown={onKeyInput}
                     />
                   </InputGroup>
                 </Box>
@@ -129,6 +195,6 @@ export const PostComment = (props: any) => {
           </Box>
         </DrawerContent>
       </Drawer>
-    </>
+    )
   );
 };

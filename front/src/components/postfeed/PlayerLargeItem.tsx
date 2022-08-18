@@ -18,8 +18,7 @@ export const PlayerLargeItem = (props: any) => {
         marginX="0vw"
         borderRadius="2vw"
         objectFit="cover"
-        src={'https://i.ytimg.com/vi/' + id + '/maxresdefault.jpg'}
-        fallbackSrc={'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg'}
+        src={albumart}
         alt="why"
       />
       <Box

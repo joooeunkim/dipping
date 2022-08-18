@@ -65,7 +65,7 @@ export const PlayerLarge = (props: any) => {
           boxShadow="0 0 2px gray"
           boxSize="92vw"
           objectFit="cover"
-          src={'https://i.ytimg.com/vi/' + playlist[currentitem].id + '/maxresdefault.jpg'}
+          src={playlist[currentitem].albumart}
         />
 
         {/* playlist popover */}
@@ -110,27 +110,32 @@ export const PlayerLarge = (props: any) => {
       </Box>
 
       {/* song info */}
-      <Box position="relative" h="48px" w="full" bg="" textAlign="center" marginY="4px">
+      <Box position="relative" h="48px" w="full" bg="" textAlign="center" marginY="8px">
         <Box
           position="relative"
-          left="0vw"
+          left="10%"
           top="8px"
           fontSize="12px"
           fontWeight="400"
           lineHeight="14px"
           bg=""
+          w="80%"
+          h="14px"
+          overflow="hidden"
           color="gray.400"
         >
           {playlist[currentitem].artist}
         </Box>
         <Box
           position="relative"
-          left="0vw"
+          left="10%"
           top="4px"
-          fontSize="18px"
+          fontSize="16px"
           fontWeight="500"
           lineHeight="24px"
-          bg=""
+          w="80%"
+          h="24px"
+          overflow="hidden"
         >
           {playlist[currentitem].title}
         </Box>
@@ -171,10 +176,12 @@ export const PlayerLarge = (props: any) => {
 
       {/* progress bar */}
       {postid === id ? (
-        <ProgressBar />
+        <Box position="relative" left="4%" h="22px" w="92%" bg="">
+          <ProgressBar />
+        </Box>
       ) : (
-        <Box position="relative" h="22px" w="full" bg="">
-          <Box position="absolute" left="4vw" h="6px" w="92%" borderRadius="2px" bg="gray.400" />
+        <Box position="relative" left="4%" h="22px" w="92%" bg="">
+          <hr />
         </Box>
       )}
     </>

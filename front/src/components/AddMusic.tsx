@@ -14,7 +14,14 @@ import {
 } from '@chakra-ui/react';
 import { Music } from '../types/HomeFeedData';
 import axios from 'axios';
-
+import { useSelector } from 'react-redux';
+import {
+  PlayerState,
+  setPlayList,
+  setPlayListIndex,
+  setPlayState,
+  setPostID,
+} from '../reducers/iframeReducer';
 export const AddMusic = ({
   isOpen,
   onClose,
@@ -27,6 +34,7 @@ export const AddMusic = ({
   const [youtube, setYoutube] = useState<Array<Music>>([]);
   const [lastfm, setLastFm] = useState([]);
   const [timer, setTimer] = useState(0); // 디바운싱 타이머
+  const playstate = useSelector((state: any) => state.iframeReducer.playstate);
 
   // 모달이 닫힐 때 실행되는 것들
   const onCloseModal = () => {
@@ -40,14 +48,25 @@ export const AddMusic = ({
 
   // 곡 선택
   const chooseMusic = (index: number) => {
-    setData((data: any) => [
-      ...data,
-      {
-        ...youtube[index],
-        artist: (lastfm[0] as any).artist,
-        title: (lastfm[0] as any).name,
-      } as Music,
-    ]);
+    console.log(index);
+    console.log(youtube[index]);
+    console.log((lastfm[0] as any).artist);
+    console.log((lastfm[0] as any).name);
+
+    setData({
+      ...youtube[index],
+      artist: (lastfm[0] as any).artist,
+      title: (lastfm[0] as any).name,
+    });
+
+    // setData((data: any) => [
+    //   ...data,
+    //   {
+    //     ...youtube[index],
+    //     artist: (lastfm[0] as any).artist,
+    //     title: (lastfm[0] as any).name,
+    //   } as Music,
+    // ]);
     onClose();
   };
 
@@ -143,7 +162,7 @@ export const AddMusic = ({
           />
           <Input
             lineHeight="48px"
-            placeholder="Basic usage"
+            placeholder="노래제목 검색"
             onChange={onChangeDebounce}
             variant="unstyled"
           />
@@ -184,6 +203,37 @@ export const AddMusic = ({
               )}
               <Box position="relative" w="full" h="64px" bg="" marginY="16px">
                 <Flex w="auto">
+                  {/* {playstate === PlayerState.PLAYING ? (
+                    <Box
+                      position="absolute"
+                      left="38px"
+                      top="4"
+                      className="fa-solid fa-pause"
+                      fontSize="30px"
+                      color="cyan.400"
+                      lineHeight="30px"
+                      onClick={() => {
+                        (window as any).player.pauseVideo();
+                      }}
+                    />
+                  ) : (
+                    <Box
+                      position="absolute"
+                      left="38px"
+                      top="4"
+                      className="fa-solid fa-play"
+                      fontSize="30px"
+                      color="cyan.400"
+                      lineHeight="30px"
+                      onClick={() => {
+                        (window as any).player.loadVideoById({ videoId: item.id });
+                      }}
+                      onLoad={({ target }) => {
+                        checkMaxRes(item.id, target);
+                      }}
+                    />
+                  )} */}
+
                   <ChakraImage
                     marginX="16px"
                     borderRadius="10px"

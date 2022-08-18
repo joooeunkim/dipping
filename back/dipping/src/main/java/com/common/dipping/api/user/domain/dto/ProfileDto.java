@@ -20,6 +20,7 @@ public class ProfileDto {
     private Long followerCount;
     private Long followingCount;
     private Boolean isMe;
+    private Boolean isFollowed;
 
 
 }

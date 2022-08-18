@@ -18,6 +18,9 @@ public class BoardResponse {
 	private int likeCount;
 	private Boolean myLike;
 	private int commentCount;
+	private String createdAt;
+	private String updatedAt;
+	private String profileImgUrl;
 	
 	public BoardResponse(Board board) {
 		this.boardId = board.getId();
@@ -27,6 +30,9 @@ public class BoardResponse {
 		this.openComment = board.isOpenComment();
 		this.albumArt = board.isAlbumArt();
 		this.nickname = board.getUser().getNickname();
+		this.createdAt = board.getCreatedAt().toString();
+		this.updatedAt = board.getUpdatedAt().toString();
+		this.profileImgUrl = board.getUser().getProfileImgUrl();
 	}
 	
 }

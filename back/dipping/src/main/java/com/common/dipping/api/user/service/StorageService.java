@@ -1,8 +1,11 @@
 package com.common.dipping.api.user.service;
 
 import com.common.dipping.api.board.domain.dto.BoardDto;
+import com.common.dipping.api.board.domain.dto.ProfilePostDto;
 import com.common.dipping.api.board.domain.entity.Board;
+import com.common.dipping.api.board.domain.entity.BoardSong;
 import com.common.dipping.api.board.repository.BoardRepository;
+import com.common.dipping.api.board.repository.BoardSongRepository;
 import com.common.dipping.api.user.domain.entity.Storage;
 import com.common.dipping.api.user.domain.entity.StorageId;
 import com.common.dipping.api.user.domain.entity.User;
@@ -20,6 +23,7 @@ public class StorageService {
     private final StorageRepository storageRepository;
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final BoardSongRepository boardSongRepository;
 
     public void storageBoard(Long userId, Long boardId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + userId));
@@ -31,6 +35,19 @@ public class StorageService {
                 .storageId(storageId)
                 .build();
         storageRepository.save(storage);
+    }
+
+    public List<ProfilePostDto> getAllStorageByUserId(Long userId) {
+
+        userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + userId));
+        List<Storage> storages = storageRepository.findlistByUserId(userId);
+        List<ProfilePostDto> list = new ArrayList<>();
+        for(Storage s : storages){
+            List<BoardSong> boardSongList = boardSongRepository.findBoardSongByBoardId(s.getBoard().getId());
+            String songImgUrl = boardSongList.get(0).getSongImgUrl();
+            list.add(new ProfilePostDto(s.getBoard().getId(), songImgUrl));
+        }
+        return list;
     }
 
     public void getListStorage(Long userId) {
@@ -53,5 +70,16 @@ public class StorageService {
             }
 
         }
+    }
+
+    public void deletStorage(Long userId, Long boardId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다. id=" + userId));
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다. id=" + boardId));
+
+        StorageId storageId = new StorageId();
+        storageId.setUserId(userId);
+        storageId.setBoardId(boardId);
+
+        storageRepository.deleteById(storageId);
     }
 }
