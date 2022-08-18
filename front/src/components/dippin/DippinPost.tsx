@@ -70,7 +70,7 @@ export const DippinPost = (props: any) => {
           {dippin.user.name}
         </Box>
         <Link to={'/profile/?nickname=' + dippin.user.name}>
-          <Avatar boxSize="40px" name="mocha_oca" src={dippin.user.profile_image} />
+          <Avatar boxSize="40px" name={dippin.user.name} src={dippin.user.profile_image} />
         </Link>
       </Flex>
 

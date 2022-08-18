@@ -18,6 +18,7 @@ import {
   DrawerCloseButton,
   DrawerBody,
   Drawer,
+  Center,
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -108,11 +109,11 @@ export const DippinFeed = (props: any) => {
                 />
               </Box>
 
-              <Box>
-                <Text lineHeight="8" fontSize="lg" maxW="220px">
+              <Center>
+                <Text lineHeight="18px" fontSize="16px" maxW="220px">
                   {e.title}
                 </Text>
-              </Box>
+              </Center>
             </Flex>
           ))
         : ''}

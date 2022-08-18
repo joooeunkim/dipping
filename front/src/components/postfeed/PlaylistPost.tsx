@@ -58,7 +58,7 @@ export const PlaylistPost = (props: any) => {
             <Avatar
               marginRight="1vw"
               boxSize="32px"
-              name="mocha_oca"
+              name={postfeed.user.name}
               src={postfeed.user.profile_image}
             />
             {postfeed.user.name}
