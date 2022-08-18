@@ -150,13 +150,16 @@ export const ProfileMain = () => {
                   <Box>
                     {isFollow ? (
                       <Button
+                        size="sm"
+                        w="87%"
                         id={profile?.nickname}
-                        bg="red.400"
+                        borderColor={buttonColor}
+                        variant="outline"
                         _hover={{
-                          bg: 'red.500',
+                          color: 'white',
                         }}
                         _active={{
-                          bg: 'cyan.500',
+                          borderColor: 'cyan.500',
                         }}
                         onClick={changeFollow}
                       >
@@ -164,6 +167,8 @@ export const ProfileMain = () => {
                       </Button>
                     ) : (
                       <Button
+                        size="sm"
+                        w="87%"
                         id={profile?.nickname}
                         bg={buttonColor}
                         _hover={{
