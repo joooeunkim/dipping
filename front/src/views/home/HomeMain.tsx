@@ -13,7 +13,7 @@ export const HomeMain = () => {
   const dispatch = useDispatch();
 
   // 요청에 쓰일 파라미터
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(0);
   const [mode, setMode] = useState<string>('user');
   // 화면에 표시할 리스트
   const [followposts, setFollowPosts] = useState<FeedPost[]>([]);
