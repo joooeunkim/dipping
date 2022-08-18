@@ -54,22 +54,13 @@ public class SearchService {
         return miniProfileDtos;
     }
 
-    public HashSet<BoardDto> searchPost(String keyword, UserDetailsImpl userDetails) {
+    public HashSet<ProfilePostDto> searchPost(String keyword, UserDetailsImpl userDetails) {
         List<Tag> tagList = tagRepository.findAllByContentContaining(keyword);
-        HashSet<BoardDto> boardList = new HashSet<>();
+        HashSet<ProfilePostDto> boardList = new HashSet<>();
         for (int i = 0; i < tagList.size(); i++) {
-            List<PostTag> postTags = postTagRepository.findAllByTag(tagList.get(i), Sort.by(Sort.Direction.DESC, "create_at"));
+            List<PostTag> postTags = postTagRepository.findAllByTag(tagList.get(i), Sort.by(Sort.Direction.DESC, "createdAt"));
             for (PostTag postTag:postTags){
-                BoardDto board = new BoardDto();
-                board.setId(postTag.getBoard().getId());
-                board.setAlbumArt(postTag.getBoard().isAlbumArt());
-                board.setContent(postTag.getBoard().getContent());
-                board.setCreatedAt(postTag.getBoard().getCreatedAt().format(DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss")));
-                board.setUpdatedAt(postTag.getBoard().getUpdatedAt().format(DateTimeFormatter.ofPattern("YYYY-MM-DD hh:mm:ss")));
-                board.setOpenComment(postTag.getBoard().isOpenComment());
-                board.setOpenPost(postTag.getBoard().isOpenPost());
-                board.setUserId(postTag.getBoard().getUser().getId());
-                boardList.add(board);
+                boardList.add(new ProfilePostDto(postTag.getBoard()));
             }
         }
         User user = userRepository.findById(userDetails.getId()).orElse(null);
@@ -134,7 +125,7 @@ public class SearchService {
         List<ProfilePostDto> boards = new ArrayList<>();
         List<InterestTag>interestTags = userInfo.getInterestTags();
         for (InterestTag interestTag: interestTags) {
-            List<PostTag> postTags = postTagRepository.findAllByTag(interestTag.getTag(), Sort.by(Sort.Direction.DESC, "create_at"));
+            List<PostTag> postTags = postTagRepository.findAllByTag(interestTag.getTag(), Sort.by(Sort.Direction.DESC, "createdAt"));
             for (PostTag postTag: postTags) {
                 if(postTag.getBoard().getUser() == userInfo) {continue;}
                 boards.add(new ProfilePostDto(postTag.getBoard()));
