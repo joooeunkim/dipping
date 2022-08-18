@@ -11,7 +11,7 @@ export const DippinMainItem = (props: any) => {
           position="relative"
           boxSize="40px"
           name="mocha_oca"
-          // src={dippin.user.profile_image}
+          src={dippin.user.profile_image}
         />
         <Box position="relative" marginX="8px" w="full">
           <Flex lineHeight="18px" h="18px">

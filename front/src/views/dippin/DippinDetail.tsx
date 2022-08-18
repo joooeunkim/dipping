@@ -66,7 +66,7 @@ export const DippinDetail = () => {
       last_modified: data.Main.item.updatedAt,
       user: {
         name: data.Main.item.nickname,
-        profile_image: data.Main.item.userId,
+        profile_image: data.Main.item.profileImgUrl,
       },
       playlist: data.Main.music.map((el: any) => {
         return {
@@ -90,7 +90,7 @@ export const DippinDetail = () => {
         last_modified: e.item.updatedAt,
         user: {
           name: e.item.nickname,
-          profile_image: e.item.userId,
+          profile_image: e.item.profileImgUrl,
         },
         playlist: e.music.map((el: any) => {
           return {
