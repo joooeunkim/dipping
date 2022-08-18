@@ -104,6 +104,7 @@ public class DippingService {
         return dippingSongDtos;
     }
 
+    @Transactional
     public boolean deleteDipping(Long dippingId,Long userId) {
         dippingRepository.deleteByIdAndUserId(dippingId,userId);
         return dippingRepository.existsById(dippingId);

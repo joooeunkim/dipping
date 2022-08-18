@@ -15,6 +15,7 @@ import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -139,7 +140,7 @@ public class BoardService {
         List<BoardSong> list = boardSongRepository.findBoardSongByBoardId(board.getId());
         return list;
     }
-
+    @Transactional
     public boolean deleteBoard(Long boardId,Long userId) {
         boardRepository.deleteByIdAndUserId(boardId,userId);
         return boardRepository.existsById(boardId);
