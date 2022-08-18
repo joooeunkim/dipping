@@ -127,8 +127,9 @@ export const DippinForm = (props: any) => {
         }}
       >
         <CyanButton title="작성" />
-      </Box>
 
+        <Box h="72px" w="100%"></Box>
+      </Box>
       <AddMusic isOpen={isOpen} onClose={onClose} setData={setData} />
       {/* <Flex>
               <Text fontSize="xl" pt="2" mr="1" color="gray.500">

@@ -173,6 +173,7 @@ export const PostFeedForm = (props: any) => {
         }}
       >
         <CyanButton title="작성" />
+        <Box h="72px" w="100%"></Box>
       </Box>
       <AddMusic isOpen={isOpen} onClose={onClose} setData={setData} />
     </Box>
