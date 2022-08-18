@@ -44,8 +44,8 @@ export const BottomTabBar = () => {
   const size = 48;
 
   const icons_light = [
-    'fa-light fa-house',
     'fa-light fa-music',
+    'fa-light fa-search',
     'fa-regular fa-plus',
     'fa-light fa-compact-disc',
     'fa-light fa-user',
