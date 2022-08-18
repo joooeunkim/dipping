@@ -160,7 +160,7 @@ export const HomeMain = () => {
         <PlaylistPost
           key={index}
           postfeed={item}
-          id={index}
+          id={index + followposts.length}
           setCommentInfo={setCommentInfo}
           onOpen={onOpen}
         />

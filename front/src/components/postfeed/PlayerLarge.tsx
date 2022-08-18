@@ -65,7 +65,7 @@ export const PlayerLarge = (props: any) => {
           boxShadow="0 0 2px gray"
           boxSize="92vw"
           objectFit="cover"
-          src={'https://i.ytimg.com/vi/' + playlist[currentitem].id + '/maxresdefault.jpg'}
+          src={playlist[currentitem].albumart}
         />
 
         {/* playlist popover */}
