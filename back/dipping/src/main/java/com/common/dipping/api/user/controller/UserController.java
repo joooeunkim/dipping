@@ -8,6 +8,7 @@ import com.common.dipping.api.user.domain.dto.*;
 import com.common.dipping.api.user.domain.entity.Code;
 import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.service.CodeService;
+import com.common.dipping.api.user.service.FireBaseService;
 import com.common.dipping.api.user.service.FollowService;
 import com.common.dipping.api.user.service.StorageService;
 import com.common.dipping.api.user.service.UserService;
@@ -50,6 +51,7 @@ public class UserController {
     private final BoardService boardService;
     private final DippingService dippingService;
     private final StorageService storageService;
+    private final FireBaseService fireBaseService;
     private final FollowService followService;
 
     @Autowired
@@ -235,20 +237,20 @@ public class UserController {
 //            //String canonicalPath = "home"+File.separator+"ubuntu"+File.separator+"S07P12B210"+File.separator+"back"+File.separator+"dipping"+File.separator+"build"+File.separator+"resources"+File.separator+"main"+File.separator+"static"+File.separator+"upload";
 //            System.out.println("file upload canonical path : "+ canonicalPath);
 
-            String canonicalPath = "file:////home/ubuntu/S07P12B210/back/dipping/build/resources/main/static/upload";
-            File folder = new File(canonicalPath);
-            if (!folder.exists()){
-                folder.mkdirs();
-            }
+//            String canonicalPath = "file:////home/ubuntu/S07P12B210/back/dipping/build/resources/main/static/upload";
+//            File folder = new File(canonicalPath);
+//            if (!folder.exists()){
+//                folder.mkdirs();
+//            }
             String originalFileName = file.getOriginalFilename();
-            String saveFileName = "untitled";
-            if (!originalFileName.isEmpty()) {
-                saveFileName = userinfo.getUsername() + originalFileName.substring(originalFileName.lastIndexOf('.'));
-                System.out.println("원본 파일 이름 : "+file.getOriginalFilename()+", 실제 저장 파일 이름 : "+ saveFileName);
-                file.transferTo(new File(folder, saveFileName));
-            }
-            String newProfileImgUrl = canonicalPath + File.separator + saveFileName;
-
+//            String saveFileName = "untitled";
+//            if (!originalFileName.isEmpty()) {
+//                saveFileName = userinfo.getUsername() + originalFileName.substring(originalFileName.lastIndexOf('.'));
+//                System.out.println("원본 파일 이름 : "+file.getOriginalFilename()+", 실제 저장 파일 이름 : "+ saveFileName);
+//                file.transferTo(new File(folder, saveFileName));
+//            }
+            String newProfileImgUrl = fireBaseService.uploadFiles(file, userinfo.getUsername() + originalFileName.substring(originalFileName.lastIndexOf('.')));
+            System.out.println(newProfileImgUrl);
             if (userService.profileImgUrlEdit(userinfo, newProfileImgUrl)) {
                 return ResponseEntity.ok().body("프로필 이미지 수정 완료");
             } else {
