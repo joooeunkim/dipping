@@ -117,24 +117,23 @@ export const SearchMain = () => {
         {mode === 'user' ? (
           userlist.map((item, index) => (
             <Link key={index} to={'/profile/' + item.name}>
-              <Box marginX="8px" marginY="16px" position="relative" h="40px" w="full" bg="">
-                <Box
-                  position="absolute"
-                  left="4vw"
-                  top="6px"
-                  fontSize="16px"
-                  fontWeight="300"
-                  lineHeight="40px"
-                  bg=""
-                >
-                  <Avatar
-                    marginRight="16px"
-                    boxSize="40px"
-                    name={item.name}
-                    src={item.profile_image}
-                  />
-                  {item.name}
-                </Box>
+              <Box
+                position="relative"
+                h="64px"
+                w="full"
+                fontSize="16px"
+                fontWeight="300"
+                lineHeight="40px"
+                paddingX="24px"
+                paddingY="8px"
+              >
+                <Avatar
+                  marginRight="16px"
+                  boxSize="40px"
+                  name={item.name}
+                  src={item.profile_image}
+                />
+                {item.name}
               </Box>
             </Link>
           ))
