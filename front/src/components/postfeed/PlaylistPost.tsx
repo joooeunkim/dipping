@@ -1,7 +1,8 @@
 import { Box, useColorModeValue, Image, Avatar } from '@chakra-ui/react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { authAxios } from '../../api/common';
+import { parseJwt } from '../../api/login/local';
 import { FeedPost, User } from '../../types/HomeFeedData';
 import { PlayerLarge } from './PlayerLarge';
 import { PostComment } from './PostComment';
@@ -64,6 +65,23 @@ export const PlaylistPost = (props: any) => {
             {postfeed.user.name}
           </Link>
         </Box>
+        {postfeed.user.name === parseJwt(localStorage.getItem('accessToken')).nickname && (
+          <Box
+            className="fa-light fa-eraser"
+            position="absolute"
+            right="4vw"
+            top="6px"
+            fontSize="24px"
+            lineHeight="32px"
+            onClick={() => {
+              if (window.confirm('정말 삭제하시겠습니까?')) {
+                console.log('삭제');
+                authAxios.delete('/board?boardId=' + postfeed.id);
+                window.history.back();
+              }
+            }}
+          />
+        )}
       </Box>
 
       {/* music player */}
@@ -126,6 +144,15 @@ export const PlaylistPost = (props: any) => {
         <Box position="absolute" left="12vw" fontSize="24px" lineHeight="30px">
           {likecount}
         </Box>
+        {/* {postfeed.user.name === parseJwt(localStorage.getItem('accessToken')).nickname && (
+          <Box
+            position="absolute"
+            right="4vw"
+            className="fa-regular fa-share-nodes"
+            fontSize="24px"
+            lineHeight="30px"
+          />
+        )} */}
         {postfeed.openComment && (
           <Box
             position="absolute"
