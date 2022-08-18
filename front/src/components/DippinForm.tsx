@@ -33,6 +33,15 @@ export const DippinForm = (props: any) => {
   const parent = props.parent;
   console.log(parent);
 
+  const popMusicList = (id: string) => {
+    setMusicList((data: any) => {
+      const targetidx = data.findIndex((e: any) => e.id === id);
+      const list = data.slice();
+      list.splice(targetidx, 1);
+      return list;
+    });
+  };
+
   const setData = (data: any) => {
     console.log('hi', data);
     selectedMusicList = [...musicList, refactorData(data)];
@@ -81,14 +90,14 @@ export const DippinForm = (props: any) => {
             console.log(music);
             return (
               <Flex key={index} mb="2">
-                <Image src={music.songImgUrl} w="12" h="12" borderRadius="lg" />
+                <Image src={music.songImgUrl} w="12" h="12" borderRadius="lg" objectFit="cover" />
                 <Box pl="2" pt="1" w="100%">
                   <Text fontSize="sm" color="gray.500">
                     {music.songSinger}
                   </Text>
                   <Text lineHeight="4">{music.songTitle}</Text>
                 </Box>
-                <CloseButton mt="2" />
+                <CloseButton mt="2" onClick={() => popMusicList(music.id)} />
               </Flex>
             );
           })
@@ -128,7 +137,7 @@ export const DippinForm = (props: any) => {
       >
         <CyanButton title="작성" />
 
-        <Box h="72px" w="100%"></Box>
+        <Box h="72px" w="100%" />
       </Box>
       <AddMusic isOpen={isOpen} onClose={onClose} setData={setData} />
       {/* <Flex>
