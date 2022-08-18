@@ -79,7 +79,7 @@ export const RegisterProcessLayout = () => {
   return (
     <Container h="100vh" position="relative">
       <Center p="4">
-        <Box position="absolute" left="5"></Box>
+        <Box left="5"></Box>
 
         <Text fontSize="2xl" fontWeight="bold">
           {title}
@@ -87,16 +87,7 @@ export const RegisterProcessLayout = () => {
       </Center>
       {/* {email} */}
       {view}
-      <Flex
-        w="100%"
-        pr="4"
-        pl="4"
-        mb="10"
-        position="absolute"
-        top="70vh"
-        left="0"
-        justifyContent="space-between"
-      >
+      <Flex w="100%" mt="4" pr="4" pl="4" mb="10" left="0" justifyContent="space-between">
         <Button
           onClick={() => {
             onClick(prev);
