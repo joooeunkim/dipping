@@ -1,14 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { FeedPost, Music } from '../types/HomeFeedData';
+import { FeedPost, Music, User } from '../types/HomeFeedData';
 
-const dippinReducer = createSlice({
-  name: 'dippinReducer',
+const searchReducer = createSlice({
+  name: 'searchReducer',
   initialState: {
     input: '',
-    mode: 'recent',
+    mode: 'user',
     page: 0,
+    userlist: new Array<User>(),
+    postlist: new Array<FeedPost>(),
     dippinlist: new Array<FeedPost>(),
-    customlist: new Array<Music>(),
   },
   reducers: {
     setInput(state, { payload: input }) {
@@ -23,23 +24,23 @@ const dippinReducer = createSlice({
     addPage(state) {
       return { ...state, page: state.page + 1 };
     },
+    pushUserList(state, { payload: newpage }) {
+      return { ...state, userlist: [...state.userlist, ...newpage] };
+    },
+    setUserList(state, { payload: newlist }) {
+      return { ...state, userlist: [...newlist] };
+    },
     pushDippinList(state, { payload: newpage }) {
       return { ...state, dippinlist: [...state.dippinlist, ...newpage] };
     },
     setDippinList(state, { payload: newlist }) {
       return { ...state, dippinlist: [...newlist] };
     },
-    pushCustomList(state, { payload: music }) {
-      return { ...state, customlist: [...state.customlist, music] };
+    pushPostList(state, { payload: newpage }) {
+      return { ...state, postlist: [...state.postlist, ...newpage] };
     },
-    popCustomList(state, { payload: id }) {
-      const targetidx = state.customlist.findIndex(e => e.id === id);
-      const list = state.customlist.slice();
-      list.splice(targetidx, 1);
-      return { ...state, customlist: [...list] };
-    },
-    setCustomList(state, { payload: list }) {
-      return { ...state, customlist: [...list] };
+    setPostList(state, { payload: newlist }) {
+      return { ...state, postlist: [...newlist] };
     },
   },
 });
@@ -51,8 +52,9 @@ export const {
   addPage,
   pushDippinList,
   setDippinList,
-  pushCustomList,
-  popCustomList,
-  setCustomList,
-} = dippinReducer.actions;
-export default dippinReducer.reducer;
+  pushUserList,
+  setUserList,
+  pushPostList,
+  setPostList,
+} = searchReducer.actions;
+export default searchReducer.reducer;

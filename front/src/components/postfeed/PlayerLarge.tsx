@@ -65,7 +65,7 @@ export const PlayerLarge = (props: any) => {
           boxShadow="0 0 2px gray"
           boxSize="92vw"
           objectFit="cover"
-          src={'https://i.ytimg.com/vi/' + playlist[currentitem].id + '/maxresdefault.jpg'}
+          src={playlist[currentitem].albumart}
         />
 
         {/* playlist popover */}
@@ -113,12 +113,15 @@ export const PlayerLarge = (props: any) => {
       <Box position="relative" h="48px" w="full" bg="" textAlign="center" marginY="8px">
         <Box
           position="relative"
-          left="0vw"
+          left="10%"
           top="8px"
           fontSize="12px"
           fontWeight="400"
           lineHeight="14px"
           bg=""
+          w="80%"
+          h="14px"
+          overflow="hidden"
           color="gray.400"
         >
           {playlist[currentitem].artist}
