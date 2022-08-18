@@ -55,7 +55,7 @@ export const PlaylistPost = (props: any) => {
           lineHeight="32px"
           bg=""
         >
-          <Link to={'/profile/' + postfeed.user.name}>
+          <Link to={'/profile/?nickname=' + postfeed.user.name}>
             <Avatar
               marginRight="1vw"
               boxSize="32px"

@@ -27,7 +27,7 @@ export const PostCommentItem = (props: any) => {
         bg=""
       >
         <Flex>
-          <Link to={'/profile/' + user.name}>
+          <Link to={'/profile/?nickname=' + user.name}>
             <Avatar boxSize="32px" marginRight="8px" name={user.name} src={user.profile_image} />
           </Link>
           <Box w="full" bg="">
