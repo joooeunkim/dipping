@@ -11,6 +11,7 @@ import com.common.dipping.api.board.domain.entity.Board;
 import com.common.dipping.api.board.repository.CommentRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +71,7 @@ public class CommentService {
 		return commentDtos;
 	}
 
+	@Transactional
 	public boolean deleteComment(Long commentId, Long userId) {
 		commentRepository.deleteByIdAndUserId(commentId,userId);
 		commentRepository.deleteByParentId(commentId);
