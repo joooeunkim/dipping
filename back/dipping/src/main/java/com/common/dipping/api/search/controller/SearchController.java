@@ -102,7 +102,7 @@ public class SearchController {
         Map<String,Object> result = new HashMap<>();
         Map<String,HashSet> searchResult = new HashMap<>();
 
-        HashSet<BoardDto> boardList = searchService.searchPost(keyword, userInfo);
+        HashSet<ProfilePostDto> boardList = searchService.searchPost(keyword, userInfo);
         result.put("code", 200);
         searchResult.put("posts", boardList);
         result.put("data", searchResult);

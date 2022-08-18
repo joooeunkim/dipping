@@ -85,7 +85,7 @@ public class BoardController {
 
     @Operation(summary = "피드 삭제", description = "피드 아이디를 통해 삭제 요청")
     @DeleteMapping
-    public ResponseEntity<?> deleteBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @Param("boardId") Long boardId){
+    public ResponseEntity<?> deleteBoard(@AuthenticationPrincipal UserDetailsImpl userInfo, @RequestParam("boardId") Long boardId){
         boolean result = boardService.deleteBoard(boardId,userInfo.getId());
         if(!result){
             return new ResponseEntity<Void>(HttpStatus.OK);
