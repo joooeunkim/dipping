@@ -100,4 +100,17 @@ public class FollowService {
         return followerList;
     }
 
+    public Boolean existFollowBySenderNicknameReceiverNickname(String senderNickname, String receiverNickname) {
+        User sender = userRepository.findByNickname(senderNickname).orElse(null);
+        User receiver = userRepository.findByNickname(receiverNickname).orElse(null);
+
+        Follow follow = followRepository.findBySenderAndReceiver(sender, receiver).orElse(null);
+
+        if (follow == null) {
+            return false;
+        }else {
+            return true;
+        }
+    }
+
 }

@@ -8,6 +8,7 @@ import com.common.dipping.api.user.domain.dto.*;
 import com.common.dipping.api.user.domain.entity.Code;
 import com.common.dipping.api.user.domain.entity.User;
 import com.common.dipping.api.user.service.CodeService;
+import com.common.dipping.api.user.service.FollowService;
 import com.common.dipping.api.user.service.StorageService;
 import com.common.dipping.api.user.service.UserService;
 import com.common.dipping.common.ApiResponse;
@@ -48,6 +49,7 @@ public class UserController {
     private final BoardService boardService;
     private final DippingService dippingService;
     private final StorageService storageService;
+    private final FollowService followService;
 
     @Autowired
     ResourceLoader resourceLoader;
@@ -160,6 +162,7 @@ public class UserController {
             isMe = true;
             userinfo = userService.profile(requestUser.getNickname());
         }
+        Boolean isFollowed = followService.existFollowBySenderNicknameReceiverNickname(requestUser.getNickname(), userinfo.getNickname());
         ProfileDto profileDto = new ProfileDto();
 
         // set을 통해 profileDto에 데이터 설정
@@ -177,6 +180,7 @@ public class UserController {
         profileDto.setFollowerCount(userService.followerCount(userinfo));
         profileDto.setFollowingCount(userService.followingCount(userinfo));
         profileDto.setIsMe(isMe);
+        profileDto.setIsFollowed(isFollowed);
 
         // result는 code와 data는 key값이
         Map<String,Object> result = new HashMap<>();
@@ -255,6 +259,7 @@ public class UserController {
     @GetMapping(value="/profiles")
     public ResponseEntity<?> profileAll(@AuthenticationPrincipal UserDetailsImpl requestUser, @RequestParam(name = "userNickname", required = false) String userNickname) {
         Boolean isMe = false;
+
         User userinfo;
         if(userNickname != null) {
             userinfo = userService.profile(userNickname);
@@ -269,6 +274,8 @@ public class UserController {
             isMe = true;
             userinfo = userService.profile(requestUser.getNickname());
         }
+        Boolean isFollowed = followService.existFollowBySenderNicknameReceiverNickname(requestUser.getNickname(), userinfo.getNickname());
+
         ProfileDto profileDto = new ProfileDto();
 
         // set을 통해 profileDto에 데이터 설정
@@ -286,6 +293,7 @@ public class UserController {
         profileDto.setFollowerCount(userService.followerCount(userinfo));
         profileDto.setFollowingCount(userService.followingCount(userinfo));
         profileDto.setIsMe(isMe);
+        profileDto.setIsFollowed(isFollowed);
 
         //사용자의 게시물 목록
         List<ProfilePostDto> boardPostDto = boardService.getAllBoardByUserId(userinfo.getId());
