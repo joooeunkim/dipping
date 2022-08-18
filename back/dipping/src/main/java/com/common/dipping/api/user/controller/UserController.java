@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
@@ -221,8 +222,9 @@ public class UserController {
         //FileUpload 관련 설정.
         if (file!=null) {
             // 파일을 저장할 폴더 지정
-            Resource res = resourceLoader.getResource("/static/upload");
-            System.out.println("res.exists(): "+res.exists());
+            //Resource res = resourceLoader.getResource("/static/upload");
+            ClassPathResource res = new ClassPathResource("static/upload");
+            System.out.println("res.getPath(): "+res.getPath());
             System.out.println("res.getDescription(): "+res.getDescription());
             System.out.println("res.getURI().getPath(): "+res.getURI().getPath());
             String canonicalPath = res.getFile().getCanonicalPath();
