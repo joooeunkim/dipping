@@ -76,74 +76,74 @@
 
 - 로그인/회원가입 페이지
 
-![Untitled1](README/Untitled%201.png)
+![Untitled1](README/Untitled1.png)
 
-![Untitled2](README/Untitled%202.png)
+![Untitled2](README/Untitled2.png)
 
 - 
 
-![Untitled](README/Untitled%203.png)
+![Untitled3](README/Untitled3.png)
 
-![Untitled](README/Untitled%204.png)
+![Untitled4](README/Untitled4.png)
 
-![Untitled](README/Untitled%205.png)
+![Untitled5](README/Untitled5.png)
 
 - 홈피드
 
-![Untitled](README/Untitled%206.png)
+![Untitled6](README/Untitled6.png)
 
 - 홈피드- 재생목록
 
-![Untitled](README/Untitled%207.png)
+![Untitled](README/Untitled7.png)
 
 - 홈피드 - 댓글작성
 
-![Untitled](README/Untitled%208.png)
+![Untitled](README/Untitled8.png)
 
 - 게시글 작성
 
-![Untitled](README/Untitled%209.png)
+![Untitled](README/Untitled9.png)
 
-![Untitled](README/Untitled%2010.png)
+![Untitled](README/Untitled10.png)
 
-![Untitled](README/Untitled%2011.png)
+![Untitled](README/Untitled11.png)
 
 - 프로필 페이지
 
-![Untitled](README/Untitled%2012.png)
+![Untitled](README/Untitled12.png)
 
-![Untitled](README/Untitled%2013.png)
+![Untitled](README/Untitled13.png)
 
-![Untitled](README/Untitled%2014.png)
+![Untitled](README/Untitled14.png)
 
 - 디핑
 
-![Untitled](README/Untitled%2015.png)
+![Untitled](README/Untitled15.png)
 
 - 디핑 작성
 
-![Untitled](README/Untitled%2016.png)
+![Untitled](README/Untitled16.png)
 
 - 디핑 상세보기
 
-![Untitled](README/Untitled%2017.png)
+![Untitled](README/Untitled17.png)
 
 - 디핑 페이지 곡들로 포스트 작성
 
-![Untitled](README/Untitled%2018.png)
+![Untitled](README/Untitled18.png)
 
-![Untitled](README/Untitled%2019.png)
+![Untitled](README/Untitled19.png)
 
-![Untitled](README/Untitled%2020.png)
+![Untitled](README/Untitled20.png)
 
 - 다크 모드
 
-![Untitled](README/Untitled%2021.png)
+![Untitled](README/Untitled21.png)
 
 - 검색-사용자
 
-![Untitled](README/Untitled%2022.png)
+![Untitled](README/Untitled22.png)
 
 - 검색-포스트
 
-![Untitled](README/Untitled%2023.png)
+![Untitled](README/Untitled23.png)
