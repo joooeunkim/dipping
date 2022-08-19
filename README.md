@@ -6,7 +6,7 @@
 
 디핑은 기존의 음악플레이어 기능을 넘어서 사람들과 음악 청취 경험을 공유할 수 있는 SNS와 뮤직 플레이어를 합친 소셜 뮤직 네트워크 서비스 입니다.
 
-            ![Untitled](README/Untitled.png)
+![Untitled](README/Untitled.png)
 
 ## 프로젝트 개요
 
