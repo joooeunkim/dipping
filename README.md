@@ -76,74 +76,74 @@
 
 - 로그인/회원가입 페이지
 
-![Untitled 1](README/Untitled_1.png)
+<img src="README/Untitled_1.png" alt="Untitled 1" style="zoom: 25%;" />
 
 ![Untitled 2](README/Untitled-2.png)
 
 - 
 
-![Untitled3](README/Untitled_3.png)
+<img src="README/Untitled_3.png" alt="Untitled3" style="zoom:25%;" />
 
-![Untitled4](README/Untitled_4.png)
+<img src="README/Untitled_4.png" alt="Untitled4" style="zoom:25%;" />
 
 ![Untitled5](README/Untitled 5.png)
 
 - 홈피드
 
-![Untitled6](README/Untitled_6.png)
+<img src="README/Untitled_6.png" alt="Untitled6" style="zoom:25%;" />
 
 - 홈피드- 재생목록
 
-![Untitled](README/Untitled_7.png)
+<img src="README/Untitled_7.png" alt="Untitled" style="zoom:25%;" />
 
 - 홈피드 - 댓글작성
 
-![Untitled](README/Untitled_8.png)
+<img src="README/Untitled_8.png" alt="Untitled" style="zoom:25%;" />
 
 - 게시글 작성
 
-![Untitled](README/Untitled_9.png)
+<img src="README/Untitled_9.png" alt="Untitled" style="zoom:25%;" />
 
-![Untitled](README/Untitled_10.png)
+<img src="README/Untitled_10.png" alt="Untitled" style="zoom:25%;" />
 
-![Untitled](README/Untitled_11.png)
+<img src="README/Untitled_11.png" alt="Untitled" style="zoom:25%;" />
 
 - 프로필 페이지
 
-![Untitled](README/Untitled_12.png)
+<img src="README/Untitled_12.png" alt="Untitled" style="zoom:25%;" />
 
-![Untitled](README/Untitled_13.png)
+<img src="README/Untitled_13.png" alt="Untitled" style="zoom:25%;" />
 
-![Untitled](README/Untitled_14.png)
+<img src="README/Untitled_14.png" alt="Untitled" style="zoom:25%;" />
 
 - 디핑
 
-![Untitled](README/Untitled_15.png)
+<img src="README/Untitled_15.png" alt="Untitled" style="zoom:25%;" />
 
 - 디핑 작성
 
-![Untitled](README/Untitled_16.png)
+<img src="README/Untitled_16.png" alt="Untitled" style="zoom:25%;" />
 
 - 디핑 상세보기
 
-![Untitled](README/Untitled_17.png)
+<img src="README/Untitled_17.png" alt="Untitled" style="zoom:25%;" />
 
 - 디핑 페이지 곡들로 포스트 작성
 
-![Untitled](README/Untitled_18.png)
+<img src="README/Untitled_18.png" alt="Untitled" style="zoom:25%;" />
 
-![Untitled](README/Untitled_19.png)
+<img src="README/Untitled_19.png" alt="Untitled" style="zoom:25%;" />
 
-![Untitled](README/Untitled_20.png)
+<img src="README/Untitled_20.png" alt="Untitled" style="zoom:25%;" />
 
 - 다크 모드
 
-![Untitled](README/Untitled_21.png)
+<img src="README/Untitled_21.png" alt="Untitled" style="zoom:25%;" />
 
 - 검색-사용자
 
-![Untitled](README/Untitled_22.png)
+<img src="README/Untitled_22.png" alt="Untitled" style="zoom:25%;" />
 
 - 검색-포스트
 
-![Untitled](README/Untitled_23.png)
+<img src="README/Untitled_23.png" alt="Untitled" style="zoom:25%;" />
