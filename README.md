@@ -76,17 +76,17 @@
 
 - 로그인/회원가입 페이지
 
-![Untitled1](README/Untitled1.png)
+![Untitled 1](README/Untitled 1.png)
 
-![Untitled2](README/Untitled2.png)
+![Untitled 2](README/Untitled 2.png)
 
 - 
 
-![Untitled3](README/Untitled3.png)
+![Untitled3](README/Untitled 3.png)
 
-![Untitled4](README/Untitled4.png)
+![Untitled4](README/Untitled 4.png)
 
-![Untitled5](README/Untitled5.png)
+![Untitled5](README/Untitled 5.png)
 
 - 홈피드
 
