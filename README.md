@@ -76,9 +76,9 @@
 
 - 로그인/회원가입 페이지
 
-![Untitled](README/Untitled%201.png)
+![Untitled1](README/Untitled%201.png)
 
-![Untitled](README/Untitled%202.png)
+![Untitled2](README/Untitled%202.png)
 
 - 
 
