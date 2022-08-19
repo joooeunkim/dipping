@@ -78,7 +78,7 @@
 
 ![Untitled 1](README/Untitled_1.png)
 
-![Untitled 2](README/Untitled_2.png)
+![Untitled 2](README/Untitled-2.png)
 
 - 
 
@@ -86,64 +86,64 @@
 
 ![Untitled4](README/Untitled_4.png)
 
-![Untitled5](README/Untitled_5.png)
+![Untitled5](README/Untitled 5.png)
 
 - 홈피드
 
-![Untitled6](README/Untitled6.png)
+![Untitled6](README/Untitled_6.png)
 
 - 홈피드- 재생목록
 
-![Untitled](README/Untitled7.png)
+![Untitled](README/Untitled_7.png)
 
 - 홈피드 - 댓글작성
 
-![Untitled](README/Untitled8.png)
+![Untitled](README/Untitled_8.png)
 
 - 게시글 작성
 
-![Untitled](README/Untitled9.png)
+![Untitled](README/Untitled_9.png)
 
-![Untitled](README/Untitled10.png)
+![Untitled](README/Untitled_10.png)
 
-![Untitled](README/Untitled11.png)
+![Untitled](README/Untitled_11.png)
 
 - 프로필 페이지
 
-![Untitled](README/Untitled12.png)
+![Untitled](README/Untitled_12.png)
 
-![Untitled](README/Untitled13.png)
+![Untitled](README/Untitled_13.png)
 
-![Untitled](README/Untitled14.png)
+![Untitled](README/Untitled_14.png)
 
 - 디핑
 
-![Untitled](README/Untitled15.png)
+![Untitled](README/Untitled_15.png)
 
 - 디핑 작성
 
-![Untitled](README/Untitled16.png)
+![Untitled](README/Untitled_16.png)
 
 - 디핑 상세보기
 
-![Untitled](README/Untitled17.png)
+![Untitled](README/Untitled_17.png)
 
 - 디핑 페이지 곡들로 포스트 작성
 
-![Untitled](README/Untitled18.png)
+![Untitled](README/Untitled_18.png)
 
-![Untitled](README/Untitled19.png)
+![Untitled](README/Untitled_19.png)
 
-![Untitled](README/Untitled20.png)
+![Untitled](README/Untitled_20.png)
 
 - 다크 모드
 
-![Untitled](README/Untitled21.png)
+![Untitled](README/Untitled_21.png)
 
 - 검색-사용자
 
-![Untitled](README/Untitled22.png)
+![Untitled](README/Untitled_22.png)
 
 - 검색-포스트
 
-![Untitled](README/Untitled23.png)
+![Untitled](README/Untitled_23.png)
