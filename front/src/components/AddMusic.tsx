@@ -182,7 +182,7 @@ export const AddMusic = ({
                 fontSize="14px"
                 fontWeight="400"
               >
-                <Box marginLeft="24px" w="36px" fontWeight="600">
+                <Box marginLeft="24px" w="40px" fontWeight="600">
                   <Box w="full">Artist</Box>
                   <Box w="full">Title</Box>
                 </Box>

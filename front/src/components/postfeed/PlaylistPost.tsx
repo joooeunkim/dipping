@@ -41,6 +41,17 @@ export const PlaylistPost = (props: any) => {
       .catch(err => console.log(err));
   };
 
+  const handleCopyClipBoard = async (text: string) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        alert('클립보드에 복사되었습니다.');
+      })
+      .catch(() => {
+        alert('복사를 다시 시도해주세요.');
+      });
+  };
+
   return (
     <Box position="relative" h="" w="full" borderBottom="1px" borderColor={borderColor} bg="">
       {/* top bar */}
@@ -178,6 +189,9 @@ export const PlaylistPost = (props: any) => {
           className="fa-regular fa-share-nodes"
           fontSize="24px"
           lineHeight="30px"
+          onClick={() =>
+            handleCopyClipBoard('http://i7b210.p.ssafy.io/post/' + (postfeed as FeedPost).id)
+          }
         />
         {/* <Box
           position="absolute"
