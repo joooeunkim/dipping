@@ -78,7 +78,7 @@
 
 <img src="README/Untitled_1.png" alt="Untitled 1" width="500" height="900" />
 
-![Untitled 2](README/Untitled-2.png)
+![Untitled 2](README/Untitled_2.png)
 
 - 
 
@@ -86,7 +86,7 @@
 
 <img src="README/Untitled_4.png" alt="Untitled4" width="500" height="900" />
 
-![Untitled5](README/Untitled 5.png)
+![Untitled5](README/Untitled_5.png)
 
 - 홈피드
 
